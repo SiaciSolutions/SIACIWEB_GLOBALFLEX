@@ -19,7 +19,8 @@ export class ApiService {
   // public apiUrl = 'https://192.168.101.2';
     // public apiUrl = 'https://192.168.0.24';
 	public apiUrl = 'https://127.0.0.1';
-		// public apiUrl = 'https://192.168.101.6';
+  //public apiUrl = 'https://192.168.0.146';
+		// public apiUrl = 'https:// 192.168.0.146';
 	
   // public apiUrl = 'https://192.168.0.13';
   // public apiUrl = 'https://192.168.101.7';
@@ -435,6 +436,31 @@ public getConfCambioVendedorPed(): string {
   generar_pedido(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/generar_pedido', param);
   }
+
+  generar_ing_producto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/generar_ing_producto', param);
+  }
+
+  lista_ing_productos(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/lista_ing_producto', param);
+  }
+
+  get_ing_producto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/get_ing_producto', param);
+  }
+
+  upload_imagen_ing_producto(formData) {
+    return this.http.post(this.apiUrl + ':' + this.port + '/upload_imagen_ing_producto', formData, {
+        reportProgress: true,
+        observe: 'events'
+      }).pipe(
+        catchError(this.errorMgmt)
+      )
+    }
+  
+  generar_pdf_ing_producto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/generar_pdf_ing_producto', param);
+  }
   
   generar_renglones_pdv(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/generar_renglones_pdv', param);
@@ -528,6 +554,18 @@ public getConfCambioVendedorPed(): string {
   ciudad(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/ciudad', param);
   }
+
+  impreso(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/impreso', param);
+  }
+
+  supervisor(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/supervisor', param);
+  }
+
+  jefe_produccion(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/jefe_produccion', param);
+  }
   
   paises(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/paises', param);
@@ -582,7 +620,9 @@ public getConfCambioVendedorPed(): string {
     return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_encabezado_pdv', param);
   }
   
-  
+  actualizar_ing_producto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_ing_producto', param);
+  }
   
   get_prec_product(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/get_prec_product', param);

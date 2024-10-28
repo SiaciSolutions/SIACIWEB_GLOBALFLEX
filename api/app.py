@@ -54,6 +54,7 @@ urlmail = 'http://' + coneccion.ip + ':' + coneccion.puerto + '/mail/'
 # app.config['UPLOAD_FOLDER'] = 'C:\\wamp\\www\\TEST_acople_webfe_PEDIDO_PDV_TALLERES\\src\\assets\\img_talleres'
 app.config['UPLOAD_FOLDER'] = APP_PATH+'\\img_talleres_desa'
 app.config['UPLOAD_FOLDER_ARTICULOS'] = APP_PATH+'\\img_articulos'
+app.config['UPLOAD_FOLDER_ING_PRODUCTOS'] = APP_PATH+'\\img_ing_productos'
 
 
 # nginx-1.14.2\html\assets\
@@ -407,6 +408,84 @@ def ciudad():
   curs = conn.cursor()
   campos = ['codemp', 'codgeo','nomgeo']
   sql = "select codemp,codgeo,nomgeo from nom_locgeo where codemp='01' and tipo=3".format(datos['codemp'])
+  curs.execute(sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    d = dict(zip(campos, r))
+    arrresp.append(d)
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
+@app.route('/impreso', methods=['POST'])
+def impreso():
+  datos = request.json
+  print ('ENTRADAAAAA A IMPRESO RESPONSABLE')
+  print (datos)
+  print(datos['codemp'])
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  #campos = ['usuario']
+  sql = "SELECT nombre+' '+apelli FROM nom_funcionarios where codemp = '{}'".format(datos['codemp'])
+  print(sql)
+  curs.execute(sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    full_name = r[0]
+    name_parts = full_name.split()
+    
+    formatted_name = ' '.join(part.capitalize() for part in name_parts[:-1])
+    formatted_name += f" {name_parts[-1][0].upper()}."
+
+    arrresp.append({'usuario': formatted_name})
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
+@app.route('/supervisor', methods=['POST'])
+def supervisor():
+  datos = request.json
+  print ('ENTRADAAAAA A SUPERVISOR')
+  print (datos)
+  
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  campos = ['usuario']
+  sql = "select usuario from usuarios_responsables where codus='01'".format(datos['usuario'])
+  curs.execute(sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    d = dict(zip(campos, r))
+    arrresp.append(d)
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
+@app.route('/jefe_produccion', methods=['POST'])
+def jefe_produccion():
+  datos = request.json
+  print ('ENTRADAAAAA A JEFE DE PRODUCCION')
+  print (datos)
+  
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  campos = ['usuario']
+  sql = "select usuario from usuarios_responsables where codus='02'".format(datos['usuario'])
   curs.execute(sql)
   regs = curs.fetchall()
   arrresp = []
@@ -3768,10 +3847,315 @@ def generar_pedido():
   response.headers['content-type'] = 'application/json'
   return(response)
   
+@app.route('/generar_ing_producto', methods=['POST']) 
+def generar_ing_producto():
+  datos = request.json
+  print ("##########  ENTRADA GENERAR ING DE PRODUCTOS ######")
+  print (datos)
   
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
 
+  #codemp=datos['codemp']
+  #print ("CODEMP")
+  #print (codemp)
   
+  sql_codIngMax = "Select MAX(codIngProd) AS codMax from ing_de_producto"
+  curs.execute(sql_codIngMax)
+  codMax = curs.fetchone()[0]
+  cod_IngMax = codMax + 1 if codMax is not None else 1
+  print(cod_IngMax)
+  
+  img_etiqueta = datos.get('imagen_comprimida') or datos.get('imagen_original') or None
+  
+  def replace_none_values(data_dict):
+    return {key: '' if value is None else value for key, value in data_dict.items()}
+  
+  datos_limpios = replace_none_values(datos)
+  #print(tinta_sticky_vC)
+  
+  
+  sql = """INSERT INTO ing_de_producto (CodEmpresa, fecIngProd,
+    razon_social_ing_prod, ruc_ing_prod, nombre_comercial_ing_prod, referencia, alto, ancho, proveedor, impresora, bobinadora, material_imprimir, ancho_material, 
+    cilindro, cortador, colores, rep_des, filas, columnas, forma_etq, cod_cilindro, cod_plano, uv_total, uv_select, relam_delam, hot_stamping, cold_folid, repujado, lami_mate, lami_brillan, 
+    primario_c, primario_m, primario_k,primario_y, 
+    pantone_1, pantone_2, pantone_3, pantone_4, pantone_5, pantone_6, pantone_7, 
+    anilox_vC, anilox_vM, anilox_vY, anilox_vK, 
+    anilox_1, anilox_2, anilox_3, anilox_4, anilox_5, anilox_6, anilox_7, 
+    prov_fabricante_vC, prov_fabricante_vM, prov_fabricante_vY, prov_fabricante_vK,
+    prov_fabricante_1, prov_fabricante_2, prov_fabricante_3, prov_fabricante_4, prov_fabricante_5, prov_fabricante_6, prov_fabricante_7, 
+    tinta_sticky_vC, tinta_sticky_vM, tinta_sticky_vY, tinta_sticky_vK, 
+    tinta_sticky_1, tinta_sticky_2, tinta_sticky_3, tinta_sticky_4, tinta_sticky_5, tinta_sticky_6, tinta_sticky_7, 
+    tipo_dispensado, diametro_rollo, peso_rollo, medida, dispensado_taca,
+    embobinado_exterior, embobinado_interior, 
+    img_etiqueta,
+    ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion
+          )  VALUES ('{}','{}',
+                  '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
+                  '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
+                  '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
+                  '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}' 
+              )"""\
+    .format(datos_limpios['codemp'],datos_limpios['fecIngProd'],
+            datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['nombre_comercial'],datos_limpios['referencia'],datos_limpios['medida_alto'],datos_limpios['medida_ancho'],datos_limpios['proveedor'],datos_limpios['impresora'],datos_limpios['bobinadora'],datos_limpios['material_imprimir'],datos_limpios['ancho_material'],
+            datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['filas'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foild'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
+            datos_limpios['primario_C'],datos_limpios['primario_M'],datos_limpios['primario_K'],datos_limpios['primario_Y'],
+            datos_limpios['pantone_1'],datos_limpios['pantone_2'],datos_limpios['pantone_3'],datos_limpios['pantone_4'],datos_limpios['pantone_5'],datos_limpios['pantone_6'],datos_limpios['pantone_7'],
+            datos_limpios['anilox_vC'],datos_limpios['anilox_vM'],datos_limpios['anilox_vY'],datos_limpios['anilox_vK'],
+            datos_limpios['anilox_1'],datos_limpios['anilox_2'],datos_limpios['anilox_3'],datos_limpios['anilox_4'],datos_limpios['anilox_5'],datos_limpios['anilox_6'],datos_limpios['anilox_7'],
+            datos_limpios['prov_fabricante_vC'],datos_limpios['prov_fabricante_vM'],datos_limpios['prov_fabricante_vY'],datos_limpios['prov_fabricante_vK'],
+            datos_limpios['prov_fabricante_1'],datos_limpios['prov_fabricante_2'],datos_limpios['prov_fabricante_3'],datos_limpios['prov_fabricante_4'],datos_limpios['prov_fabricante_5'],datos_limpios['prov_fabricante_6'],datos_limpios['prov_fabricante_7'],
+            datos_limpios['tinta_sticky_vC'],datos_limpios['tinta_sticky_vM'],datos_limpios['tinta_sticky_vY'],datos_limpios['tinta_sticky_vK'],
+            datos_limpios['tinta_sticky_1'],datos_limpios['tinta_sticky_2'],datos_limpios['tinta_sticky_3'],datos_limpios['tinta_sticky_4'],datos_limpios['tinta_sticky_5'],datos_limpios['tinta_sticky_6'],datos_limpios['tinta_sticky_7'],
+            datos_limpios['tipo_dispensado'],datos_limpios['diametro_rollo'], datos_limpios['peso_rollo'], datos_limpios['medida_dispensado'], datos_limpios['taca'], 
+            datos_limpios['embobinado_ext_seleccionado'], datos_limpios['embobinado_interior_seleccionado'],
+            img_etiqueta,
+            datos_limpios['ejecutivo_ventas'], datos_limpios['impreso_res'], datos_limpios['supervisador_res'], datos_limpios['jefe_prod'])
+  print (sql)
+  curs.execute(sql)
+  conn.commit()
+  
+  d = {'status': 'INSERTADO CON EXITO', 'CodIngProd': cod_IngMax}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
 
+@app.route('/actualizar_ing_producto', methods=['POST'])
+def actualizar_ing_producto():
+  datos = request.json
+  print(datos)
+  print("INGRESANDO AL UPDATE")
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  img_etiqueta = datos.get('imagen_comprimida') or datos.get('imagen_original') or None
+  def replace_none_values(data_dict):
+    return {key: '' if value in [None, 'None'] else value for key, value in data_dict.items()}
+  
+  datos_limpios = replace_none_values(datos)
+  
+  sql= """UPDATE ing_de_producto set 
+    fecIngProd='{}',
+    razon_social_ing_prod='{}', ruc_ing_prod='{}', nombre_comercial_ing_prod='{}', referencia='{}', alto='{}', ancho='{}', proveedor='{}', impresora='{}', bobinadora='{}', material_imprimir='{}', ancho_material='{}', 
+    cilindro='{}', cortador='{}', colores='{}', rep_des='{}', filas='{}', columnas='{}', forma_etq='{}', cod_cilindro='{}', cod_plano='{}', uv_total='{}', uv_select='{}', relam_delam='{}', hot_stamping='{}', cold_folid='{}', repujado='{}', lami_mate='{}', lami_brillan='{}', 
+    primario_c='{}', primario_m='{}', primario_k='{}',primario_y='{}', 
+    pantone_1='{}', pantone_2='{}', pantone_3='{}', pantone_4='{}', pantone_5='{}', pantone_6='{}', pantone_7='{}', 
+    anilox_vC='{}', anilox_vM='{}', anilox_vY='{}', anilox_vK='{}', 
+    anilox_1='{}', anilox_2='{}', anilox_3='{}', anilox_4='{}', anilox_5='{}', anilox_6='{}', anilox_7='{}', 
+    prov_fabricante_vC='{}', prov_fabricante_vM='{}', prov_fabricante_vY='{}', prov_fabricante_vK='{}',
+    prov_fabricante_1='{}', prov_fabricante_2='{}', prov_fabricante_3='{}', prov_fabricante_4='{}', prov_fabricante_5='{}', prov_fabricante_6='{}', prov_fabricante_7='{}', 
+    tinta_sticky_vC='{}', tinta_sticky_vM='{}', tinta_sticky_vY='{}', tinta_sticky_vK='{}', 
+    tinta_sticky_1='{}', tinta_sticky_2='{}', tinta_sticky_3='{}', tinta_sticky_4='{}', tinta_sticky_5='{}', tinta_sticky_6='{}', tinta_sticky_7='{}', 
+    tipo_dispensado='{}', diametro_rollo='{}', peso_rollo='{}', medida='{}', dispensado_taca='{}',
+    embobinado_exterior='{}', embobinado_interior='{}', 
+    img_etiqueta ='{}',
+    ejecutivo_ventas='{}', impreso_responsable='{}', supervisado_responsable='{}', jefe_produccion='{}'
+    where codEmpresa = {} and codIngProd ='{}'
+  """.format(datos_limpios['fecIngProd'],
+            datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['nombre_comercial'],datos_limpios['referencia'],datos_limpios['medida_alto'],datos_limpios['medida_ancho'],datos_limpios['proveedor'],datos_limpios['impresora'],datos_limpios['bobinadora'],datos_limpios['material_imprimir'],datos_limpios['ancho_material'],
+            datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['filas'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foild'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
+            datos_limpios['primario_C'],datos_limpios['primario_M'],datos_limpios['primario_K'],datos_limpios['primario_Y'],
+            datos_limpios['pantone_1'],datos_limpios['pantone_2'],datos_limpios['pantone_3'],datos_limpios['pantone_4'],datos_limpios['pantone_5'],datos_limpios['pantone_6'],datos_limpios['pantone_7'],
+            datos_limpios['anilox_vC'],datos_limpios['anilox_vM'],datos_limpios['anilox_vY'],datos_limpios['anilox_vK'],
+            datos_limpios['anilox_1'],datos_limpios['anilox_2'],datos_limpios['anilox_3'],datos_limpios['anilox_4'],datos_limpios['anilox_5'],datos_limpios['anilox_6'],datos_limpios['anilox_7'],
+            datos_limpios['prov_fabricante_vC'],datos_limpios['prov_fabricante_vM'],datos_limpios['prov_fabricante_vY'],datos_limpios['prov_fabricante_vK'],
+            datos_limpios['prov_fabricante_1'],datos_limpios['prov_fabricante_2'],datos_limpios['prov_fabricante_3'],datos_limpios['prov_fabricante_4'],datos_limpios['prov_fabricante_5'],datos_limpios['prov_fabricante_6'],datos_limpios['prov_fabricante_7'],
+            datos_limpios['tinta_sticky_vC'],datos_limpios['tinta_sticky_vM'],datos_limpios['tinta_sticky_vY'],datos_limpios['tinta_sticky_vK'],
+            datos_limpios['tinta_sticky_1'],datos_limpios['tinta_sticky_2'],datos_limpios['tinta_sticky_3'],datos_limpios['tinta_sticky_4'],datos_limpios['tinta_sticky_5'],datos_limpios['tinta_sticky_6'],datos_limpios['tinta_sticky_7'],
+            datos_limpios['tipo_dispensado'],datos_limpios['diametro_rollo'], datos_limpios['peso_rollo'], datos_limpios['medida_dispensado'], datos_limpios['taca'], 
+            datos_limpios['embobinado_ext_seleccionado'], datos_limpios['embobinado_interior_seleccionado'],
+            img_etiqueta,
+            datos_limpios['ejecutivo_ventas'], datos_limpios['impreso_res'], datos_limpios['supervisador_res'], datos_limpios['jefe_prod'],
+            datos_limpios['codemp'], datos_limpios['CodIngProd'])
+  print(sql)
+  curs.execute(sql)
+  conn.commit()
+  
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  
+  d = {'status': 'ACTUALIZADO CON EXITO'}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
+
+@app.route('/lista_ing_producto', methods=['POST'])
+def lista_ing_producto():
+  datos = request.json
+  print(datos)
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  campos = ['CodIngProd','razon_social_ing_prod','fecIngProd','ejecutivo_ventas','impreso_responsable','supervisado_responsable','jefe_produccion']
+  
+  sql = """ SELECT CodIngProd, razon_social_ing_prod, fecIngProd, ejecutivo_ventas, impreso_responsable, supervisado_responsable,jefe_produccion 
+  FROM ing_de_producto where codEmpresa = '{}' and fecIngProd between '{}' and '{}' order by fecIngProd
+  """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'])
+  curs.execute(sql)
+  print (sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    d = dict(zip(campos, r))
+    print(arrresp)
+    arrresp.append(d)
+
+  #print(arrresp)
+  print("CERRANDO SESION SIACI")
+  # print(arrresp)
+  curs.close()
+  conn.close()
+
+  return (jsonify(arrresp))
+
+@app.route('/get_ing_producto', methods=['POST'])
+def get_ing_producto():
+  datos = request.json
+  print (datos)
+  codemp=datos['codemp']
+  codIngProd=datos['codIngProd']
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  # SELECT p.numtra,DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra , DATEFORMAT(p.fecult, 'DD-MM-YYYY') as fecult ,c.rucced,c.nombres,c.dircli,c.codcli,c.telcli,c.email,p.observ,p.totnet,p.iva_cantidad,p.codusu,p.ciucli,
+  sql = """
+        SELECT codIngProd, fecIngProd,
+          razon_social_ing_prod, ruc_ing_prod, nombre_comercial_ing_prod, referencia, alto, ancho, proveedor, impresora, bobinadora, material_imprimir, ancho_material, 
+          cilindro, cortador, colores, rep_des, filas, columnas, forma_etq, cod_cilindro, cod_plano, uv_total, uv_select, relam_delam, hot_stamping, cold_folid, repujado, lami_mate, lami_brillan, 
+          primario_c, primario_m, primario_k,primario_y, 
+          pantone_1, pantone_2, pantone_3, pantone_4, pantone_5, pantone_6, pantone_7, 
+          anilox_vC, anilox_vM, anilox_vY, anilox_vK, 
+          anilox_1, anilox_2, anilox_3, anilox_4, anilox_5, anilox_6, anilox_7, 
+          prov_fabricante_vC, prov_fabricante_vM, prov_fabricante_vY, prov_fabricante_vK,
+          prov_fabricante_1, prov_fabricante_2, prov_fabricante_3, prov_fabricante_4, prov_fabricante_5, prov_fabricante_6, prov_fabricante_7, 
+          tinta_sticky_vC, tinta_sticky_vM, tinta_sticky_vY, tinta_sticky_vK, 
+          tinta_sticky_1, tinta_sticky_2, tinta_sticky_3, tinta_sticky_4, tinta_sticky_5, tinta_sticky_6, tinta_sticky_7, 
+          tipo_dispensado, diametro_rollo, peso_rollo, medida, dispensado_taca,
+          embobinado_exterior, embobinado_interior, 
+          ruta_img,
+          ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion 
+        FROM ing_de_producto WHERE codIngProd = '{}' and codEmpresa = '{}'
+	      """.format(codIngProd,codemp)
+  curs.execute(sql)
+  print (sql)
+  r = curs.fetchone()
+  campos = [
+    'codIngProd', 'fecIngProd', 'razon_social', 'ruc', 'nombre_comercial', 'referencia', 'medida_alto', 'medida_ancho',
+    'proveedor', 'impresora', 'bobinadora', 'material_imprimir', 'ancho_material', 'cilindro', 'cortador',
+    'color_seleccionado', 'rep_des', 'filas', 'columnas', 'formato_seleccionado', 'cilindro_cod', 'troquel_plano_cod',
+    'uv_total', 'uv_select', 'relam_delam', 'hot_stamping_acabados', 'cold_foild', 'repujado', 'laminado_mate',
+    'laminado_brillan', 'primario_C', 'primario_M', 'primario_K', 'primario_Y', 'pantone_1', 'pantone_2', 'pantone_3',
+    'pantone_4', 'pantone_5', 'pantone_6', 'pantone_7', 'anilox_vC', 'anilox_vM', 'anilox_vY', 'anilox_vK', 'anilox_1',
+    'anilox_2', 'anilox_3', 'anilox_4', 'anilox_5', 'anilox_6', 'anilox_7', 'prov_fabricante_vC', 'prov_fabricante_vM',
+    'prov_fabricante_vY', 'prov_fabricante_vK', 'prov_fabricante_1', 'prov_fabricante_2', 'prov_fabricante_3',
+    'prov_fabricante_4', 'prov_fabricante_5', 'prov_fabricante_6', 'prov_fabricante_7', 'tinta_sticky_vC',
+    'tinta_sticky_vM', 'tinta_sticky_vY', 'tinta_sticky_vK', 'tinta_sticky_1', 'tinta_sticky_2', 'tinta_sticky_3',
+    'tinta_sticky_4', 'tinta_sticky_5', 'tinta_sticky_6', 'tinta_sticky_7', 'tipo_dispensado', 'diametro_rollo',
+    'peso_rollo', 'medida_dispensado', 'taca', 'embobinado_ext_seleccionado', 'embobinado_interior_seleccionado',
+    'ruta_img', 'ejecutivo_ventas', 'impreso_res', 'supervisador_res', 'jefe_prod'
+    ]
+  print(r)
+  
+  if r:
+    if r[81]:
+      print("hay imagen")
+      arr_path_img = r[81].split('\\')
+      img_name = arr_path_img[-1]
+      art = (r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], r[35], r[36], r[37], r[38], r[39], r[40], r[41], r[42], r[43], r[44], r[45], r[46], r[47], r[48], r[49], r[50], r[51], r[52], r[53], r[54], r[55], r[56], r[57], r[58], r[59], r[60], r[61], r[62], r[63], r[64], r[65], r[66], r[67], r[68], r[69], r[70], r[71], r[72], r[73], r[74], r[75], r[76], r[77], r[78], r[79], r[80], '../../assets/img_ing_productos/'+img_name, r[82], r[83], r[84], r[85])
+      d = dict(zip(campos, art))
+    else:
+      print("NO HAY IMAGEN")
+      art = (r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], r[35], r[36], r[37], r[38], r[39], r[40], r[41], r[42], r[43], r[44], r[45], r[46], r[47], r[48], r[49], r[50], r[51], r[52], r[53], r[54], r[55], r[56], r[57], r[58], r[59], r[60], r[61], r[62], r[63], r[64], r[65], r[66], r[67], r[68], r[69], r[70], r[71], r[72], r[73], r[74], r[75], r[76], r[77], r[78], r[79], r[80], '../../assets/img_ing_productos/subir-imagen.png', r[82], r[83], r[84], r[85])
+      d = dict(zip(campos, art))
+  else:
+    d = {'codus1': False}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  print (d)
+  
+	#return(response)
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  
+  return(response)
+
+@app.route("/upload_imagen_ing_producto", methods=['POST'])
+def upload_imagen_ing_producto():
+ if request.method == 'POST':
+  datos = request
+ 
+  print (request)
+  print (request.form)
+ 
+
+  # numtra = request.form["dir"][3:]
+  codemp = request.form["codemp"]
+  codIngProd = request.form["codIngProd"]
+  
+  print (request.form["codemp"])
+  print (request.form["codIngProd"])
+  # print (codemp)
+  print (request.files)
+  print (request.files['uploads'])
+  
+  f = request.files['uploads']
+  filename = secure_filename(f.filename)
+  directorio = app.config['UPLOAD_FOLDER_ING_PRODUCTOS']
+
+  f.save(os.path.join(directorio, filename))
+  
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  sql = """ update ing_de_producto set ruta_img = '{}' where codEmpresa = '{}' and codIngProd='{}'
+  """.format(directorio+'\\'+filename,codemp,codIngProd)
+  print (sql) 
+  curs = conn.cursor()
+  curs.execute(sql)
+  conn.commit()
+  curs.close()
+  
+  result = {'resultado': 'Archivo subido exitosamente'} 
+  response = make_response(dumps(result, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
+@app.route('/generar_pdf_ing_producto', methods=['POST'])
+def generar_pdf_ing_producto():
+    print("GENERAR ING. DE PRODUCTO PDF")
+    datos = request.json
+    print(datos)
+    codIngProd_str = str(datos['codIngProd'])
+    file= 'INGENIERIA_DE_PRODUCTO_'+datos['codemp']+'_'+codIngProd_str+'.pdf'
+   
+    DESTINO='C:\\SISTEMA\\temporales\\'+file
+    ORIGEN = APP_PATH+'\\PLANTILLA_PEDIDOS\\'+file
+    
+    generar_pdf = pdf.GEN_PDF()
+    resp_pdf = generar_pdf.gen_ing_producto_pdf(datos['codemp'],datos['codIngProd'])
+    shutil.move(ORIGEN, DESTINO)
+
+    d = {'STATUS':'EXITOSO','PDF':file}
+	
+    # return send_from_directory(PATH_PDF, arr_image[1])
+    return jsonify(d)
+
+@app.route('/ver_pdf_ing_producto/<ticketname>')
+def ver_pdf_ing_producto(ticketname):
+    print ("VER TICKET")
+    print (ticketname)
+
+    # arr_image= ticketname.split('_')
+    # arr_image= ticketname.split('_')
+	
+    # codemp = arr_image[1]
+    # numfac = arr_image[2]
+
+
+    PATH_PDF='C:\\SISTEMA\\temporales'
+    # return send_from_directory(PATH_PDF, arr_image[1])
+    return send_from_directory(PATH_PDF, ticketname)
+    
 ##################################################### GENERAR PEDIDO GUADAPRODUCT 
 # @app.route('/generar_pedido', methods=['POST'])
 # def generar_pedido():
