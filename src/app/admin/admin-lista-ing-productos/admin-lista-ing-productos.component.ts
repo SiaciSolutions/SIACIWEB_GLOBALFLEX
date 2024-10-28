@@ -132,23 +132,23 @@ export class AdminListaIngProductosComponent implements OnInit {
 	// localStorage.removeItem('listado_original')
 	
 	
-	this.srv.lista_pedidos(datos).subscribe(
+	this.srv.lista_ing_productos(datos).subscribe(
 	   data => {
 		   // if (data){
 			   // this.loading = false;
 		   // }
 		   console.log(data)
 		   console.log ("EJECUTADA DATA")
-			this.lista_pedidos_tabla = data
+			this.lista_ing_producto_tabla = data
 			// this.buildDtOptions(this.lista_pedidos)
 		}); 
 		
 		setTimeout(()=> {	
 			console.log("TIME OUT")
 			// console.log(this.lista_pedidos)
-			this.lista_pedidos = this.lista_pedidos_tabla
+			this.lista_ing_producto = this.lista_ing_producto_tabla
 			// localStorage.setItem('listado_original', this.lista_pedidos)
-			this.listado_original = this.lista_pedidos
+			this.listado_original = this.lista_ing_producto
 			
 			
 		this.dtOptions = {
@@ -308,7 +308,7 @@ export class AdminListaIngProductosComponent implements OnInit {
 	datos['usuario'] = this.usuario;
 	datos['tipacc'] = this.srv.getTipacc()
 
-	this.srv.lista_pedidos(datos).subscribe(
+	this.srv.lista_ing_productos(datos).subscribe(
 	   data => {
 		   // if (data){
 			   // this.loading = false;
@@ -332,10 +332,10 @@ export class AdminListaIngProductosComponent implements OnInit {
     render_table(new_list): void {
 
 		this.loading = true
-		this.lista_pedidos = undefined
+		this.lista_ing_producto_tabla = undefined
 		setTimeout(()=> {	
 			console.log("TIME OUT")
-			this.lista_pedidos = new_list
+			this.lista_ing_producto_tabla = new_list
 		
 			this.dtOptions = {
 				order: [0, 'desc'],

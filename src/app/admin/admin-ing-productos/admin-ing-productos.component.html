@@ -566,37 +566,71 @@
 											</tr>
 											<tr>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_vC" id="tinta_sticky_vC"   [(ngModel)]="tinta_sticky_vC"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off" [disabled]="!primario_C">
+													<select name="tinta_sticky_vC" [(ngModel)]="tinta_sticky_vC" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_C">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_vM" id="tinta_sticky_vM"   [(ngModel)]="tinta_sticky_vM"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off" [disabled]="!primario_M">
+													<!--<input type="text" name="tinta_sticky_vM" id="tinta_sticky_vM"   [(ngModel)]="tinta_sticky_vM"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off" [disabled]="!primario_M">-->
+													<select name="tinta_sticky_vM" [(ngModel)]="tinta_sticky_vM" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_M">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_vY" id="tinta_sticky_vY"   [(ngModel)]="tinta_sticky_vY"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off" [disabled]="!primario_Y">
+													<select name="tinta_sticky_vY" [(ngModel)]="tinta_sticky_vY" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_Y">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_vK" id="tinta_sticky_vK"   [(ngModel)]="tinta_sticky_vK"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off" [disabled]="!primario_K">
+													<select name="tinta_sticky_vK" [(ngModel)]="tinta_sticky_vK" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_K">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_1" id="tinta_sticky_1"   [(ngModel)]="tinta_sticky_1"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off">
+													<select name="tinta_sticky_1" [(ngModel)]="tinta_sticky_1" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_2" id="tinta_sticky_2"   [(ngModel)]="tinta_sticky_2"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off">
+													<select name="tinta_sticky_2" [(ngModel)]="tinta_sticky_2" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_3" id="tinta_sticky_3"   [(ngModel)]="tinta_sticky_3"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off">
+													<select name="tinta_sticky_3" [(ngModel)]="tinta_sticky_3" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_4" id="tinta_sticky_4"   [(ngModel)]="tinta_sticky_4"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off">
+													<select name="tinta_sticky_4" [(ngModel)]="tinta_sticky_4" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_5" id="tinta_sticky_5"   [(ngModel)]="tinta_sticky_5"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off">
+													<select name="tinta_sticky_5" [(ngModel)]="tinta_sticky_5" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_6" id="tinta_sticky_6"   [(ngModel)]="tinta_sticky_6"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off">
+													<select name="tinta_sticky_6" [(ngModel)]="tinta_sticky_6" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="tinta_sticky_7" id="tinta_sticky_7"   [(ngModel)]="tinta_sticky_7"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off">
+													<select name="tinta_sticky_7" [(ngModel)]="tinta_sticky_7" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 											</tr>
 										</tbody>

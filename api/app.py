@@ -3981,8 +3981,8 @@ def actualizar_ing_producto():
   return(response)
 
 
-@app.route('/lista_ing_producto', methods=['POST'])
-def lista_ing_producto():
+@app.route('/lista_ing_productos', methods=['POST'])
+def lista_ing_productos():
   datos = request.json
   print(datos)
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)

@@ -442,7 +442,7 @@ public getConfCambioVendedorPed(): string {
   }
 
   lista_ing_productos(param): Observable<any> {
-    return this.http.post(this.apiUrl + ':' + this.port + '/lista_ing_producto', param);
+    return this.http.post(this.apiUrl + ':' + this.port + '/lista_ing_productos', param);
   }
 
   get_ing_producto(param): Observable<any> {

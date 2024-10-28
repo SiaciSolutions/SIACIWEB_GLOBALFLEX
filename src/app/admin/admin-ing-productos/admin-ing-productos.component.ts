@@ -227,50 +227,57 @@ export class AdminIngProductosComponent implements OnInit {
 
     tiptra
 	// getConfCambioVendedorPed()
-  public doc_lista = [
-			{"tiptra": "1", "nom_doc": "PEDIDO"},
-		    {"tiptra": "2", "nom_doc": "PROFORMA"}
-		];
-  
-  public color_lista = [
-			{"color_ls": "1", "nom_doc": "1"},
-		    {"color_ls": "2", "nom_doc": "2"},
-		    {"color_ls": "3", "nom_doc": "3"},
-		    {"color_ls": "4", "nom_doc": "4"},
-		    {"color_ls": "5", "nom_doc": "5"},
-		    {"color_ls": "6", "nom_doc": "6"},
-		    {"color_ls": "7", "nom_doc": "7"}
-		];
-  
-  public formato_etiqueta = [
-			{"tipo_etiqueta": "Rectangular", "nom_doc": "RECTANGULAR"},
-			{"tipo_etiqueta": "Cuadrado", "nom_doc": "CUADRADO"},
-			{"tipo_etiqueta": "Circular", "nom_doc": "CIRCULAR"},
-			{"tipo_etiqueta": "Especial", "nom_doc": "ESPECIAL"},
-			{"tipo_etiqueta": "Otros", "nom_doc": "OTROS"}
-		];
-  
+	
+	public color_lista = [
+		{"color_ls": "1", "nom_doc": "1"},
+		{"color_ls": "2", "nom_doc": "2"},
+		{"color_ls": "3", "nom_doc": "3"},
+		{"color_ls": "4", "nom_doc": "4"},
+		{"color_ls": "5", "nom_doc": "5"},
+		{"color_ls": "6", "nom_doc": "6"},
+		{"color_ls": "7", "nom_doc": "7"}
+	];
+	
+	
+	public formato_etiqueta = [
+		{"tipo_etiqueta": "Rectangular", "nom_doc": "RECTANGULAR"},
+		{"tipo_etiqueta": "Cuadrado", "nom_doc": "CUADRADO"},
+		{"tipo_etiqueta": "Circular", "nom_doc": "CIRCULAR"},
+		{"tipo_etiqueta": "Especial", "nom_doc": "ESPECIAL"},
+		{"tipo_etiqueta": "Otros", "nom_doc": "OTROS"}
+	];
+	
+	public tinta_sticky_lista = [
+		{"ts_lista": "S", "nom_doc": "S"},
+		{"ts_lista": "a", "nom_doc": "a"},
+		{"ts_lista": "n", "nom_doc": "n"},
+		{"ts_lista": "bl", "nom_doc": "bl"},
+		{"ts_lista": "BE", "nom_doc": "BE"},
+		{"ts_lista": "AM", "nom_doc": "AM"}
+	];
+
 	public emboext_lista = [
-			{"emboext_ls": "R1", "nom_doc": "R1"},
-			{"emboext_ls": "R2", "nom_doc": "R2"},
-			{"emboext_ls": "R3", "nom_doc": "R3"},
-			{"emboext_ls": "R4", "nom_doc": "R4"},
-			{"emboext_ls": "R5", "nom_doc": "R5"},
-			{"emboext_ls": "R6", "nom_doc": "R6"},
-			{"emboext_ls": "R7", "nom_doc": "R7"},
-			{"emboext_ls": "R8", "nom_doc": "R8"}
-		];
+		{"emboext_ls": "R1", "nom_doc": "R1"},
+		{"emboext_ls": "R2", "nom_doc": "R2"},
+		{"emboext_ls": "R3", "nom_doc": "R3"},
+		{"emboext_ls": "R4", "nom_doc": "R4"},
+		{"emboext_ls": "R5", "nom_doc": "R5"},
+		{"emboext_ls": "R6", "nom_doc": "R6"},
+		{"emboext_ls": "R7", "nom_doc": "R7"},
+		{"emboext_ls": "R8", "nom_doc": "R8"}
+	];
 
 	public emboint_lista = [
-			{"emboint_ls": "R101", "nom_doc": "R101"},
-			{"emboint_ls": "R102", "nom_doc": "R102"},
-			{"emboint_ls": "R103", "nom_doc": "R103"},
-			{"emboint_ls": "R104", "nom_doc": "R104"},
-			{"emboint_ls": "R105", "nom_doc": "R105"},
-			{"emboint_ls": "R106", "nom_doc": "R106"},
-			{"emboint_ls": "R107", "nom_doc": "R107"},
-			{"emboint_ls": "R108", "nom_doc": "R108"}
-		];
+		{"emboint_ls": "R101", "nom_doc": "R101"},
+		{"emboint_ls": "R102", "nom_doc": "R102"},
+		{"emboint_ls": "R103", "nom_doc": "R103"},
+		{"emboint_ls": "R104", "nom_doc": "R104"},
+		{"emboint_ls": "R105", "nom_doc": "R105"},
+		{"emboint_ls": "R106", "nom_doc": "R106"},
+		{"emboint_ls": "R107", "nom_doc": "R107"},
+		{"emboint_ls": "R108", "nom_doc": "R108"},
+		{"emboint_ls": "NO", "nom_doc": "NO APLICA"}
+	];
 
 
   tipo_doc
@@ -644,7 +651,7 @@ export class AdminIngProductosComponent implements OnInit {
 		this.taca = data['taca']
 			
 		this.embobinado_ext_seleccionado = data['embobinado_ext_seleccionado']
-		this.embobinado_interior_seleccionado = data['embobinado_interior_seleccionado']
+		this.embobinado_interior_seleccionado = data['embobinado_interior_seleccionado'];
 		
 		this.src = data['ruta_img']
 
@@ -1474,7 +1481,7 @@ export class AdminIngProductosComponent implements OnInit {
 			
 			//********SENTIDO SALIDA**********
 			encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
-			if(this.embobinado_interior_seleccionado){
+			if(this.embobinado_interior_seleccionado && this.embobinado_interior_seleccionado !== 'NO'){
 				encabezado_ing_prod['embobinado_interior_seleccionado'] = this.embobinado_interior_seleccionado;
 			}
 			else{
@@ -1707,7 +1714,7 @@ export class AdminIngProductosComponent implements OnInit {
 				
 				//********SENTIDO SALIDA**********
 				encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
-				if(this.embobinado_interior_seleccionado){
+				if(this.embobinado_interior_seleccionado && this.embobinado_interior_seleccionado !== 'NO'){
 					encabezado_ing_prod['embobinado_interior_seleccionado'] = this.embobinado_interior_seleccionado;
 				}
 				else{
