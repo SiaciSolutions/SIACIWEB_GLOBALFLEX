@@ -2,22 +2,21 @@
   <!-- Content Header (Page header) -->
   <section class="content-header">
     <h1 *ngIf="!accion_actualizar">
-	   Agregar ING. de Producto
+	   Agregar Ing. de Producto
       <small>Creación de la Ingeniera del producto</small>
     </h1>
 	
-	<h1 *ngIf="accion_actualizar && tiptra==1">
+	<h1 *ngIf="accion_actualizar">
 	   Actualizar Ing. de Producto {{numtra}}
       <!-- <small>Actualizacion de los pedidos</small> -->
     </h1>
-	<h1 *ngIf="accion_actualizar && tiptra==2">
-	   Actualizar Proforma {{numtra}}
-      <!-- <small>Actualizacion de los pedidos</small> -->
-    </h1>
-	
-    <ol class="breadcrumb">
+    <ol *ngIf="!accion_actualizar" class="breadcrumb">
       <li><i class="fa fa-dashboard"></i>Ing. de Productos</li>
       <li class="active">Agregar Ing. de Productos</li>
+    </ol>
+    <ol *ngIf="accion_actualizar" class="breadcrumb">
+      <li><i class="fa fa-dashboard"></i>Ing. de Productos</li>
+      <li class="active">Actualizar Ing. de Productos</li>
     </ol>
   </section>
 
@@ -111,10 +110,12 @@
 										</div>
 									</div>
 									<div class="col-md-4">
-										<div class="form-group">
-											<label >NOMBRE COMERCIAL</label>
-											<input type="text" name="nombre_comercial" id="nombre_comercial"   [(ngModel)]="nombre_comercial"  class="form-control ui-autocomplete-input" placeholder="NOMBRE COMERCIAL" autocomplete="off" disabled>
-										</div>
+										<!-- 
+											<div class="form-group">
+												<label >NOMBRE COMERCIAL</label>
+												<input type="text" name="nombre_comercial" id="nombre_comercial"   [(ngModel)]="nombre_comercial"  class="form-control ui-autocomplete-input" placeholder="NOMBRE COMERCIAL" autocomplete="off" disabled>
+											</div>
+										-->
 									</div>
 								</div>
 								<div class="row">
@@ -526,37 +527,71 @@
 											</tr>
 											<tr>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_vC" id="prov_fabricante_vC"   [(ngModel)]="prov_fabricante_vC"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off" [disabled]="!primario_C">
+													<!--<input type="text" name="prov_fabricante_vC" id="prov_fabricante_vC"   [(ngModel)]="prov_fabricante_vC"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off" [disabled]="!primario_C">-->
+													<select name="prov_fabricante_vC" [(ngModel)]="prov_fabricante_vC" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_C">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_vM" id="prov_fabricante_vM"   [(ngModel)]="prov_fabricante_vM"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off" [disabled]="!primario_M">
+													<select name="prov_fabricante_vM" [(ngModel)]="prov_fabricante_vM" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_M">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_vY" id="prov_fabricante_vY"   [(ngModel)]="prov_fabricante_vY"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off" [disabled]="!primario_Y">
+													<select name="prov_fabricante_vY" [(ngModel)]="prov_fabricante_vY" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_Y">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_vK" id="prov_fabricante_vK"   [(ngModel)]="prov_fabricante_vK"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off" [disabled]="!primario_K">
+													<select name="prov_fabricante_vK" [(ngModel)]="prov_fabricante_vK" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_K">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_1" id="prov_fabricante_1"   [(ngModel)]="prov_fabricante_1"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off">
+													<select name="prov_fabricante_1" [(ngModel)]="prov_fabricante_1" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_2" id="prov_fabricante_2"   [(ngModel)]="prov_fabricante_2"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off">
+													<select name="prov_fabricante_2" [(ngModel)]="prov_fabricante_2" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_3" id="prov_fabricante_3"   [(ngModel)]="prov_fabricante_3"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off">
+													<select name="prov_fabricante_3" [(ngModel)]="prov_fabricante_3" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_4" id="prov_fabricante_4"   [(ngModel)]="prov_fabricante_4"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off">
+													<select name="prov_fabricante_4" [(ngModel)]="prov_fabricante_4" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_5" id="prov_fabricante_5"   [(ngModel)]="prov_fabricante_5"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off">
+													<select name="prov_fabricante_5" [(ngModel)]="prov_fabricante_5" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_6" id="prov_fabricante_6"   [(ngModel)]="prov_fabricante_6"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off">
+													<select name="prov_fabricante_6" [(ngModel)]="prov_fabricante_6" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 												<td class="col-md-1">
-													<input type="text" name="prov_fabricante_7" id="prov_fabricante_7"   [(ngModel)]="prov_fabricante_7"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off">
+													<select name="prov_fabricante_7" [(ngModel)]="prov_fabricante_7" class="form-control select2 tip" style="width:100%;">
+														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
+													</select>
 												</td>
 											</tr>
 											<tr>

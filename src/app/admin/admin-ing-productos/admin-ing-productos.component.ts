@@ -247,6 +247,11 @@ export class AdminIngProductosComponent implements OnInit {
 		{"tipo_etiqueta": "Otros", "nom_doc": "OTROS"}
 	];
 	
+	public h_w_lista = [
+		{"hw_lista": "H", "nom_doc": "H"},
+		{"hw_lista": "W", "nom_doc": "W"}
+	];
+
 	public tinta_sticky_lista = [
 		{"ts_lista": "S", "nom_doc": "S"},
 		{"ts_lista": "a", "nom_doc": "a"},
