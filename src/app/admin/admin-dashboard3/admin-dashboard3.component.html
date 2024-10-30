@@ -143,6 +143,11 @@
 					>
                         <i class="fa fa-align-justify"></i> Lista Ped Medico               
 					</a>
+					<a   class="btn btn-app" (click)="ocultar_menu_moviles()"
+					routerLink="/admin/codbarra_producto" [queryParams]="{usuario: srv.getUsuario(),empresa: srv.getEmpresa()}"
+					>
+                        <i class="fa fa-barcode"></i> Consulta por CodBarra               
+					</a>
 					
 					
 					

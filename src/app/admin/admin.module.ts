@@ -49,6 +49,10 @@ import { AdminPedidosMedicosComponent } from './admin-pedidos-medicos/admin-pedi
 import { AdminListaPedidosMedicosComponent } from './admin-lista-ped-medicos/admin-lista-ped-medicos.component';
 import { AdminTransfBodegaComponent } from './admin-transferencias/admin-transferencias.component';
 import { AdminListaTranferenciasComponent } from './admin-lista-transferencia/admin-lista-transferencias.component';
+import { AdminBusquedaCodBarraComponent } from './admin-busqueda-codbarra/admin-busqueda-codbarra.component';
+import { AdminListaDespachoPedidosComponent } from './admin-lista-despacho-ped/admin-lista-despachos-ped.component';
+import { AdminRegistroDespachoPedidosComponent } from './admin-registro-despacho/admin-registro-despacho.component';
+
 
 
 
@@ -155,7 +159,10 @@ import {
 	AdminPedidosMedicosComponent,
 	AdminListaPedidosMedicosComponent,
 	AdminTransfBodegaComponent,
-	AdminListaTranferenciasComponent
+	AdminListaTranferenciasComponent,
+	AdminBusquedaCodBarraComponent,
+	AdminListaDespachoPedidosComponent,
+	AdminRegistroDespachoPedidosComponent
 
 	
   ],

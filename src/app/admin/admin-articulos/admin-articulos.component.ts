@@ -91,6 +91,7 @@ export class AdminArticulosComponent implements OnInit {
  linea_articulo
  lista_tipo_subclase
  subclase_articulo
+ consulta_codbarra
 
 
 
@@ -112,6 +113,7 @@ export class AdminArticulosComponent implements OnInit {
 		this.usuario = params['usuario'] || this.route.snapshot.paramMap.get('usuario') || 0;
 		this.empresa = params['empresa'] || this.route.snapshot.paramMap.get('empresa') || 0;
 		this.codart = params['codart'] || this.route.snapshot.paramMap.get('codart') || 0;
+		this.consulta_codbarra = params['codbarra'] || this.route.snapshot.paramMap.get('codbarra') || 0;
 		console.log("LUEGO DE ENTRADA")
 		this.accion_actualizar = false
 		if (this.codart != 0){

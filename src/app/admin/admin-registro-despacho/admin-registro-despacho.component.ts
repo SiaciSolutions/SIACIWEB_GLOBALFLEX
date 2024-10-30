@@ -7,6 +7,8 @@ import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {formatDate} from '@angular/common';
 import {MatSelectionList} from '@angular/material'
+import { HttpEvent, HttpEventType } from '@angular/common/http';
+import {NgxImageCompressService} from 'ngx-image-compress';
 
 
 
@@ -14,16 +16,16 @@ declare var AdminLTE: any;
 
 
 @Component({
-  selector: 'app-admin-pedidos',
-  templateUrl: './admin-pedidos.component.html',
-  styleUrls: ['./admin-pedidos.component.css']
+  selector: 'app-admin-despacho-pedidos',
+  templateUrl: './admin-registro-despacho.component.html',
+  styleUrls: ['./admin-registro-despacho.component.css']
 })
 
 
 
 	
 
-export class AdminPedidosComponent implements OnInit {
+export class AdminRegistroDespachoPedidosComponent implements OnInit {
 	
 	  parametros: {usuario: string, empresa: string};
 	
@@ -81,12 +83,35 @@ export class AdminPedidosComponent implements OnInit {
 	condiciones_pago = null
 	tiempo_entrega = null
 	info_adicional = null
+	public id_pedido_ruta = undefined
+	public observacion_entrega_pedido= undefined
+
+	  ///////VARIABLE PARA SUBIDA DE FOTOS ///////////
+	  progress: number = 0;
+	  subida_exitosa = false
+	  uploadedFiles: Array < File > ;
+	  nombre_archivo = 'Seleccione archivo';
+	  localUrl: any;
+	  imageFile:any
+	  // AudioFile:any
+	  formData:any
+	  loading: boolean;
+	  sizeOfOriginalImage
+	  imgResultAfterCompress
+	  localCompressedURl
+	  sizeOFCompressedImage
+	  fotos
+	  audios
+	  /////// FIN VARIABLES SUBIDAS DE FOTOS///////////
 
 
 	
 	
 	jstoday = '';
 	fectra =  new FormControl(new Date());
+	fecha_entrega_efectiva =  new FormControl(new Date());
+	hora_entrega_planificada
+	hora_entrega_efectiva
 	// public date : string;
 	// clientes;
 	usuario = ''
@@ -96,6 +121,8 @@ export class AdminPedidosComponent implements OnInit {
 	cantidad_nueva = '';
 	ciudad
 	vendedor = '01'
+	src = "../../assets/img_articulos/subir-imagen.png"
+
 
 	// editART: ARTICULO
 	editART: any = []
@@ -106,7 +133,6 @@ export class AdminPedidosComponent implements OnInit {
 	articulos_seleccionado
 	elements_checkedList:any = [];
 	masterSelected:boolean;
-	tipo_agencia_cliente
 
 	
 	articulos_pedido: any = []
@@ -117,6 +143,7 @@ export class AdminPedidosComponent implements OnInit {
 	accion_actualizar = false
 	almacenes_lista
 	almacen
+	status_entrega
 	
     tiptra
 	// getConfCambioVendedorPed()
@@ -137,7 +164,9 @@ export class AdminPedidosComponent implements OnInit {
   constructor(
   private router: Router, 
   private srv: ApiService, 
-  private route: ActivatedRoute) 
+  private route: ActivatedRoute,
+  private imageCompress: NgxImageCompressService
+) 
   
   { 
   this.tipo_busqueda = true
@@ -172,17 +201,20 @@ export class AdminPedidosComponent implements OnInit {
 			this.empresa = params['empresa'] || this.route.snapshot.paramMap.get('empresa') || 0;
 			this.numtra = params['pedido'] || this.route.snapshot.paramMap.get('pedido') || 0;
 			this.tiptra = params['tiptra'] || this.route.snapshot.paramMap.get('tiptra') || 0;
-			
+			this.id_pedido_ruta= params['id_pedido_ruta'] || this.route.snapshot.paramMap.get('id_pedido_ruta') || 0;
+			this.status_entrega= params['status_entrega'] || this.route.snapshot.paramMap.get('status_entrega') || 0;
 			console.log("LUEGO DE ENTRADA")
 		if (this.numtra == 0){
 			this.numtra = undefined
 			this.accion_actualizar = false
 			window.scrollTo(0,0);
 			this.pedido_nuevo()
+			this.reload_pedido_ruta()
 		}else {
 			window.scrollTo(0,0);
 			this.accion_actualizar = true
 			this.reload_pedido()
+			this.reload_pedido_ruta()
 			
 		}
 			
@@ -204,8 +236,16 @@ export class AdminPedidosComponent implements OnInit {
    ngOnInit() {
 
 	let datos_ruta = {};
-	datos_ruta['codemp'] = this.empresa;		
+	datos_ruta['codemp'] = this.empresa;
+	datos_ruta['pedido'] = this.numtra;
 	console.log (datos_ruta)
+
+/* 	const datos = {};
+	datos['codemp'] = this.empresa;	
+	datos['usuario'] = this.usuario;
+	datos['pedido'] = this.pedido;
+ */
+
 
 	this.srv.get_rutas(datos_ruta).subscribe(
 		data => {
@@ -214,7 +254,6 @@ export class AdminPedidosComponent implements OnInit {
 			let  newData = data.filter(obj => obj.idruta !== '%');
 			this.lista_rutas = newData
 		 }); 
-	   
 
 	AdminLTE.init();
 	
@@ -334,7 +373,6 @@ export class AdminPedidosComponent implements OnInit {
 		const datos = {};
 		datos['codemp'] = this.empresa;
 		datos['usuario'] = this.usuario;
-		datos['pedido'] = this.numtra;
 		console.log (datos)
 			
 		this.srv.ciudad(datos).subscribe(
@@ -362,64 +400,59 @@ export class AdminPedidosComponent implements OnInit {
 		// console.log(this.iva_porcentaje)
 		console.log ("#### CONFIGURACION CORREO PEDIDOS ####")
 		console.log (this.srv.getConfCorreoPedCli())
+		this.lista_imagenes();
 		
 		this.buscar_encabezado_recibo();
-
-
-
-		this.srv.get_sucursal_pedido(datos).subscribe(data => {
-			console.log ("**** RUTA PEDIDO ***")
-			console.log (data)
-             
-			if (data['tipo_agencia'] == 'P'){
-				this.check_agencia = 'principal'
-				this.tipo_agencia_cliente = data['tipo_agencia']
-			}
-			if (data['tipo_agencia'] == 'S'){
-				this.check_agencia = 'sucursal'
-				this.tipo_agencia_cliente = data['tipo_agencia']
-			}
-		        
-			
-			this.nombre_ruta = data['nombre_ruta']
-			this.dir_agencia = data['dir_agencia']
-			//e.idruta+'|'+e.nombre_ruta
-			
-			
-	/* 		this.fecha_entrega_original_formateada = data['fecha_entrega_formateado']  //PARA LA FECHA ANTES DEL CAMBIO DE FECHA DE ENTREGA
-			this.fecha_entrega_original = data['fecha_entrega'] */
-/* 			"e.id_agencia+'|'+e.dir_agencia" */
-
-			let fecha = new Date(data['fecha_entrega'])
-			//PARA COLOCAR LA FECHA CORRECTA Y NO LA FECHA -1
-			fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset())
-			console.log("***** FECHA DE BASE DE DATOS CORREGIDA *****")
-			console.log(fecha)
-
-			this.fecha_entrega = new FormControl(fecha);
-
-
-			this.idruta = data['idruta']
-			this.id_agencia = data['id_agencia']
-			console.log (new Date(data['fecha_entrega'])) ///
-			this.id_nombre_ruta_seleccionado = this.idruta+'|'+this.nombre_ruta
-			this.id_direccion_sucursal_seleccionado = this.id_agencia+'|'+this.dir_agencia
-			console.log (this.id_nombre_ruta_seleccionado)
-			
-
-			setTimeout(()=> {	
-				this.set_id_nombre_rutas(data['tipo_agencia'])
-			}, 1000)
-
-	/* 		this.fecha_entrega_nueva = new FormControl(new Date(data['fecha_entrega'])); */
-			// this.fecha_entrega_nueva = new FormControl(new Date());
-		});
-
-
-
 			
 	
 	}
+
+	public reload_pedido_ruta(){
+		// this.jstoday = formatDate(this.today, 'dd-MM-yyyy hh:mm:ss a', 'en-US', '-0500');
+		this.jstoday = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
+
+
+
+
+		
+		
+		const datos = {};
+		datos['codemp'] = this.empresa;
+		datos['id_pedido_ruta'] = this.id_pedido_ruta;
+		datos['usuario'] = this.usuario;
+		console.log (datos)
+			
+		this.srv.get_pedidos_ruta_despacho(datos).subscribe(
+		   data => {
+			   console.log("****** OBTENIENDO PEDIDO RUTA DESPACHO****")
+			   console.log (data)
+			   this.observacion_entrega_pedido = data['observacion_entrega']
+		
+			   let fecha_planificada = new Date(data['fecha_entrega'])
+			   //PARA COLOCAR LA FECHA CORRECTA Y NO LA FECHA -1
+			   fecha_planificada.setMinutes(fecha_planificada.getMinutes() + fecha_planificada.getTimezoneOffset())
+			   console.log("***** FECHA DE BASE DE DATOS CORREGIDA *****")
+			   console.log(fecha_planificada)
+			   this.fecha_entrega = new FormControl(fecha_planificada);
+			   
+			   let fecha_efectiva = new Date(data['fecha_entrega_efectiva'])
+				//PARA COLOCAR LA FECHA CORRECTA Y NO LA FECHA -1
+			   fecha_efectiva.setMinutes(fecha_efectiva.getMinutes() + fecha_efectiva.getTimezoneOffset())
+			   console.log("***** FECHA DE BASE DE DATOS CORREGIDA *****")
+			   console.log(fecha_efectiva)
+			   this.fecha_entrega_efectiva = new FormControl(fecha_efectiva);
+
+
+			   
+
+
+
+			   
+			
+			});
+
+	}
+
 
 	
 	buscar_encabezado_recibo() {
@@ -493,8 +526,6 @@ export class AdminPedidosComponent implements OnInit {
 		this.dato_cliente= {"nomcli":this.razon_social,"codcli":data['codcli'],"dircli":data['direccion']}
 		console.log ("****** DATO CLIENTE *******")
 		console.log (this.dato_cliente)
-		//this.set_id_nombre_rutas(this.tipo_agencia_cliente)
-		//this.set_id_nombre_rutas('S')
 		   
 		}); 
 	
@@ -575,8 +606,6 @@ export class AdminPedidosComponent implements OnInit {
 	
 	
 	set_id_nombre_rutas(tipo_agencia){
-
-		console.log ("######### SET ID NOMBRE RUTAS  ############")
 		console.log(this.id_nombre_ruta_seleccionado)
 		// this.id_direccion_sucursal_seleccionado=undefined
 		console.log (this.id_direccion_sucursal_seleccionado)
@@ -2000,61 +2029,6 @@ export class AdminPedidosComponent implements OnInit {
 								  console.log(datos)
 								    if (contador_proceso == longitud_renglones){
 										//###### SE VALIDA SI ESTA CONFIGURADO EL ENVIO DE CORREO DE LOS PEDIDOS  ########
-										
-										let datos_pedido_ruta = {};
-										
-										datos_pedido_ruta['empresa'] = this.empresa
-										datos_pedido_ruta['numtra_pedido'] = this.numtra
-										datos_pedido_ruta['idruta'] = this.idruta
-										datos_pedido_ruta['id_agencia'] = this.id_agencia
-										let fectra_string = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500')
-										datos_pedido_ruta['fectra'] = fectra_string
-				  
-										if (fecha_entrega == this.fectra['value']){
-											datos_pedido_ruta['fecha_entrega'] = this.fectra
-										}else{
-											datos_pedido_ruta['fecha_entrega'] = fecha_entrega
-										}
-										datos_pedido_ruta['hora_entrega'] = '00:00:00'
-										
-										if (this.exist_fecha_entrega){
-										 datos_pedido_ruta['existe_fecha_entrega'] = 'SI'
-										}else{
-										 datos_pedido_ruta['existe_fecha_entrega'] = 'NO'
-										}
-										
-										// this.fectra = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
-										
-									
-										this.srv.actualizar_pedido_ruta(datos_pedido_ruta).subscribe(
-											result => {
-												console.log(result)
-											
-											},
-											error => {
-												console.error(error)
-											}
-										)
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
 										if (this.srv.getConfCorreoPedCli() == 'SI'){
 											this.correo_pedido(numtra,this.email_cliente)
 										}
@@ -2110,6 +2084,43 @@ export class AdminPedidosComponent implements OnInit {
 
 
 	}//FIN ENVIO CORREO PEDIDO
+
+	actualizar_despacho(accion) {
+		let confirm_pedido
+		console.log(accion)
+
+		let datos = {};
+		datos['codemp'] = this.empresa;
+		datos['usuario'] = this.usuario;
+		datos['status_entrega'] = accion;
+		datos['id_pedido_ruta'] = this.id_pedido_ruta;
+        datos['observacion_entrega'] = this.observacion_entrega_pedido;
+		//actualizar_despacho_pedido
+		if (accion == 'DESPACHADO'){
+			confirm_pedido = confirm('Esta seguro de colocar el orden ** DESPACHADA ** ??');
+		}
+		if (accion == 'NO DESPACHADO'){
+			confirm_pedido = confirm('Esta seguro de colocar el orden ** NO DESPACHADA ** ??');
+		}
+
+		if (confirm_pedido){
+			console.log("ACTUALIZAR DESPACHO")
+			this.srv.actualizar_despacho_pedido(datos).subscribe(
+				data => {
+					let datos_lista ={}
+					datos_lista['usuario'] = this.usuario;
+					datos_lista['empresa'] = this.empresa;
+					datos_lista['pedido'] = 'success_act'
+					console.log(datos_lista)
+					//###### SE VALIDA SI ESTA CONFIGURADO EL ENVIO DE CORREO DE LOS PEDIDOS  ########
+					this.router.navigate(['/admin/despachos_pedidos', datos_lista]);
+					console.log(data)
+				}
+			)
+
+		}
+
+	}//FIN aCTUALIZAR DESPACHO
 	
 	reset() {
 	  this.clientes = false;
@@ -2152,6 +2163,147 @@ export class AdminPedidosComponent implements OnInit {
      }
      return false;        
 	}
+
+
+	fileChange(element) {
+		this.loading = true
+		this.subida_exitosa = false
+		this.uploadedFiles = element.target.files;
+		console.log ("ARCHIVO CARGADO")
+		console.log (this.uploadedFiles)
+		this.nombre_archivo = this.uploadedFiles[0].name
+		var reader = new FileReader();
+		console.log ("ARCHIVO COMPRESION")
+		reader.onload = (element: any) => {
+				this.localUrl = element.target.result;
+
+
+				this.compressFile(this.localUrl,this.nombre_archivo)
+			}
+		console.log (element.target.files[0])
+		// this.uploadedFiles = element.target.files[0];
+		reader.readAsDataURL(element.target.files[0]);
+
+	  }
+
+  	compressFile(image,fileName) {
+				console.log ("INICIO COMPRIMIR ARCHIVO")
+		console.log (image)
+		console.log (fileName)
+
+		var orientation = -1;
+		this.sizeOfOriginalImage = this.imageCompress.byteCount(image)/(1024*1024);
+
+		console.warn('Size in bytes is now:',  this.sizeOfOriginalImage);
+
+		this.imageCompress.compressFile(image, orientation, 50, 50).then(
+		result => {
+			this.imgResultAfterCompress = result;
+			this.localCompressedURl = result;
+			this.sizeOFCompressedImage = this.imageCompress.byteCount(result)/(1024*1024)
+			console.warn('Size in bytes after compression:',  this.sizeOFCompressedImage);// create file from byte
+			const imageName = fileName;
+			console.log (result)
+			// call method that creates a blob from dataUri
+			const imageBlob = this.dataURItoBlob(this.imgResultAfterCompress.split(',')[1]);
+			//imageFile created below is the new compressed file which can be send to API in form data
+			// const imageFile = new File([result], imageName, { type: 'image/jpeg' });
+			this.imageFile = new File([imageBlob], imageName, { type: 'image/jpeg' });
+			console.log ("imageFile")
+			console.log (this.imageFile)
+			this.uploadedFiles = this.imageFile
+			this.loading = false
+
+
+
+		}
+		);
+
+	}
+
+
+
+  	dataURItoBlob(dataURI) {
+		const byteString = window.atob(dataURI);
+		const arrayBuffer = new ArrayBuffer(byteString.length);
+		const int8Array = new Uint8Array(arrayBuffer);for (let i = 0; i < byteString.length; i++) {
+		int8Array[i] = byteString.charCodeAt(i);
+		}const blob = new Blob([int8Array], { type: 'image/jpeg' });
+		return blob;
+	}
+
+
+
+
+
+
+
+  upload() {
+	  	console.log ("##### UPLOAD #######")
+	console.log (this.uploadedFiles)
+	console.log (this.nombre_archivo)
+	this.subida_exitosa = false
+    this.formData = new FormData();
+	this.formData.append("uploads", this.uploadedFiles, this.nombre_archivo);
+	this.formData.append("dir",this.empresa+"_"+this.id_pedido_ruta);
+	this.loading = true
+
+	
+	console.log ("#### FORMDATA  #####")
+	console.log (this.formData)
+	// this.progress = 10
+	let loading_subida = false
+  
+	this.srv.uploadFile_despacho(this.formData).subscribe(
+	(event: HttpEvent<any>) => {
+      switch (event.type) {
+        case HttpEventType.Sent:
+          console.log('Request has been made!');
+          break;
+        case HttpEventType.ResponseHeader:
+          console.log('Response header has been received!');
+          break;
+        case HttpEventType.UploadProgress:
+          this.progress = Math.round(event.loaded / event.total * 100);
+          console.log(`Uploaded! ${this.progress}%`);
+          break;
+        case HttpEventType.Response:
+          console.log('Archivo subido con exito!!!!', event.body);
+		  	  this.lista_imagenes();
+			  loading_subida = true;
+			  
+			  
+			  
+          setTimeout(() => {
+            this.progress = 0;
+			this.subida_exitosa = true
+			this.imageFile = false
+			this.nombre_archivo = 'Seleccione archivo'
+			this.loading = false
+
+          }, 1500);
+
+
+      }
+    });
+	}
+
+		// FUNCIONES PARA ADMINISTRAR FOTOS    ////
+	
+	lista_imagenes() {
+		
+		let datos_img= {}
+		datos_img['dir'] = this.empresa+'_'+this.id_pedido_ruta
+		this.srv.lista_img_despacho(datos_img).subscribe(
+		data => {
+			console.log ("#######  LISTA DE FOTOS   ##########")
+			  console.log(data)
+			  this.fotos = data
+	
+		  }
+	
+		  );
+	  }
 
 	
 	

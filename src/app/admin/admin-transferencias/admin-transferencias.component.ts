@@ -268,17 +268,7 @@ export class AdminTransfBodegaComponent implements OnInit {
   nomcli
   nompro
 	
-	// location.reload()
-	
-  // allowedFormats = [ BarcodeFormat.QR_CODE, BarcodeFormat.EAN_13, BarcodeFormat.CODE_128, BarcodeFormat.DATA_MATRIX, BarcodeFormat.AZTEC,BarcodeFormat.CODABAR,  BarcodeFormat.CODE_39, BarcodeFormat.CODE_93, BarcodeFormat.EAN_8, BarcodeFormat.ITF, BarcodeFormat.MAXICODE, BarcodeFormat.PDF_417, BarcodeFormat.RSS_14, BarcodeFormat.RSS_EXPANDED   ];
-  
-  
-   // formatsEnabled: BarcodeFormat[] = [
-    // BarcodeFormat.CODE_128,
-    // BarcodeFormat.DATA_MATRIX,
-    // BarcodeFormat.EAN_13,
-    // BarcodeFormat.QR_CODE,
-  // ];
+
   
    formatsEnabled: BarcodeFormat[] = [
   	BarcodeFormat.AZTEC,
