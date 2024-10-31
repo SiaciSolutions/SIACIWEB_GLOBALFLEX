@@ -50,9 +50,8 @@ export class AdminIngProductosComponent implements OnInit {
 	public iva_porcentaje = 0;
 	subtotal_desc = 0;
 	public iva_siaci
-	public impresor_lista:any = [];
-	public supervisor_lista:any = [];
-	public jefe_produccion_lista:any = [];
+	public nomina_ingP_lista:any = [];
+
 	public vendedores_lista:any = [];
 	public observacion_pedido = null
 	public cambiar_email:boolean;
@@ -451,38 +450,18 @@ export class AdminIngProductosComponent implements OnInit {
 		datos['codagencia'] = this.srv.getCodAgencia();
 		console.log (datos)
 			
-		this.srv.impreso(datos).subscribe(
+		this.srv.nomina_ing_producto(datos).subscribe(
 		   data => {
 			   console.log("OBTENIENDO RESPONSABLE IMPRESION")
 			   console.log(data)
 			   let option_defecto_final = {"codus": "01", "usuario": "*** OTRO RESPONSABLE IMPRESION ***"};
-			   this.impresor_lista = data
-			   this.impresor_lista.push(option_defecto_final)
+			   this.nomina_ingP_lista = data
+			   this.nomina_ingP_lista.push(option_defecto_final)
 			   console.log("RESPONSABLE IMPRESION LISTA")
-			   console.log(this.impresor_lista)
+			   console.log(this.nomina_ingP_lista)
 			});
 			
-		this.srv.supervisor(datos).subscribe(
-			data => {
-				console.log("OBTENIENDO SUPERVISOR")
-				console.log(data)
-				let option_defecto_final = {"codus": "01", "usuario": "*** OTRO SUPERVISOR ***"};
-				this.supervisor_lista = data
-				this.supervisor_lista.push(option_defecto_final)
-				console.log("SUPERVISOR LISTA")
-				console.log(this.supervisor_lista)
-			});
-			
-			this.srv.jefe_produccion(datos).subscribe(
-				data => {
-					console.log("OBTENIENDO PRODUCCION")
-					console.log(data)
-					let option_defecto_final = {"codus": "01", "usuario": "*** OTRA PRODUCCION ***"};
-					this.jefe_produccion_lista = data
-					this.jefe_produccion_lista.push(option_defecto_final) 
-					console.log("PRODUCCION LISTA")
-					console.log(this.jefe_produccion_lista)
-				});
+		
 	   this.tiptra = '1'
 
 		
@@ -504,39 +483,16 @@ export class AdminIngProductosComponent implements OnInit {
 		datos['usuario'] = this.usuario;
 		console.log (datos)
 
-		this.srv.impreso(datos).subscribe(
+		this.srv.nomina_ing_producto(datos).subscribe(
 			data => {
 				console.log("OBTENIENDO RESPONSABLE IMPRESION")
 				console.log(data)
 				let option_defecto_final = {"codus": "01", "usuario": "*** OTRO RESPONSABLE IMPRESION ***"};
-				this.impresor_lista = data
-				this.impresor_lista.push(option_defecto_final)
+				this.nomina_ingP_lista = data
+				this.nomina_ingP_lista.push(option_defecto_final)
 				console.log("RESPONSABLE IMPRESION LISTA")
-				console.log(this.impresor_lista)
+				console.log(this.nomina_ingP_lista)
 			 });
-
-
-		this.srv.supervisor(datos).subscribe(
-			data => {
-				console.log("OBTENIENDO SUPERVISOR")
-				console.log(data)
-				let option_defecto_final = {"codus": "01", "usuario": "*** OTRO SUPERVISOR ***"};
-				this.supervisor_lista = data
-				this.supervisor_lista.push(option_defecto_final)
-				console.log("SUPERVISOR LISTA")
-				console.log(this.supervisor_lista)
-			});
-			
-			this.srv.jefe_produccion(datos).subscribe(
-				data => {
-					console.log("OBTENIENDO PRODUCCION")
-					console.log(data)
-					let option_defecto_final = {"codus": "01", "usuario": "*** OTRA PRODUCCION ***"};
-					this.jefe_produccion_lista = data
-					this.jefe_produccion_lista.push(option_defecto_final) 
-					console.log("PRODUCCION LISTA")
-					console.log(this.jefe_produccion_lista)
-				});
 
 		this.buscar_encabezado_ingProducto();
 	}

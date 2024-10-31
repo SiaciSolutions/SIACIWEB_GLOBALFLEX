@@ -422,8 +422,8 @@ def ciudad():
   response.headers['content-type'] = 'application/json'
   return(response)
 
-@app.route('/impreso', methods=['POST'])
-def impreso():
+@app.route('/nomina_ing_producto', methods=['POST'])
+def nomina_ing_producto():
   datos = request.json
   print ('ENTRADAAAAA A IMPRESO RESPONSABLE')
   print (datos)
@@ -452,53 +452,7 @@ def impreso():
   response.headers['content-type'] = 'application/json'
   return(response)
 
-@app.route('/supervisor', methods=['POST'])
-def supervisor():
-  datos = request.json
-  print ('ENTRADAAAAA A SUPERVISOR')
-  print (datos)
-  
-  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
-  curs = conn.cursor()
-  campos = ['usuario']
-  sql = "select usuario from usuarios_responsables where codus='01'".format(datos['usuario'])
-  curs.execute(sql)
-  regs = curs.fetchall()
-  arrresp = []
-  for r in regs:
-    d = dict(zip(campos, r))
-    arrresp.append(d)
 
-  print("CERRANDO SESION SIACI")
-  curs.close()
-  conn.close()
-  response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
-  response.headers['content-type'] = 'application/json'
-  return(response)
-
-@app.route('/jefe_produccion', methods=['POST'])
-def jefe_produccion():
-  datos = request.json
-  print ('ENTRADAAAAA A JEFE DE PRODUCCION')
-  print (datos)
-  
-  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
-  curs = conn.cursor()
-  campos = ['usuario']
-  sql = "select usuario from usuarios_responsables where codus='02'".format(datos['usuario'])
-  curs.execute(sql)
-  regs = curs.fetchall()
-  arrresp = []
-  for r in regs:
-    d = dict(zip(campos, r))
-    arrresp.append(d)
-
-  print("CERRANDO SESION SIACI")
-  curs.close()
-  conn.close()
-  response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
-  response.headers['content-type'] = 'application/json'
-  return(response)
   
 @app.route('/provincia', methods=['POST'])
 def provincia():

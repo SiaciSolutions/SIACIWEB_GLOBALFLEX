@@ -555,16 +555,8 @@ public getConfCambioVendedorPed(): string {
     return this.http.post(this.apiUrl + ':' + this.port + '/ciudad', param);
   }
 
-  impreso(param): Observable<any> {
-    return this.http.post(this.apiUrl + ':' + this.port + '/impreso', param);
-  }
-
-  supervisor(param): Observable<any> {
-    return this.http.post(this.apiUrl + ':' + this.port + '/supervisor', param);
-  }
-
-  jefe_produccion(param): Observable<any> {
-    return this.http.post(this.apiUrl + ':' + this.port + '/jefe_produccion', param);
+  nomina_ing_producto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/nomina_ing_producto', param);
   }
   
   paises(param): Observable<any> {
