@@ -1,7 +1,7 @@
 import { Component, OnInit,ViewChild } from '@angular/core';
 // Variable in assets/js/scripts.js file
 import { Router,ActivatedRoute,Params,RouterEvent } from '@angular/router';
-import { ApiService } from './../../api.service';
+import { ApiService } from '../../api.service';
 import { FormControl } from "@angular/forms";
 import {Observable} from 'rxjs';
 import {formatDate} from '@angular/common';
@@ -16,16 +16,16 @@ declare var AdminLTE: any;
 
 
 @Component({
-  selector: 'app-admin-des-pedidos',
-  templateUrl: './admin-lista-despachos-ped.component.html',
-  styleUrls: ['./admin-lista-despachos-ped.component.css']
+  selector: 'app-admin-ing-productos',
+  templateUrl: './admin-lista-ing-productos.component.html',
+  styleUrls: ['./admin-lista-ing-productos.component.css']
 })
 
 
 
 	
 
-export class AdminListaDespachoPedidosComponent implements OnInit {
+export class AdminListaIngProductosComponent implements OnInit {
 	@ViewChild(DataTableDirective) 
 	datatableElement: DataTableDirective;
 	  // dtOptions: DataTables.Settings = {};
@@ -34,8 +34,11 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 
 	usuario;
 	empresa;
+	codIngProd;
 	lista_pedidos
+	lista_ing_producto
 	lista_pedidos_tabla
+	lista_ing_producto_tabla
 	public loading : boolean;
 	public espera_correo_facturacion : boolean;
 	public espera_exitoso_facturacion : boolean;
@@ -47,7 +50,6 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 	public success_act
 	pedido_status
 	public edit_ruta
-	ruta = '%'
 	lista_rutas
 	fecha_entrega_busqueda
 	listado_original
@@ -114,57 +116,53 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 	
 			// // ### Obtener fecha de día de 7 dias atras  
 	var newdate = new Date();
-	var newdate_futuro = new Date();
-	newdate.setDate(newdate.getDate() -15 ); //
-	newdate_futuro.setDate(newdate_futuro.getDate() +10 ); 
+	newdate.setDate(newdate.getDate() -30 ); //
 	// this.fecha_desde  = new FormControl(new Date(newdate))
 	
 	this.fecha_desde  = formatDate(newdate, 'yyyy-MM-dd', 'en-US', '-0500');
 	console.log (this.fecha_desde)
 	// new FormControl(new Date());
 	// this.fecha_hasta  = new Date()
-	//this.fecha_hasta  = formatDate(new Date(), 'yyyy-MM-dd', 'en-US', '-0500');
-	this.fecha_hasta  = formatDate(newdate_futuro, 'yyyy-MM-dd', 'en-US', '-0500');
+	this.fecha_hasta  = formatDate(new Date(), 'yyyy-MM-dd', 'en-US', '-0500');
 	datos['fecha_desde'] = this.fecha_desde
 	datos['fecha_hasta'] = this.fecha_hasta
-	datos['idruta'] = this.ruta
 	
 	
 	
 	// localStorage.removeItem('listado_original')
 	
 	
-	this.srv.lista_despachos_pedidos(datos).subscribe(
+	this.srv.lista_ing_productos(datos).subscribe(
 	   data => {
 		   // if (data){
 			   // this.loading = false;
 		   // }
 		   console.log(data)
 		   console.log ("EJECUTADA DATA")
-			this.lista_pedidos_tabla = data
+			this.lista_ing_producto_tabla = data
 			// this.buildDtOptions(this.lista_pedidos)
 		}); 
 		
 		setTimeout(()=> {	
 			console.log("TIME OUT")
 			// console.log(this.lista_pedidos)
-			this.lista_pedidos = this.lista_pedidos_tabla
+			this.lista_ing_producto = this.lista_ing_producto_tabla
 			// localStorage.setItem('listado_original', this.lista_pedidos)
-			this.listado_original = this.lista_pedidos
+			this.listado_original = this.lista_ing_producto
 			
 			
 		this.dtOptions = {
 			// ajax: 'data/data.json',
-			order: [2, 'desc'],
+			order: [0, 'desc'],
 			dom: 'Bfrtip',
 			// buttons: ['print','excel'],  ///SI SIRVEEE
 			buttons: [{
                 extend: 'print',
-                filename: 'LISTA_PEDIDOS_SIACI_WEB'+this.usuario
+                filename: 'LISTA_ING_DE_PRODUCTOS_SIACI_WEB'+this.usuario
             },
             {
                 extend: 'excel',
-                filename: 'LISTA_PEDIDOS_SIACI_WEB'+this.usuario
+                filename: 'LISTA_ING_DE_PRODUCTOS_SIACI_WEB'+this.usuario
             }],
 			columnDefs: [
             // { width: 200, targets: 0 }
@@ -202,12 +200,12 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 			
 			}, 3000)
 
-	 this.srv.get_rutas(datos).subscribe(
-	    data => {
-		    console.log("OBTENIENDO RUTAS")
-		    console.log(data)
-		    this.lista_rutas = data
-		}); 
+	// this.srv.get_rutas(datos).subscribe(
+	   // data => {
+		   // console.log("OBTENIENDO RUTAS")
+		   // console.log(data)
+		   // this.lista_rutas = data
+		// }); 
 		
 	// let filtro = this.lista_pedidos.filter(Element.key == '27-05-2021');
 
@@ -237,7 +235,7 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
   // }
   
   
-    buscar_factura_fecha(): void {
+    buscar_ingProd_fecha(): void {
 		let datos = {};
 		this.loading = true;
 		datos['codemp'] = this.empresa;	
@@ -247,40 +245,39 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 		datos['fecha_hasta'] = this.fecha_hasta
 	    datos['codalm'] = this.srv.getCodAgencia();	
 		datos['api_url'] = this.srv.apiUrl+':'+this.srv.port;
-		datos['idruta'] = this.ruta
 	
 	
-	this.srv.lista_despachos_pedidos(datos).subscribe(
+	this.srv.lista_ing_productos(datos).subscribe(
 	   data => {
 		   // if (data){
 			   // this.loading = false;
 		   // }
 		   console.log(data)
 		   console.log ("EJECUTADA DATA")
-			this.lista_pedidos_tabla = data
+			this.lista_ing_producto_tabla = data
 			// this.buildDtOptions(this.lista_pedidos)
 		}); 
 		
 		setTimeout(()=> {	
 			console.log("TIME OUT")
 			// console.log(this.lista_pedidos)
-			this.lista_pedidos = this.lista_pedidos_tabla
+			this.lista_ing_producto = this.lista_ing_producto_tabla
 			// localStorage.setItem('listado_original', this.lista_pedidos)
-			this.listado_original = this.lista_pedidos
+			this.listado_original = this.lista_ing_producto
 			
 			
 		this.dtOptions = {
 			// ajax: 'data/data.json',
-			order: [2, 'desc'],
+			order: [0, 'desc'],
 			dom: 'Bfrtip',
 			// buttons: ['print','excel'],  ///SI SIRVEEE
 			buttons: [{
                 extend: 'print',
-                filename: 'LISTA_VENTAS_PDV_SIACI_WEB'
+                filename: 'LISTA_ING_DE_PRODUCTOS_PDV_SIACI_WEB'
             },
             {
                 extend: 'excel',
-                filename: 'LISTA_VENTAS_PDV_SIACI_WEB'
+                filename: 'LISTA_ING_DE_PRODUCTOS_PDV_SIACI_WEB'
             }],
 			columnDefs: [
             // { width: 200, targets: 0 }
@@ -310,17 +307,16 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 	datos['codemp'] = this.empresa;	
 	datos['usuario'] = this.usuario;
 	datos['tipacc'] = this.srv.getTipacc()
-	datos['idruta'] = this.ruta
 
-	this.srv.lista_despachos_pedidos(datos).subscribe(
+	this.srv.lista_ing_productos(datos).subscribe(
 	   data => {
 		   // if (data){
 			   // this.loading = false;
 		   // }
 		   console.log(data)
 		   console.log ("EJECUTADA DATA")
-			this.lista_pedidos_tabla = data
-			this.render_table(this.lista_pedidos_tabla);
+			this.lista_ing_producto = data
+			this.render_table(this.lista_ing_producto_tabla);
 			// this.buildDtOptions(this.lista_pedidos)
 		}); 
 
@@ -336,22 +332,22 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
     render_table(new_list): void {
 
 		this.loading = true
-		this.lista_pedidos = undefined
+		this.lista_ing_producto_tabla = undefined
 		setTimeout(()=> {	
 			console.log("TIME OUT")
-			this.lista_pedidos = new_list
+			this.lista_ing_producto_tabla = new_list
 		
 			this.dtOptions = {
-				order: [2, 'desc'],
+				order: [0, 'desc'],
 				dom: 'Bfrtip',
 				// buttons: ['print','excel'],  ///SI SIRVEEE
 				buttons: [{
 					extend: 'print',
-					filename: 'LISTA_PEDIDOS_SIACI_WEB'+this.usuario
+					filename: 'LISTA_ING_DE_PRODUCTOS_SIACI_WEB'+this.usuario
 				},
 				{
 					extend: 'excel',
-					filename: 'LISTA_PEDIDOS_SIACI_WEB'+this.usuario
+					filename: 'LISTA_ING_DE_PRODUCTOS_SIACI_WEB'+this.usuario
 				}],
 				columnDefs: [
 				 { "width": "200px", "targets": 0 }
@@ -550,13 +546,13 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 	}//FIN ENVIO CORREO PEDIDO
 	
 	
-	generar_pdf_ped(numtra,tiptra) {
+	generar_pdf_ingProd(codIngProd) {
 		
 		// let confirm_pedido = confirm('Usted va a reenviar correo del pedido a su cliente, está seguro de reenviar?');
 		// if (confirm_pedido){
 		
 		console.log("GENERAR Y REDIRECCIONAR PDF")
-		console.log (numtra)
+		console.log (codIngProd)
 		this.espera_generar_pdf = true;
 		
 		window.scrollTo(0, 0);
@@ -566,17 +562,14 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 				
 				let datos = {};
 				datos['codemp'] = this.empresa;
-				datos['usuario'] = this.usuario;
-				// datos['nomcli'] = nomcli
-				datos['num_ped'] = numtra;
-				datos['tiptra'] = tiptra;
+				datos['codIngProd'] = codIngProd;
 				
 				// datos['asunto'] = 'pedido'
 				// datos['email'] = email
 				
 				// this.espera_correo_pedido = true;
 				// this.espera_exitoso_pedido = false;
-				this.srv.generar_pdf_pedido(datos).subscribe(
+				this.srv.generar_pdf_ing_producto(datos).subscribe(
 					data => {
 						
 						this.espera_generar_pdf = false;
@@ -584,7 +577,7 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 						let datos_url = this.srv.apiUrl+':'+this.srv.port;
 						console.log(datos_url)
 						window.open(
-						  datos_url+'/ver_pdf_pedido/'+data['PDF'],
+						  datos_url+'/ver_pdf_ing_producto/'+data['PDF'],
 						  '_blank' // <- This is what makes it open in a new window.
 						);
 					},

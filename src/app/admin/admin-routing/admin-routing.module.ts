@@ -1,6 +1,7 @@
 import { AdminDashboard2Component } from './../admin-dashboard2/admin-dashboard2.component';
 import { AdminDashboard3Component } from './../admin-dashboard3/admin-dashboard3.component';
 import { AdminPedidosComponent } from './../admin-pedidos/admin-pedidos.component';
+import { AdminIngProductosComponent } from './../admin-ing-productos/admin-ing-productos.component';
 import { AdminClienteComponent } from './../admin-cliente/admin-cliente.component';
 // import { AdminDashboard1Component } from './../admin-dashboard1/admin-dashboard1.component';
 import { AdminComponent } from './../admin.component';
@@ -31,6 +32,7 @@ import { AdminEgresoArticulosComponent } from './../admin-egreso-articulos/admin
 import { AdminListaEgresosComponent } from './../admin-lista-egresos/admin-lista-egresos.component';
 import { AdminListaWhatsappComponent } from './../admin-lista-msg-whatsapp/admin-lista-msg-whatsapp.component';
 import { AdminListaProductosComponent } from './../admin-lista-productos/admin-lista-productos.component';
+import { AdminListaIngProductosComponent } from './../admin-lista-ing-productos/admin-lista-ing-productos.component';
 import { AdminArticulosComponent } from './../admin-articulos/admin-articulos.component';
 import { AdminConteoArticulosComponent } from './../admin-conteo-articulos/admin-conteo-articulos.component';
 import { AdminMedicionesComponent } from './../admin-mediciones/admin-mediciones.component';
@@ -93,6 +95,14 @@ import { AdminRegistroDespachoPedidosComponent } from './../admin-registro-despa
 		  {
             path: 'crear_pedidos',
             component: AdminPedidosComponent
+          },
+		  {
+            path: 'agregar_ing_productos',
+            component: AdminIngProductosComponent
+          },
+		  {
+            path: 'lista_ing_productos',
+            component: AdminListaIngProductosComponent
           },
 		  {
             path: 'crear_clientes',

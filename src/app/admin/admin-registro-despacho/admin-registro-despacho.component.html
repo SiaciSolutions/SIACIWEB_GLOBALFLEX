@@ -55,6 +55,7 @@
 									<input type="text" name="date" *ngIf="status_entrega == 'DESPACHADO'"  style="color:green;font-weight:bold" value="{{status_entrega}}" class="form-control tip" id="date" required="required" disabled>
 									<input type="text" name="date" *ngIf="status_entrega == 'PLANIFICADO'"  style="color:blue;font-weight:bold" value="{{status_entrega}}" class="form-control tip" id="date" required="required" disabled>	
 									<input type="text" name="date" *ngIf="status_entrega == 'NO DESPACHADO'"  style="color:red;font-weight:bold" value="{{status_entrega}}" class="form-control tip" id="date" required="required" disabled>
+									<input type="text" name="date" *ngIf="status_entrega == 'ENTREGADO MENSAJERO'"  style="color:rgb(79, 128, 0);font-weight:bold" value="{{status_entrega}}" class="form-control tip" id="date" required="required" disabled>
 								</div>
                             </div>
 							<div class="col-md-3">
@@ -712,7 +713,7 @@
 </div>
 
 
-<div *ngIf= "status_entrega == 'PLANIFICADO'" class="form-group">
+<div *ngIf= "status_entrega == 'PLANIFICADO' || status_entrega == 'ENTREGADO MENSAJERO'" class="form-group">
 	<div class="box-body">
 		<div class="row">
 
@@ -785,9 +786,9 @@
 							<!-- <img src="articulos.imagen" alt=""> -->
                         </div>
 			<!-- 			*ngIf= "'status_entrega == 'PLANIFICADO'" -->
-					<div *ngIf= "status_entrega == 'PLANIFICADO'"  class="product-option-shop">
+<!-- 					<div *ngIf= "status_entrega == 'PLANIFICADO'"  class="product-option-shop">
 						 <button class="btn btn-danger" id="btnUpload" (click)="eliminar_imagen(img.nombre)">Eliminar</button>
-                    </div>                       
+                    </div>   -->                     
                     </div>
                 </div>
 
@@ -804,7 +805,8 @@
 
 </div>
 
-<div *ngIf="status_entrega == 'PLANIFICADO'" class="form-group">
+
+<div *ngIf="status_entrega == 'ENTREGADO MENSAJERO'" class="form-group">
 	<div class="box-body">
 		<div class="row">
 			
@@ -812,7 +814,7 @@
 			<div class="info-box">
 			<span class="info-box-icon bg-green"><i class="fa fa-fw fa-check-square"></i></span>
 			<div class="info-box-content">
-				<span  class="info-box-number ">REGISTRAR ENTREGA</span>
+				<span  class="info-box-number ">REGISTRAR ENTREGA CLIENTE</span>
 				<input type="submit"  name="si_entrega" value="Aplicar Entrega" (click)="actualizar_despacho('DESPACHADO')" class="btn btn-success">
 <!-- 								<span style="color:red" class="info-box-number">USD {{ redondear (subtotal)}}</span> -->
 		
@@ -827,7 +829,7 @@
 			
 			
 			<div class="info-box-content">
-				<span class="info-box-number">REGISTRAR NO ENTREGA</span>
+				<span class="info-box-number">REGISTRAR NO ENTREGA CLIENTE</span>
 				<!-- <span style="color:red" class="info-box-number">USD {{ redondear (iva_cant_new)}}</span> -->
 				<input   type="submit"  name="no_entrega" value="Aplicar No Entrega" (click)="actualizar_despacho('NO DESPACHADO')" class="btn btn-danger">
 			</div>
@@ -843,6 +845,26 @@
 			</div>
 			</div>
 		</div> -->
+		</div>
+	</div>
+</div>
+<div *ngIf="status_entrega == 'PLANIFICADO'" class="form-group"  class="form-group">
+<!-- <div *ngIf="status_entrega == 'ENTREGA A MENSAJERO'" class="form-group"> -->
+	<div class="box-body">
+		<div class="row">
+			
+		<div class="col-md-6 col-sm-6 col-xs-12">
+			<div class="info-box">
+			<span class="info-box-icon bg-green"><i class="fa fa-fw fa-check-square"></i></span>
+			<div class="info-box-content">
+				<span  class="info-box-number ">ENTREGA A MENSAJERO</span>
+				<input type="submit"  name="si_entrega" value="Aplicar Entrega" (click)="actualizar_despacho('ENTREGADO MENSAJERO')" class="btn btn-success">
+<!-- 								<span style="color:red" class="info-box-number">USD {{ redondear (subtotal)}}</span> -->
+		
+			</div>
+			</div>
+		</div>
+
 		</div>
 	</div>
 </div>

@@ -786,6 +786,259 @@ class GEN_PDF():
 		from_template(filename, OUTPUT_PDF)
 		return 'HTML GENERADO CON EXITO'
 
+	def gen_ing_producto_pdf(self, codemp, codIngProd):
+		APP_PATH = os.getcwd()
+		print(APP_PATH)
+    
+		codemp = codemp
+		codIngProd = codIngProd
+		conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+		curs = conn.cursor()
+		sql = """SELECT
+          razon_social_ing_prod, ruc_ing_prod, nombre_comercial_ing_prod, referencia, alto, ancho, proveedor, impresora, bobinadora, material_imprimir, ancho_material, 
+          cilindro, cortador, colores, rep_des, filas, columnas, forma_etq, cod_cilindro, cod_plano, uv_total, uv_select, relam_delam, hot_stamping, cold_folid, repujado, lami_mate, lami_brillan, 
+          primario_c, primario_m, primario_k,primario_y, 
+          pantone_1, pantone_2, pantone_3, pantone_4, pantone_5, pantone_6, pantone_7, 
+          anilox_vC, anilox_vM, anilox_vY, anilox_vK, 
+          anilox_1, anilox_2, anilox_3, anilox_4, anilox_5, anilox_6, anilox_7, 
+          prov_fabricante_vC, prov_fabricante_vM, prov_fabricante_vY, prov_fabricante_vK,
+          prov_fabricante_1, prov_fabricante_2, prov_fabricante_3, prov_fabricante_4, prov_fabricante_5, prov_fabricante_6, prov_fabricante_7, 
+          tinta_sticky_vC, tinta_sticky_vM, tinta_sticky_vY, tinta_sticky_vK, 
+          tinta_sticky_1, tinta_sticky_2, tinta_sticky_3, tinta_sticky_4, tinta_sticky_5, tinta_sticky_6, tinta_sticky_7, 
+          tipo_dispensado, diametro_rollo, peso_rollo, medida, dispensado_taca,
+          embobinado_exterior, embobinado_interior, 
+          ruta_img,
+          ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion 
+        FROM ing_de_producto WHERE codIngProd = '{}' and codEmpresa = '{}'
+	      """.format(codIngProd,codemp)
+		curs.execute(sql)
+		r = curs.fetchone()
+		print (r)
+
+		#PRIMER RENGLON
+		razon_social_ing_prod  = r[0]
+		print(razon_social_ing_prod)
+		ruc_ing_prod  = r[1]
+		nombre_comercial_ing_prod  = r[2]
+		referencia  = r[3]
+		alto  = r[4]
+		ancho  = r[5]
+		proveedor = r[6]
+		impresora  = r[7]
+		bobinadora  = r[8]
+		material_imprimir  = r[9]
+		ancho_material  = r[10]
+		#SEGUNDO RENGLON, EMPIEZA TABLA DE TROQUE, ACABADOS, ACABADOS2, LAMINADO
+		cilindro  = r[11]
+		cortador  = r[12]
+		colores  = r[13]
+		rep_des  = r[14]
+		filas  = r[15]
+		columnas  = r[16]
+		forma_etq  = r[17]
+		cod_cilindro  = r[18]
+		cod_plano  = r[19]
+		uv_total  = 'X' if r[20] == 'SI' else ''
+		uv_select  = 'X' if r[21] == 'SI' else ''
+		relam_delam  = 'X' if r[22] == 'SI' else ''
+		hot_stamping  = 'X' if r[23] == 'SI' else ''
+		cold_folid  = 'X' if r[24] == 'SI' else ''
+		repujado  = 'X' if r[25] == 'SI' else ''
+		lami_mate  = 'X' if r[26] == 'SI' else ''
+		lami_brillan  = 'X' if r[27] == 'SI' else ''
+		#TERCER RENGLON, EMPIEZA TABLA DE COLORES PRIMARIOS Y COLORES PLANOS O PANTONE, ANILOX, PROVEEDOR/FABRICANTE, TINTA Y STICKY
+		#FILA COLORES PRIMARIOS Y COLORES PLANOS O PANTONE
+		primario_c  = 'X' if r[28] == 'SI' else '	'
+		primario_m  = 'X' if r[29] == 'SI' else '	'
+		primario_k  = 'X' if r[30] == 'SI' else '	'
+		primario_y  = 'X' if r[31] == 'SI' else '	'
+		pantone_1  = r[32]
+		pantone_2  = r[33]
+		pantone_3  = r[34]
+		pantone_4  = r[35]
+		pantone_5  = r[36]
+		pantone_6  = r[37]
+		pantone_7  = r[38]
+		#FILA ANILOX
+		anilox_vC  = '	' if r[39] == 0 else r[39]
+		anilox_vM  = '	' if r[40] == 0 else r[40]
+		anilox_vK  = '	' if r[42] == 0 else r[42]
+		anilox_vY  = '	' if r[41] == 0 else r[41]
+		anilox_1  = r[43]
+		anilox_2  = r[44]
+		anilox_3  = r[45]
+		anilox_4  = r[46]
+		anilox_5  = r[47]
+		anilox_6  = r[48]
+		anilox_7  = r[49]
+		#FILA PROVEEDOR/FABRICANTE
+		prov_fabricante_vC  = r[50]
+		prov_fabricante_vM  = r[51]
+		prov_fabricante_vK  = r[53]
+		prov_fabricante_vY  = r[52]
+		prov_fabricante_1  = r[54]
+		prov_fabricante_2  = r[55]
+		prov_fabricante_3  = r[56]
+		prov_fabricante_4  = r[57]
+		prov_fabricante_5  = r[58]
+		prov_fabricante_6  = r[59]
+		prov_fabricante_7  = r[60]
+		#FILA TINTA Y STICKY
+		tinta_sticky_vC  = r[61]
+		tinta_sticky_vM  = r[62]
+		tinta_sticky_vK  = r[64]
+		tinta_sticky_vY  = r[63]
+		tinta_sticky_1  = r[65]
+		tinta_sticky_2  = r[66]
+		tinta_sticky_3  = r[67]
+		tinta_sticky_4  = r[68]
+		tinta_sticky_5  = r[69]
+		tinta_sticky_6  = r[70]
+		tinta_sticky_7  = r[71]
+		#CUARTO RENGLON, EMPIEZA TABLA DE TIPO DE DISPENSADO
+		tipo_dispensado  = r[72]
+		diametro_rollo  = r[73]
+		peso_rollo  = r[74]
+		medida  = r[76]
+		dispensado_taca  = r[75]
+		#QUINTO RENGLON, EMPIEZA SENTIDO SALIDA
+		embobinado_exterior  = r[77]
+		embobinado_interior  = r[78]
+		#SEXTO RENGLON, IMAGEN
+		ruta_img  = r[79]
+		#SEPTIMO RENGLON, FIRMAS RESPONSABLES
+		ejecutivo_ventas  = r[80]
+		impreso_responsable  = r[81]
+		supervisado_responsable  = r[82]
+		jefe_produccion  = r[83]
+        
+		ruta_plantilla_pedidos="\\PLANTILLA_PEDIDOS\\INGENIERIA_DE_PRODUCTO.docx"
+		conn.close()
+
+		tpl=DocxTemplate(APP_PATH+ruta_plantilla_pedidos)
+		logo = InlineImage(tpl,ruta_img)
+  
+
+		context = { 'razon_social' : razon_social_ing_prod,
+					'ruc' : ruc_ing_prod,
+					'nombre_comercial' : nombre_comercial_ing_prod,
+					'referencia' : referencia,
+					'alto' : alto,
+					'ancho' : ancho,
+					'proveedor' : proveedor,
+					'impresora' : impresora,
+					'bobinadora' : bobinadora,
+					'material' : material_imprimir,
+					'ancho_material' : ancho_material,
+					#SEGUNDO RENGLON
+					'cilindro' : cilindro,
+					'cortador' : cortador,
+					'col' : colores,
+					'r_d' : rep_des,
+					'filas' : filas,
+					'cols' : columnas,
+					'forma_etq' : forma_etq,
+					'cilin_cod' : cod_cilindro,
+					'plano_cod' : cod_plano,
+					'uv_tot' : uv_total,
+					'uv_sel' : uv_select,
+					'rel_del' : relam_delam,
+					'h_stam' : hot_stamping,
+					'C_f' : cold_folid,
+					'repuj' : repujado,
+					'mate' : lami_mate,
+					'brilla' : lami_brillan,
+					#TERCER RENGLON
+					#FILA COLORES PRIMARIOS Y COLORES PLANOS O PANTONE
+					'C' : primario_c,
+					'M' : primario_m,
+					'K' : primario_k,
+					'Y' : primario_y,
+					'PANTONE_1' : pantone_1,
+					'PANTONE_2' : pantone_2,
+					'PANTONE_3' : pantone_3,
+					'PANTONE_4' : pantone_4,
+					'PANTONE_5' : pantone_5,
+					'PANTONE_6' : pantone_6,
+					'PANTONE_7' : pantone_7,
+					#FILA ANILOX
+					'v_c' : anilox_vC,
+					'v_m' : anilox_vM,
+					'v_k' : anilox_vK,
+					'v_y' : anilox_vY,
+					'anilox_1' : anilox_1,
+					'anilox_2' : anilox_2,
+					'anilox_3' : anilox_3,
+					'anilox_4' : anilox_4,
+					'anilox_5' : anilox_5,
+					'anilox_6' : anilox_6,
+					'anilox_7' : anilox_7,
+					#FILA PROVEEDOR/FABRICANTE
+					'hw_1' : prov_fabricante_vC,
+					'hw_2' : prov_fabricante_vM,
+					'hw_3' : prov_fabricante_vK,
+					'hw_4' : prov_fabricante_vY,
+					'hw_5' : prov_fabricante_1,
+					'hw_6' : prov_fabricante_2,
+					'hw_7' : prov_fabricante_3,
+					'hw_8' : prov_fabricante_4,
+					'hw_9' : prov_fabricante_5,
+					'hw_10' : prov_fabricante_6,
+					'hw_11' : prov_fabricante_7,
+					#FILA TINTA Y STICKY
+					'ts_1' : tinta_sticky_vC,
+					'ts_2' : tinta_sticky_vM,
+					'ts_3' : tinta_sticky_vK,
+					'ts_4' : tinta_sticky_vY,
+					'ts_5' : tinta_sticky_1,
+					'ts_6' : tinta_sticky_2,
+					'ts_7' : tinta_sticky_3,
+					'ts_8' : tinta_sticky_4,
+					'ts_9' : tinta_sticky_5,
+					'ts_10' : tinta_sticky_6,
+					'ts_11' : tinta_sticky_7,
+					#CUARTO RENGLON
+					't_dispensado' : tipo_dispensado,
+					'diametro' : diametro_rollo,
+					'peso' : peso_rollo,
+					'taca' : medida,
+					'med' : dispensado_taca,
+					#QUINTO RENGLON
+					'emb_ext' : embobinado_exterior,
+					'emb_int' : embobinado_interior,
+					#SEXTO RENGLON
+					'etiqueta' : logo,
+					#SEPTIMO RENGLON
+					'ejecutivo_ventas' : ejecutivo_ventas,
+					'impreso' : impreso_responsable,
+					#'supervisado_responsable' : supervisado_responsable,
+					#'jefe_produccion' : jefe_produccion
+		}
+		
+		tpl.render(context)
+		codIngProd_str = str(codIngProd)
+		word_out = APP_PATH+'\\PLANTILLA_PEDIDOS\\INGENIERIA_DE_PRODUCTO_'+codemp+'_'+codIngProd_str+'.docx'
+		tpl.save(word_out)
+
+		###CONVERTIR A PDF EL PEDIDO PEDIDO_10000221_WEB.pdf
+		print ("########### CONVIRTIENDO A PDF aa ###########")
+		comtypes.CoInitialize()
+		c = win32com.client.DispatchEx("Word.Application")
+		
+		f = word_out
+		dest = APP_PATH+'\\PLANTILLA_PEDIDOS\\INGENIERIA_DE_PRODUCTO_'+codemp+'_'+codIngProd_str+'.pdf'
+		doc = c.Documents.Open(f)
+		doc.SaveAs(dest, FileFormat=17)
+		doc.Close()
+		c.Quit()
+		del c
+		os.remove(word_out)
+		
+		comtypes.CoUninitialize()
+		return 'PDF GENERADO CON EXITO'
+  
+
+     
 
 
 # ModuleNotFoundError: No module named 'reportlab.graphics.barcode.code128'

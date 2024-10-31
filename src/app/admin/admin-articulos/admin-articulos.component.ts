@@ -334,6 +334,7 @@ export class AdminArticulosComponent implements OnInit {
 			this.unidad =data['coduni']
 			this.codart_old=this.codart
 			this.src = data['src']
+			
 			if (this.srv.getActLineaArticulo() == 'SI'){
 				this.linea_articulo= data['codcla']
 				this.getTipoLinea()

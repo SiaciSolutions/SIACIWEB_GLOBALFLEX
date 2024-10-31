@@ -53,6 +53,8 @@ import { AdminBusquedaCodBarraComponent } from './admin-busqueda-codbarra/admin-
 import { AdminListaDespachoPedidosComponent } from './admin-lista-despacho-ped/admin-lista-despachos-ped.component';
 import { AdminRegistroDespachoPedidosComponent } from './admin-registro-despacho/admin-registro-despacho.component';
 
+import { AdminIngProductosComponent } from './admin-ing-productos/admin-ing-productos.component';
+import { AdminListaIngProductosComponent } from './admin-lista-ing-productos/admin-lista-ing-productos.component';
 
 
 
@@ -124,6 +126,8 @@ import {
     AdminDashboard2Component,
 	AdminDashboard3Component,
 	AdminPedidosComponent,
+	AdminIngProductosComponent,
+	AdminListaIngProductosComponent,
 	AdminClienteComponent,
 	AdminViewPedidosComponent,
 	AdminListaPedidosComponent,

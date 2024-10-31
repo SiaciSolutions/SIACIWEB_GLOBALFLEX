@@ -292,7 +292,25 @@
           <!-- <li><a href="#"><i class="fa fa-circle-o"></i>Agregar Pedido</a></li> -->
         </ul>
       </li>
-	  	  
+	<!--####################### INGENIERIA DE PRODUCTOS#######################################-->
+	<li *ngIf="auth.getPedidos() != 'NO'" class="treeview">
+        <a href="#">
+		<i class="fa fa-cubes"></i> 
+		<span>ING. PRODUCTOS</span>
+			<span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+        <ul class="treeview-menu">
+			<!-- <a [routerLink]="['/profile']" [queryParams]="{ruc: auth.getRUC()}" class="nav-link" >Comprobantes descargados</a> -->
+			<li (click)="ocultar_menu_moviles()"><a routerLink="lista_ing_productos" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Lista Ing. de Productos</a></li>
+			<li (click)="ocultar_menu_moviles()"><a routerLink="agregar_ing_productos" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Agregar Ing. de Producto</a></li>
+			<li  *ngIf="auth.getConfGeoloc() != 'NO'" (click)="ocultar_menu_moviles()" ><a routerLink="registrar_visita" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Registrar visita cliente</a></li>
+			<li  *ngIf="auth.getConfGeoloc() != 'NO'" (click)="ocultar_menu_moviles()" ><a routerLink="reporte_visita" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Reporte visita vendedores</a></li>
+			<!-- <li><a href="#"><i class="fa fa-circle-o"></i>Lista de Pedidos</a></li> -->
+			<!-- <li><a href="#"><i class="fa fa-circle-o"></i>Agregar Pedido</a></li> -->
+        </ul>
+    </li>
 	 <!--####################### MULTINIVEL PEDIDOS#######################################-->
       <li *ngIf="auth.getConfPedidoMedico() != 'NO'" class="treeview">
         <a href="#">

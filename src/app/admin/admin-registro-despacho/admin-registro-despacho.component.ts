@@ -2102,6 +2102,9 @@ export class AdminRegistroDespachoPedidosComponent implements OnInit {
 		if (accion == 'NO DESPACHADO'){
 			confirm_pedido = confirm('Esta seguro de colocar el orden ** NO DESPACHADA ** ??');
 		}
+		if (accion == 'ENTREGADO MENSAJERO'){
+			confirm_pedido = confirm('Esta seguro de colocar el orden ** ENTREGADO MENSAJERO ** ??');
+		}
 
 		if (confirm_pedido){
 			console.log("ACTUALIZAR DESPACHO")
@@ -2304,6 +2307,30 @@ export class AdminRegistroDespachoPedidosComponent implements OnInit {
 	
 		  );
 	  }
+
+
+
+	eliminar_imagen(nombre) {
+
+		let datos = {};
+		datos['nombre']  = nombre;
+		datos['dir'] = this.empresa+'_'+this.numtra
+		datos['codemp'] = this.empresa
+		datos['numtra'] = this.numtra
+		// let datos_img= {}
+
+	this.srv.eliminar_imagen(datos).subscribe((res)=> {
+      console.log('response received is ', res);
+	   // console.log(res['resultado']);
+
+	  // if (res['resultado'] == 'Archivo subido exitosamente'){
+		  // this.subida_exitosa = true
+	  // }
+	  	 this.lista_imagenes();
+	});
+
+
+	}
 
 	
 	
