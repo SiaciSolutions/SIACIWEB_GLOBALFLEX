@@ -10,6 +10,12 @@
 /node_modules
 npm-debug.log
 yarn-error.log
+/build
+/dist
+/e2e
+api/build
+api/dist
+
 
 # IDEs and editors
 .idea/
