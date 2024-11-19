@@ -84,7 +84,7 @@ export class AdminRegistroDespachoPedidosComponent implements OnInit {
 	tiempo_entrega = null
 	info_adicional = null
 	public id_pedido_ruta = undefined
-	public observacion_entrega_pedido= undefined
+	public observacion_entrega_pedido= null
 
 	  ///////VARIABLE PARA SUBIDA DE FOTOS ///////////
 	  progress: number = 0;
@@ -112,6 +112,7 @@ export class AdminRegistroDespachoPedidosComponent implements OnInit {
 	fecha_entrega_efectiva =  new FormControl(new Date());
 	hora_entrega_planificada
 	hora_entrega_efectiva
+	direccion_entrega
 	// public date : string;
 	// clientes;
 	usuario = ''
@@ -133,6 +134,7 @@ export class AdminRegistroDespachoPedidosComponent implements OnInit {
 	articulos_seleccionado
 	elements_checkedList:any = [];
 	masterSelected:boolean;
+	
 
 	
 	articulos_pedido: any = []
@@ -427,6 +429,9 @@ export class AdminRegistroDespachoPedidosComponent implements OnInit {
 			   console.log("****** OBTENIENDO PEDIDO RUTA DESPACHO****")
 			   console.log (data)
 			   this.observacion_entrega_pedido = data['observacion_entrega']
+			   this.direccion_entrega = data['direccion_entrega']
+			   this.hora_entrega_planificada = data['hora_entrega'].substring(0,8)
+			   this.hora_entrega_efectiva = data['hora_entrega_efectiva'].substring(0,8)
 		
 			   let fecha_planificada = new Date(data['fecha_entrega'])
 			   //PARA COLOCAR LA FECHA CORRECTA Y NO LA FECHA -1
@@ -2094,7 +2099,11 @@ export class AdminRegistroDespachoPedidosComponent implements OnInit {
 		datos['usuario'] = this.usuario;
 		datos['status_entrega'] = accion;
 		datos['id_pedido_ruta'] = this.id_pedido_ruta;
-        datos['observacion_entrega'] = this.observacion_entrega_pedido;
+		datos['observacion_entrega'] = this.observacion_entrega_pedido;
+/* 		if (datos['observacion_entrega'] = 'None'){
+        datos['observacion_entrega'] = null;
+	    } */
+
 		//actualizar_despacho_pedido
 		if (accion == 'DESPACHADO'){
 			confirm_pedido = confirm('Esta seguro de colocar el orden ** DESPACHADA ** ??');

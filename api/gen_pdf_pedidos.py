@@ -213,6 +213,16 @@ class GEN_PDF():
         
 		ruta_plantilla_pedidos=r[0]
         
+        
+		sql = """SELECT DATEFORMAT(fecha_entrega, 'DD-MM-YYYY'),substring(hora_entrega,1,8) as hora FROM "DBA"."pedido_ruta" where numtra_pedido='{}' and empresa='{}'""".format(numtra,codemp)
+		curs.execute(sql)
+		r = curs.fetchone()
+		print (r)
+		if (r[0]) : 
+			fecha_entrega = r[0]+' / '+r[1]
+		else:
+			fecha_entrega = 'POR PLANIFICAR'
+        
 		conn.close()
 
 
@@ -246,7 +256,8 @@ class GEN_PDF():
                     'tipodoc': tipodoc,
                     'condiciones_pago':condiciones_pago,
                     'validez':info_adicional,
-                    'tiempo_entrega':tiempo_entrega
+                    'tiempo_entrega':tiempo_entrega,
+                    'fecha_entrega':fecha_entrega
                     
                     
 		}

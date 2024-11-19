@@ -147,12 +147,22 @@
 								<label for="fecha_hasta">Fecha hasta: </label>
 								<input [(ngModel)]="fecha_hasta" type="date" name="fecha_hasta" placeholder="dd-mm-yyyy" value="" min="1997-01-01" max="2030-12-31">
 				 </div>
-				 <div class="col-md-3">
+				 <div class="col-md-2">
 					<div class="form-group">
 						<label>Ruta:</label>
 						<select  name="ruta" [(ngModel)]="ruta" class="form-control select2 tip" style="width:100%;">
 <!-- 						<option [ngValue]="undefined" disabled  selected>Seleccione</option> -->
 						<option *ngFor="let e of lista_rutas"  [value]="e.idruta">{{e.nombre_ruta}}</option>
+						</select>
+					
+					</div>
+				</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label>Status entrega:</label>
+						<select  name="ruta" [(ngModel)]="status_entrega" class="form-control select2 tip" style="width:100%;">
+<!-- 						<option [ngValue]="undefined" disabled  selected>Seleccione</option> -->
+						<option *ngFor="let e of lista_status"  [value]="e.nombre_status">{{e.nombre_status}}</option>
 						</select>
 					
 					</div>

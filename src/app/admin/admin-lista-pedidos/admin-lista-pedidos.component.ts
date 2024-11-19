@@ -150,7 +150,7 @@ export class AdminListaPedidosComponent implements OnInit {
 			
 		this.dtOptions = {
 			// ajax: 'data/data.json',
-			order: [0, 'desc'],
+			//order: [0, 'desc'],
 			dom: 'Bfrtip',
 			// buttons: ['print','excel'],  ///SI SIRVEEE
 			buttons: [{
@@ -265,7 +265,7 @@ export class AdminListaPedidosComponent implements OnInit {
 			
 		this.dtOptions = {
 			// ajax: 'data/data.json',
-			order: [0, 'desc'],
+		//	order: [0, 'desc'],
 			dom: 'Bfrtip',
 			// buttons: ['print','excel'],  ///SI SIRVEEE
 			buttons: [{
@@ -335,7 +335,7 @@ export class AdminListaPedidosComponent implements OnInit {
 			this.lista_pedidos = new_list
 		
 			this.dtOptions = {
-				order: [0, 'desc'],
+			//	order: [0, 'desc'],
 				dom: 'Bfrtip',
 				// buttons: ['print','excel'],  ///SI SIRVEEE
 				buttons: [{

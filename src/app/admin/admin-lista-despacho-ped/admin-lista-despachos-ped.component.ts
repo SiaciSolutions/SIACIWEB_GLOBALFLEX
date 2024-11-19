@@ -54,6 +54,14 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 	fecha_desde
 	fecha_hasta
 	descripcion_error
+	lista_status = [
+		{'nombre_status':'TODOS LOS STATUS'},
+		{'nombre_status':'DESPACHADO'},
+		{'nombre_status':'PLANIFICADO'},
+		{'nombre_status':'NO DESPACHADO'},
+		{'nombre_status':'ENTREGADO MENSAJERO'},
+	]
+	status_entrega = 'TODOS LOS STATUS'
 	
 
   constructor(
@@ -128,6 +136,12 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 	datos['fecha_desde'] = this.fecha_desde
 	datos['fecha_hasta'] = this.fecha_hasta
 	datos['idruta'] = this.ruta
+	let status_buscar = this.status_entrega 
+	if (this.status_entrega == 'TODOS LOS STATUS'){
+	   status_buscar = '%'
+		
+	}
+	datos['status_entrega'] = status_buscar
 	
 	
 	
@@ -248,6 +262,12 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 	    datos['codalm'] = this.srv.getCodAgencia();	
 		datos['api_url'] = this.srv.apiUrl+':'+this.srv.port;
 		datos['idruta'] = this.ruta
+		let status_buscar = this.status_entrega 
+	if (this.status_entrega == 'TODOS LOS STATUS'){
+	   status_buscar = '%'
+		
+	}
+	datos['status_entrega'] = status_buscar
 	
 	
 	this.srv.lista_despachos_pedidos(datos).subscribe(
@@ -311,7 +331,12 @@ export class AdminListaDespachoPedidosComponent implements OnInit {
 	datos['usuario'] = this.usuario;
 	datos['tipacc'] = this.srv.getTipacc()
 	datos['idruta'] = this.ruta
-
+	let status_buscar = this.status_entrega 
+	if (this.status_entrega == 'TODOS LOS STATUS'){
+	   status_buscar = '%'
+		
+	}
+	datos['status_entrega'] = status_buscar
 	this.srv.lista_despachos_pedidos(datos).subscribe(
 	   data => {
 		   // if (data){

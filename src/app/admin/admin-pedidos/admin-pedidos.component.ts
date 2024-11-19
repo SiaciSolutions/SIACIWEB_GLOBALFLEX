@@ -74,7 +74,7 @@ export class AdminPedidosComponent implements OnInit {
 	public patron_cliente
 	public razon_social_lista
 	public edit_iva_art
-	exist_fecha_entrega = true
+	exist_fecha_entrega = false
 	// fecha_entrega = undefined
 	fecha_entrega = new FormControl(new Date());
 	// date = new FormControl(new Date());
@@ -370,6 +370,18 @@ export class AdminPedidosComponent implements OnInit {
 		this.srv.get_sucursal_pedido(datos).subscribe(data => {
 			console.log ("**** RUTA PEDIDO ***")
 			console.log (data)
+
+			if (data['fecha_entrega']){
+				this.exist_fecha_entrega = true
+/* 				let fecha_entrega_bd = new Date(data['fecha_entrega'])
+				//PARA COLOCAR LA FECHA CORRECTA Y NO LA FECHA -1
+				fecha_entrega_bd.setMinutes(fecha_entrega_bd.getMinutes() + fecha_entrega_bd.getTimezoneOffset())
+				console.log("***** FECHA DE BASE DE DATOS CORREGIDA *****")
+				console.log(fecha_entrega_bd)
+	
+				this.fecha_entrega = new FormControl(fecha_entrega_bd); */
+
+			}
              
 			if (data['tipo_agencia'] == 'P'){
 				this.check_agencia = 'principal'
@@ -392,16 +404,20 @@ export class AdminPedidosComponent implements OnInit {
 
 			let fecha = new Date(data['fecha_entrega'])
 			//PARA COLOCAR LA FECHA CORRECTA Y NO LA FECHA -1
-			fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset())
-			console.log("***** FECHA DE BASE DE DATOS CORREGIDA *****")
-			console.log(fecha)
+			if (data['fecha_entrega']){
+				fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset())
+				console.log("***** FECHA DE BASE DE DATOS CORREGIDA *****")
+				console.log(fecha)
+	
+				this.fecha_entrega = new FormControl(fecha);
+				console.log (new Date(data['fecha_entrega'])) ///
+			}
 
-			this.fecha_entrega = new FormControl(fecha);
 
 
 			this.idruta = data['idruta']
 			this.id_agencia = data['id_agencia']
-			console.log (new Date(data['fecha_entrega'])) ///
+
 			this.id_nombre_ruta_seleccionado = this.idruta+'|'+this.nombre_ruta
 			this.id_direccion_sucursal_seleccionado = this.id_agencia+'|'+this.dir_agencia
 			console.log (this.id_nombre_ruta_seleccionado)
@@ -1887,7 +1903,7 @@ export class AdminPedidosComponent implements OnInit {
 	
 	actualizar_pedido() {
 
-
+    console.log ("######### ACTUALIZAR PEDIDO  #########")
 	console.log (this.fecha_entrega)
 	console.log (this.fecha_entrega['value'])
 	// console.log (formatDate(this.fecha_entrega['value'], 'yyyy-MM-dd', 'en-US', '-0500'))

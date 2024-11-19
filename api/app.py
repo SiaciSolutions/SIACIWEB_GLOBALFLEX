@@ -119,7 +119,9 @@ def login():
   'act_total_recibido_cambio','act_selecc_articulo_servicio_pdv','act_pago_efectivo_pdv','act_pago_tarjeta_pdv','act_pago_cheque_pdv','act_pago_trans_pdv',
   'act_pago_credito_pdv','act_edicion_plazo_credito_pdv','consultar_estado_cartera','act_articulos','act_servicios','act_egr_bod','busqueda_defecto_pdv','servicio_defecto_pdv']
   
-  sql = "select u.codus1,u.clausu,u.tipacc,e.nomemp,u.codemp from usuario u, empresa e where u.codemp=e.codemp and u.codus1='{}' and u.clausu='{}' and u.codemp='{}'".format(d['usuario'],d['password'],d['empresa'])
+  # sql = "select u.codus1,u.clausu,u.tipacc,e.nomemp,u.codemp from usuario u, empresa e where u.codemp=e.codemp and u.codus1='{}' and u.clausu='{}' and u.codemp='{}'".format(d['usuario'],d['password'],d['empresa'])
+  sql = "select u.codus1,u.clausu,u.tipacc,e.nomemp,u.codemp from usuario u, empresa e where u.codemp=e.codemp and u.codus1='{}' and (u.clausu='{}' OR u.clausu= (SELECT f_decodificador('{}','secreto'))) and u.codemp='{}'".format(d['usuario'], d['password'],d['password'],d['empresa'])
+  #sql = "SELECT u.codus1, u.clausu, e.nomemp FROM usuario u, empresa e WHERE  u.codemp=e.codemp and u.codus1='{}' AND (u.clausu='{}' OR u.clausu= (SELECT f_decodificador('{}','secreto'))) and e.codemp LIKE '{}'".format(d['usuario'], d['password'],d['password'],d['empresa'])
   curs.execute(sql)
   print (sql)
   print ("GEOLOCALIZACION ACTIVA= "+coneccion.GEOLOC)
@@ -147,7 +149,9 @@ def login():
        print (sql)
        regs = curs.fetchall()
        resp_perfil = []
+       # print (regs)
        if (r[2] == 'P'):
+          # print ("###### PARCIAL ####")
           sql = """SELECT m.nommod,nm.desmod
           FROM modulo m, numeromodulo nm
           where m.codus1 ='{}'
@@ -156,6 +160,7 @@ def login():
           and m.codemp = '{}'""".format(r[0],d['empresa'])
           curs.execute(sql)
           array_perfil = curs.fetchall()
+          # print (array_perfil)
           arr_campos_perfil = ['nommod','desmod']
           for rp in array_perfil:
             d = dict(zip(arr_campos_perfil, rp))
@@ -1171,7 +1176,8 @@ def lista_pedidos():
   (SELECT fecha_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as fecha_entrega,
   (SELECT status_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as status_entrega
   FROM encabezadopedpro p, clientes c where p.tiptra in (1,2) and p.codemp='{}'
-  and p.fectra between '{}' and '{}' and p.codusu='{}'
+  and p.fectra between '{}' and '{}' 
+  --and p.codusu='{}'
   and p.codemp = c.codemp and p.codcli = c.codcli and codalm='01'  and estado in ('P','I') order by p.fectra desc""".format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['usuario'])
   # and p.codemp = c.codemp and p.codcli = c.codcli and codalm='01' and estado='P' order by p.fectra desc""".format(datos['codemp'])
 
@@ -1227,8 +1233,9 @@ def lista_despachos_pedidos():
             and pr.status_entrega <> 'POR PLANIFICAR'
             and fecha_entrega between '{}' and  '{}'
             and pr.idruta like '{}'
+            and pr.status_entrega like '{}'
 			order by p.fectra desc
-        """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['idruta']) 
+        """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['idruta'],datos['status_entrega']) 
   print (sql)        
   
   curs.execute(sql)
@@ -1260,14 +1267,17 @@ def get_pedidos_ruta_despacho():
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   curs = conn.cursor()
 
-  campos = ['status_entrega','fecha_entrega','hora_entrega','observacion_entrega', 'fecha_entrega_efectiva','hora_entrega_efectiva']
+  campos = ['status_entrega','fecha_entrega','hora_entrega','observacion_entrega', 'fecha_entrega_efectiva','hora_entrega_efectiva','direccion_entrega']
   
-  sql = """ select status_entrega,fecha_entrega,hora_entrega,observacion_entrega,fecha_entrega_efectiva,hora_entrega_efectiva from pedido_ruta where id_pedido_ruta={} and empresa ='{}'
+  sql = """ select status_entrega,fecha_entrega,hora_entrega,observacion_entrega,fecha_entrega_efectiva,hora_entrega_efectiva, 
+  (select dir_agencia from agencia_cliente a where a.empresa = pr.empresa and a.id_agencia=pr.id_agencia) as direccion_entrega
+  from pedido_ruta pr where id_pedido_ruta={} and empresa ='{}'
 	""".format(datos['id_pedido_ruta'],datos['codemp'])
-    
-  curs.execute(sql)
+  
   print (sql)
+  curs.execute(sql)
   reg = curs.fetchone()
+  print (reg)
   d = dict(zip(campos, reg))
   
   
@@ -1296,9 +1306,12 @@ def actualizar_despacho_pedido():
   fecha_entrega_efectiva = dateTimeObj.strftime("%Y-%m-%d")
   print (fecha_entrega_efectiva)
   
+  observ= 'null'  if datos['observacion_entrega'] == None else "'"+datos['observacion_entrega']+"'"
+
+  
   sql = """update pedido_ruta p set 
-  p.status_entrega = '{}', p.fecha_entrega_efectiva= '{}' , p.hora_entrega_efectiva = '{}' , p.observacion_entrega = '{}'
-  where p.id_pedido_ruta = '{}' and p.empresa = '{}'""".format(datos['status_entrega'],fecha_entrega_efectiva,hora_entrega_efectiva,datos['observacion_entrega'],datos['id_pedido_ruta'] ,datos['codemp'])
+  p.status_entrega = '{}', p.fecha_entrega_efectiva= '{}' , p.hora_entrega_efectiva = '{}' , p.observacion_entrega = {}
+  where p.id_pedido_ruta = '{}' and p.empresa = '{}'""".format(datos['status_entrega'],fecha_entrega_efectiva,hora_entrega_efectiva,observ,datos['id_pedido_ruta'] ,datos['codemp'])
   print (sql) 
   curs.execute(sql)
   conn.commit()
@@ -5123,12 +5136,14 @@ def actualizar_pedido_ruta():
   sql = ''
   
   if (datos['existe_fecha_entrega']=='SI'):
-    sql = "update pedido_ruta  set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' where numtra_pedido= '{}' and empresa='{}'"\
-          .format(datos['fecha_entrega'],datos['idruta'],datos['id_agencia'],'PLANIFICADO',datos['numtra_pedido'],datos['empresa'])
+    sql = "update pedido_ruta set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' ,hora_entrega= '{}' where numtra_pedido= '{}' and empresa='{}'"\
+          .format(datos['fecha_entrega'],datos['idruta'],datos['id_agencia'],'PLANIFICADO',datos['hora_entrega'],datos['numtra_pedido'],datos['empresa'])
 
   if (datos['existe_fecha_entrega']=='NO'):
-    sql = "update pedido_ruta  set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' where numtra_pedido= '{}' and empresa='{}'"\
-          .format(datos['fecha_entrega'],datos['idruta'],datos['id_agencia'],'POR PLANIFICAR',datos['numtra_pedido'],datos['empresa'])
+    sql = "update pedido_ruta  set idruta='{}',id_agencia='{}', status_entrega ='{}', fecha_entrega = null, hora_entrega=null where numtra_pedido= '{}' and empresa='{}'"\
+          .format(datos['idruta'],datos['id_agencia'],'POR PLANIFICAR',datos['numtra_pedido'],datos['empresa'])
+    # sql = "update pedido_ruta  set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' where numtra_pedido= '{}' and empresa='{}'"\
+          # .format(datos['fecha_entrega'],datos['idruta'],datos['id_agencia'],'POR PLANIFICAR',datos['numtra_pedido'],datos['empresa'])
     # sql = "INSERT INTO pedido_ruta (empresa,numtra_pedido,fectra,hora,idruta,id_agencia,status_entrega) values('{}','{}','{}','{}','{}','{}','{}')"\
           # .format(datos['empresa'] ,datos['numtra_pedido'],datos['fectra'],hora,datos['idruta'],datos['id_agencia'],'POR PLANIFICAR')
    
@@ -5511,6 +5526,8 @@ def get_pedidos_ruta_programada():
         if (reg[8] == '00:00:00.000'):
             datos_rutas['start'] = reg[7]
         else:
+            print (reg[7])
+            print (reg[8])
             datos_rutas['start'] = reg[7]+"T"+reg[8]+"-05:00"
         # datos_rutas['end'] = reg[1]+"T"+reg[2]+"-05:00"
         # datos_rutas['nombre_ruta'] = reg[3]
@@ -5537,12 +5554,12 @@ def set_fecha_hora_pedido():
     datos = request.json
     print (datos)
     print ("#####  DENTRO DE set_fecha_hora_pedido  ##### ")
-    sql = """ update pedido_ruta p set p.fecha_entrega='{}',p.hora_entrega='{}' where p.empresa='{}' and p.numtra_pedido='{}'
+    sql = """ update pedido_ruta p set p.fecha_entrega='{}',p.hora_entrega='{}', status_entrega='PLANIFICADO' where p.empresa='{}' and p.numtra_pedido='{}'
           """.format(datos['fecha_entrega'],datos['hora_entrega'],datos['empresa'],datos['num_pedido'])
 	
     if ((datos['accion'] == 'ARRASTRAR') and (datos['hora_entrega'] == '00:00:00')):
        print("##### CAMBIANDO FECHA ######")
-       sql = """ update pedido_ruta p set p.fecha_entrega=DATE('{}')+1,p.hora_entrega='{}' where p.empresa='{}' and p.numtra_pedido='{}'
+       sql = """ update pedido_ruta p set p.fecha_entrega=DATE('{}')+1,p.hora_entrega='{}' , status_entrega='PLANIFICADO' where p.empresa='{}' and p.numtra_pedido='{}'
              """.format(datos['fecha_entrega'],datos['hora_entrega'],datos['empresa'],datos['num_pedido'])
 
        
@@ -6578,58 +6595,58 @@ def uploadFile_despacho():
      os.mkdir(app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio)
   f.save(os.path.join(app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio, filename))
   
-  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  # conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   
-  sql = """
-  select  cname
-  from    SYS.SYSCOLUMNS
-  where   tname = 'imagen_orden'
-  and     cname like 'imagen%'
-   """
-  print (sql) 
-  curs = conn.cursor()
-  curs.execute(sql)
-  regs = curs.fetchall()
-  arrresp = []
-  imagen_escoger = ''
-  for r in regs:
-    print (r)
-    sql = """
-    SELECT {} FROM "DBA"."imagen_despacho" where id_pedido_ruta='{}' and codemp='{}'
-    """.format(r[0],id_pedido_ruta,codemp)
-    curs = conn.cursor()
-    curs.execute(sql)
-    imagen = curs.fetchone()
-    if imagen:
-        if (imagen[0] == None):
-           imagen_escoger = r[0]
-           print (imagen_escoger) 
-           break
-    else:
-       imagen_escoger = 'imagen1'
+  # sql = """
+  # select  cname
+  # from    SYS.SYSCOLUMNS
+  # where   tname = 'imagen_orden'
+  # and     cname like 'imagen%'
+   # """
+  # print (sql) 
+  # curs = conn.cursor()
+  # curs.execute(sql)
+  # regs = curs.fetchall()
+  # arrresp = []
+  # imagen_escoger = ''
+  # for r in regs:
+    # print (r)
+    # sql = """
+    # SELECT {} FROM "DBA"."imagen_despacho" where id_pedido_ruta='{}' and codemp='{}'
+    # """.format(r[0],id_pedido_ruta,codemp)
+    # curs = conn.cursor()
+    # curs.execute(sql)
+    # imagen = curs.fetchone()
+    # if imagen:
+        # if (imagen[0] == None):
+           # imagen_escoger = r[0]
+           # print (imagen_escoger) 
+           # break
+    # else:
+       # imagen_escoger = 'imagen1'
 
   
-  if (imagen_escoger):
-     if (imagen_escoger == 'imagen1'):
-        sql = """
-        insert into imagen_despacho
-        (codemp,id_pedido_ruta,{})values
-        ('{}',{},'{}','{}')
-         """.format(imagen_escoger,codemp,id_pedido_ruta,app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio+'\\'+filename)
-        print (sql) 
-        curs = conn.cursor()
-        curs.execute(sql)
-        conn.commit()
-     else :
-        sql = """
-        update imagen_despacho set {} = '{}' where codemp = '{}' and id_pedido_ruta ='{}'
-        """.format(imagen_escoger,app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio+'\\'+filename,codemp,id_pedido_ruta)
-        print (sql) 
-        curs = conn.cursor()
-        curs.execute(sql)
-        conn.commit()
+  # if (imagen_escoger):
+     # if (imagen_escoger == 'imagen1'):
+        # sql = """
+        # insert into imagen_despacho
+        # (codemp,id_pedido_ruta,{})values
+        # ('{}',{},'{}','{}')
+         # """.format(imagen_escoger,codemp,id_pedido_ruta,app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio+'\\'+filename)
+        # print (sql) 
+        # curs = conn.cursor()
+        # curs.execute(sql)
+        # conn.commit()
+     # else :
+        # sql = """
+        # update imagen_despacho set {} = '{}' where codemp = '{}' and id_pedido_ruta ='{}'
+        # """.format(imagen_escoger,app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio+'\\'+filename,codemp,id_pedido_ruta)
+        # print (sql) 
+        # curs = conn.cursor()
+        # curs.execute(sql)
+        # conn.commit()
 
-  curs.close()
+  # curs.close()
   
   
   result = {'resultado': 'Archivo subido exitosamente'} 

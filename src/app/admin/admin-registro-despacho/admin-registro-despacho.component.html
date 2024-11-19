@@ -63,7 +63,7 @@
                                     <label for="date">FECHA ENTREGA PLANIFICADA
 <!-- 									<a *ngIf="!edit_fecha_creacion"  (click)="edit_fecha_creacion = true" class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="Editar fecha de creacion"></i></a>  -->
 									</label>
-									<input *ngIf="!edit_fecha_creacion" type="text" name="date" value="{{formato_fecha(this.fecha_entrega['value'])}}" class="form-control tip" id="date" required="required" disabled>
+									<input *ngIf="!edit_fecha_creacion" type="text" name="date" value="{{formato_fecha(this.fecha_entrega['value'])}} / {{hora_entrega_planificada}}" class="form-control tip" id="date" required="required" disabled>
 										
 								
 								</div>
@@ -73,18 +73,27 @@
                                     <label for="date">FECHA ENTREGA EFECTIVA
 <!-- 									<a *ngIf="!edit_fecha_creacion"  (click)="edit_fecha_creacion = true" class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="Editar fecha de creacion"></i></a>  -->
 									</label>
-									<input *ngIf="!edit_fecha_creacion" type="text" name="date" value="{{formato_fecha(this.fecha_entrega_efectiva['value'])}}" class="form-control tip" id="date" required="required" disabled>
+									<input *ngIf="!edit_fecha_creacion" type="text" name="date" value="{{formato_fecha(this.fecha_entrega_efectiva['value'])}} / {{hora_entrega_efectiva}}" class="form-control tip" id="date" required="required" disabled>
 									
 								
 								</div>
                             </div>
 
-							<div class="col-md-5">
+							<div class="col-md-4">
                                 <div class="form-group">
 														
 								<label for="reference">NOMBRE Y APELLIDO Ó RAZÓN SOCIAL </label>
 								<input *ngIf="!this.clientes" type="text" placeholder="Nombre ó Razón Social" id="add_item" class="form-control ui-autocomplete-input" autocomplete="off" disabled>
 								<input *ngIf="this.clientes " type="text" placeholder="Nombre ó Razón Social" id="add_item"  value="{{razon_social}}" class="form-control ui-autocomplete-input" autocomplete="off" disabled>
+						
+								</div>
+                            </div>
+							<div class="col-md-7">
+                                <div class="form-group">
+														
+								<label for="reference">DIRECCION DE ENTREGA </label>
+								<input *ngIf="!this.clientes" type="text" placeholder="Nombre ó Razón Social" id="add_item" class="form-control ui-autocomplete-input" autocomplete="off" disabled>
+								<input *ngIf="this.clientes " type="text" placeholder="Direccion entrega" id="add_item"  value="{{direccion_entrega}}" class="form-control ui-autocomplete-input" autocomplete="off" disabled>
 						
 								</div>
                             </div>
