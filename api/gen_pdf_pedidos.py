@@ -17,6 +17,7 @@ from reportlab.graphics.barcode import usps4s
 from reportlab.graphics.barcode import ecc200datamatrix
 from reportlab.graphics.barcode import code128
 from xhtml2pdf import pisa             # import python module
+from docx.shared import Cm
 
 
 def convert_decimal(d):
@@ -819,7 +820,7 @@ class GEN_PDF():
           tipo_dispensado, diametro_rollo, peso_rollo, medida, dispensado_taca,
           embobinado_exterior, embobinado_interior, 
           ruta_img,
-          ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion 
+          ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion ,uv_sobre_impr
         FROM ing_de_producto WHERE codIngProd = '{}' and codEmpresa = '{}'
 	      """.format(codIngProd,codemp)
 		curs.execute(sql)
@@ -922,12 +923,14 @@ class GEN_PDF():
 		impreso_responsable  = r[81]
 		supervisado_responsable  = r[82]
 		jefe_produccion  = r[83]
+		uv_sobre_impr  = 'X' if r[84] == 'SI' else ''
         
 		ruta_plantilla_pedidos="\\PLANTILLA_PEDIDOS\\INGENIERIA_DE_PRODUCTO.docx"
 		conn.close()
 
 		tpl=DocxTemplate(APP_PATH+ruta_plantilla_pedidos)
-		logo = InlineImage(tpl,ruta_img)
+		# logo = InlineImage(tpl,ruta_img , width=Cm(5), height=Cm(8))
+		logo = InlineImage(tpl,ruta_img , width=Cm(4) )
   
 
 		context = { 'razon_social' : razon_social_ing_prod,
@@ -1022,8 +1025,9 @@ class GEN_PDF():
 					#SEPTIMO RENGLON
 					'ejecutivo_ventas' : ejecutivo_ventas,
 					'impreso' : impreso_responsable,
-					#'supervisado_responsable' : supervisado_responsable,
-					#'jefe_produccion' : jefe_produccion
+					'super_responsable' : supervisado_responsable,
+					'jefe_produccion' : jefe_produccion,
+                    'uv_sobre_impr' : uv_sobre_impr
 		}
 		
 		tpl.render(context)

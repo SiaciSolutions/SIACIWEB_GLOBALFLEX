@@ -197,10 +197,10 @@
 									<label >REP. DES</label>					
 									<input type="number" name="rep_des" id="rep_des"   [(ngModel)]="rep_des"  class="form-control ui-autocomplete-input" placeholder="##" autocomplete="off" [min]="1">
 								</div>
-								<div class="col-md-1">
+<!-- 								<div class="col-md-1">
 									<label >FILAS</label>
 									<input type="number" name="filas" id="filas"   [(ngModel)]="filas"  class="form-control ui-autocomplete-input" placeholder="cm" autocomplete="off" [min]="1">
-								</div>
+								</div> -->
 								<div class="col-md-1">
 									<label >COLUMNAS</label>
 									<input type="number" name="columnas" id="columnas"   [(ngModel)]="columnas"  class="form-control ui-autocomplete-input" placeholder="cm" autocomplete="off" [min]="1">
@@ -233,6 +233,9 @@
 												<label >PLANO CÓDIGO</label>
 											</td>
 											<td class="col-md-1">
+												<label >UV SOBRE IMPR</label>
+											</td>
+											<td class="col-md-1">
 												<label >UV TOTAL</label>
 											</td>
 											<td class="col-md-1">
@@ -245,7 +248,7 @@
 												<label >HOT STAMPING</label>
 											</td>
 											<td class="col-md-1">
-												<label >COLD FOLID</label>
+												<label >COLD FOIL</label>
 											</td>
 											<td class="col-md-1">
 												<label >REPUJADO</label>
@@ -263,6 +266,9 @@
 											</td>
 											<td class="col-md-2">
 												<input type="text" name="troquel_plano_cod" id="troquel_plano_cod"   [(ngModel)]="troquel_plano_cod"  class="form-control ui-autocomplete-input" placeholder="Cod. Plano" autocomplete="off">
+											</td>
+											<td [ngStyle]="{ 'text-align': 'center' }">
+												<input type="checkbox" name="uv_sobre_impr" id="uv_sobre_impr" [(ngModel)]="uv_sobre_impr" autocomplete="off">
 											</td>
 											<td [ngStyle]="{ 'text-align': 'center' }">
 												<input type="checkbox" name="uv_total" id="uv_total" [(ngModel)]="uv_total" autocomplete="off">

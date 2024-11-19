@@ -143,7 +143,8 @@ export class AdminIngProductosComponent implements OnInit {
 	formato_seleccionado: string;
 	cilindro_cod: string;
 	troquel_plano_cod: string;
-	uv_total: boolean;
+	uv_total: boolean; 
+	uv_sobre_impr: boolean;
 	uv_select: boolean;
 	relam_delam: boolean;
 	hot_stamping: boolean;
@@ -155,50 +156,52 @@ export class AdminIngProductosComponent implements OnInit {
 	primario_M: boolean;
 	primario_Y: boolean;
 	primario_K: boolean;
-	pantone_1: string;
-	pantone_2: string;
-	pantone_3: string;
-	pantone_4: string;
-	pantone_5: string;
-	pantone_6: string;
-	pantone_7: string;
-	anilox_vC: number;
-	anilox_vM: number;
-	anilox_vY: number;
-	anilox_vK: number;
-	anilox_1: number;
-	anilox_2: number;
-	anilox_3: number;
-	anilox_4: number;
-	anilox_5: number;
-	anilox_6: number;
-	anilox_7: number;
-	prov_fabricante_vC: string;
-	prov_fabricante_vM: string;
-	prov_fabricante_vY: string;
-	prov_fabricante_vK: string;
-	prov_fabricante_1: string;
-	prov_fabricante_2: string;
-	prov_fabricante_3: string;
-	prov_fabricante_4: string;
-	prov_fabricante_5: string;
-	prov_fabricante_6: string;
-	prov_fabricante_7: string;
-	tinta_sticky_vC: string;
-	tinta_sticky_vM: string;
-	tinta_sticky_vY: string;
-	tinta_sticky_vK: string;
-	tinta_sticky_1: string;
-	tinta_sticky_2: string;
-	tinta_sticky_3: string;
-	tinta_sticky_4: string;
-	tinta_sticky_5: string;
-	tinta_sticky_6: string;
-	tinta_sticky_7: string;
+	
+	pantone_1: string = null;
+	pantone_2: string = null;
+	pantone_3: string = null;
+	pantone_4: string = null;
+	pantone_5: string = null;
+	pantone_6: string = null;
+	pantone_7: string = null;
+
+	anilox_vC: number = null;
+	anilox_vM: number = null;
+	anilox_vY: number = null;
+	anilox_vK: number = null;
+	anilox_1: number = null;
+	anilox_2: number = null;
+	anilox_3: number = null;
+	anilox_4: number = null;
+	anilox_5: number = null;
+	anilox_6: number = null;
+	anilox_7: number = null ;
+	prov_fabricante_vC: string = null;
+	prov_fabricante_vM: string = null;
+	prov_fabricante_vY: string = null;
+	prov_fabricante_vK: string = null;
+	prov_fabricante_1: string = null;
+	prov_fabricante_2: string = null;
+	prov_fabricante_3: string = null;
+	prov_fabricante_4: string = null;
+	prov_fabricante_5: string = null;
+	prov_fabricante_6: string = null;
+	prov_fabricante_7: string = null;
+	tinta_sticky_vC: string = null;
+	tinta_sticky_vM: string = null;
+	tinta_sticky_vY: string = null;
+	tinta_sticky_vK: string = null;
+	tinta_sticky_1: string = null;
+	tinta_sticky_2: string = null;
+	tinta_sticky_3: string = null;
+	tinta_sticky_4: string = null;
+	tinta_sticky_5: string = null;
+	tinta_sticky_6: string = null;
+	tinta_sticky_7: string = null;
 	tipo_dispensado: string;
-	diametro_rollo: number;
-	peso_rollo: number;
-	medida_dispensado: number;
+	diametro_rollo: number = null;
+	peso_rollo: number = null;
+	medida_dispensado: number = null;
 	taca: string;
 	embobinado_ext_seleccionado: string;
 	embobinado_interior_seleccionado: string;
@@ -253,12 +256,15 @@ export class AdminIngProductosComponent implements OnInit {
 	];
 
 	public tinta_sticky_lista = [
-		{"ts_lista": "S", "nom_doc": "S"},
-		{"ts_lista": "a", "nom_doc": "a"},
-		{"ts_lista": "n", "nom_doc": "n"},
-		{"ts_lista": "bl", "nom_doc": "bl"},
-		{"ts_lista": "BE", "nom_doc": "BE"},
-		{"ts_lista": "AM", "nom_doc": "AM"}
+		{"ts_lista": "Sin/Bl", "nom_doc": "Sin/Bl"},
+		{"ts_lista": "Sin/Be", "nom_doc": "Sin/Be"},
+		{"ts_lista": "Sin/Am", "nom_doc": "Sin/Am"},
+		{"ts_lista": "Act/Bl", "nom_doc": "Act/Bl"},
+		{"ts_lista": "Act/Be", "nom_doc": "Act/Be"},
+		{"ts_lista": "Act/Am", "nom_doc": "Act/Am"},
+		{"ts_lista": "Naz/Bl", "nom_doc": "Naz/Bl"},
+		{"ts_lista": "Naz/Be", "nom_doc": "Naz/Be"},
+		{"ts_lista": "Naz/Am", "nom_doc": "Naz/Am"}
 	];
 
 	public emboext_lista = [
@@ -516,7 +522,7 @@ export class AdminIngProductosComponent implements OnInit {
 			 });
 
 
-		this.srv.supervisor(datos).subscribe(
+/* 		this.srv.supervisor(datos).subscribe(
 			data => {
 				console.log("OBTENIENDO SUPERVISOR")
 				console.log(data)
@@ -536,7 +542,7 @@ export class AdminIngProductosComponent implements OnInit {
 					this.jefe_produccion_lista.push(option_defecto_final) 
 					console.log("PRODUCCION LISTA")
 					console.log(this.jefe_produccion_lista)
-				});
+				}); */
 
 		this.buscar_encabezado_ingProducto();
 	}
@@ -593,6 +599,7 @@ export class AdminIngProductosComponent implements OnInit {
 		this.cilindro_cod = data['cilindro_cod']
 		this.troquel_plano_cod = data['troquel_plano_cod']
 		this.uv_total = data['uv_total'] === 'SI';
+		this.uv_sobre_impr = data['uv_sobre_impr'] === 'SI';
 		this.uv_select = data['uv_select'] === 'SI';
 		this.relam_delam = data['relam_delam'] === 'SI';
 		this.hot_stamping = data['hot_stamping_acabados'] === 'SI';
@@ -855,10 +862,10 @@ export class AdminIngProductosComponent implements OnInit {
 			alert("Por favor, ingesar la impresora.")
 			return false;
 		}
-		else if(!this.bobinadora){
+/* 		else if(!this.bobinadora){
 			alert("Por favor, ingesar la bobinadora.")
 			return false;
-		}
+		} */
 		else if(!this.material_imprimir){
 			alert("Por favor, ingesar el material a imprmir.")
 			return false;
@@ -872,7 +879,7 @@ export class AdminIngProductosComponent implements OnInit {
 			return false;
 		}
 		else if(!this.cortador){
-			alert("Por favor, ingesar el cortador.")
+			alert("Por favor, ingresar el cortador.")
 			return false;
 		}
 		else if(!this.color_seleccionado){
@@ -883,10 +890,10 @@ export class AdminIngProductosComponent implements OnInit {
 			alert("Por favor, ingesar el REP. DES.")
 			return false;
 		}
-		else if(!this.filas || this.filas == 0){
+/* 		else if(!this.filas || this.filas == 0){
 			alert("Por favor, ingesar las filas.")
 			return false;
-		}
+		} */
 		else if(!this.columnas || this.columnas == 0){
 			alert("Por favor, ingesar las columnas.")
 			return false;
@@ -895,17 +902,17 @@ export class AdminIngProductosComponent implements OnInit {
 			alert("Por favor, ingesar el formato seleccionado.")
 			return false;
 		}
-		else if(!this.cilindro_cod){
+/* 		else if(!this.cilindro_cod){
 			alert("Por favor, ingesar el codigo del cilindro.")
 			return false;
-		}
-		else if(!this.troquel_plano_cod){
+		} */
+/* 		else if(!this.troquel_plano_cod){
 			alert("Por favor, ingesar el codigo del troquel.")
 			return false;
-		}
+		} */
 		
 		
-		else if(!this.pantone_1){
+	/* 	else if(!this.pantone_1){
 			alert("Por favor, ingesar el Pantone 1.")
 			return false;
 		}
@@ -1019,27 +1026,27 @@ export class AdminIngProductosComponent implements OnInit {
 		else if(!this.tinta_sticky_7){
 			alert("Por favor, ingesar el tinta/sticky 7.")
 			return false;
-		}
+		} */
 		else if(!this.tipo_dispensado){
 			alert("Por favor, seleccionar el tipo de dispensado.")
 			return false;
 		}
-		else if(!this.diametro_rollo || this.diametro_rollo == 0){
+/* 		else if(!this.diametro_rollo || this.diametro_rollo == 0){
 			alert("Por favor, ingesar el  diametro del rollo.")
 			return false;
-		}
-		else if(!this.peso_rollo || this.peso_rollo == 0){
+		} */
+/* 		else if(!this.peso_rollo || this.peso_rollo == 0){
 			alert("Por favor, ingesar el peso del rollo.")
 			return false;
-		}
-		else if(!this.medida_dispensado || this.medida_dispensado == 0){
-			alert("Por favor, ingesar la medida del dispensado.")
+		} */
+/* 		else if(!this.medida_dispensado || this.medida_dispensado == 0){
+			alert("Por favor, ingresar la medida del dispensado.")
 			return false;
-		}
-		else if(!this.taca){
+		} */
+/* 		else if(!this.taca){
 			alert("Por favor, seleccionar Taca.")
 			return false;
-		}
+		} */
 		else if(!this.embobinado_ext_seleccionado){
 			alert("Por favor, ingesar el embobinado Exterior.")
 			return false;
@@ -1107,10 +1114,10 @@ export class AdminIngProductosComponent implements OnInit {
 			alert("Por favor, ingesar la impresora.")
 			return false;
 		}
-		else if(!this.bobinadora){
+/* 		else if(!this.bobinadora){
 			alert("Por favor, ingesar la bobinadora.")
 			return false;
-		}
+		} */
 		else if(!this.material_imprimir){
 			alert("Por favor, ingesar el material a imprmir.")
 			return false;
@@ -1124,7 +1131,7 @@ export class AdminIngProductosComponent implements OnInit {
 			return false;
 		}
 		else if(!this.cortador){
-			alert("Por favor, ingesar el cortador.")
+			alert("Por favor, ingresar el cortador.")
 			return false;
 		}
 		else if(!this.color_seleccionado){
@@ -1135,10 +1142,10 @@ export class AdminIngProductosComponent implements OnInit {
 			alert("Por favor, ingesar el REP. DES.")
 			return false;
 		}
-		else if(!this.filas || this.filas == 0){
+/* 		else if(!this.filas || this.filas == 0){
 			alert("Por favor, ingesar las filas.")
 			return false;
-		}
+		} */
 		else if(!this.columnas || this.columnas == 0){
 			alert("Por favor, ingesar las columnas.")
 			return false;
@@ -1147,17 +1154,17 @@ export class AdminIngProductosComponent implements OnInit {
 			alert("Por favor, ingesar el formato seleccionado.")
 			return false;
 		}
-		else if(!this.cilindro_cod){
+/* 		else if(!this.cilindro_cod){
 			alert("Por favor, ingesar el codigo del cilindro.")
 			return false;
-		}
-		else if(!this.troquel_plano_cod){
+		} */
+/* 		else if(!this.troquel_plano_cod){
 			alert("Por favor, ingesar el codigo del troquel.")
 			return false;
-		}
+		} */
 		
 		
-		else if(!this.pantone_1){
+	/* 	else if(!this.pantone_1){
 			alert("Por favor, ingesar el Pantone 1.")
 			return false;
 		}
@@ -1271,23 +1278,23 @@ export class AdminIngProductosComponent implements OnInit {
 		else if(!this.tinta_sticky_7){
 			alert("Por favor, ingesar el tinta/sticky 7.")
 			return false;
-		}
+		} */
 		else if(!this.tipo_dispensado){
 			alert("Por favor, seleccionar el tipo de dispensado.")
 			return false;
 		}
-		else if(!this.diametro_rollo || this.diametro_rollo == 0){
+	/* 	else if(!this.diametro_rollo || this.diametro_rollo == 0){
 			alert("Por favor, ingesar el  diametro del rollo.")
 			return false;
-		}
-		else if(!this.peso_rollo || this.peso_rollo == 0){
+		} */
+	/* 	else if(!this.peso_rollo || this.peso_rollo == 0){
 			alert("Por favor, ingesar el peso del rollo.")
 			return false;
-		}
-		else if(!this.medida_dispensado || this.medida_dispensado == 0){
+		} */
+	/* 	else if(!this.medida_dispensado || this.medida_dispensado == 0){
 			alert("Por favor, ingesar la medida del dispensado.")
 			return false;
-		}
+		} */
 		else if(!this.taca){
 			alert("Por favor, seleccionar Taca.")
 			return false;
@@ -1354,6 +1361,7 @@ export class AdminIngProductosComponent implements OnInit {
 			encabezado_ing_prod['troquel_plano_cod'] = this.troquel_plano_cod;
 			//encabezado_ing_prod['uv_total'] = this.uv_total
 			encabezado_ing_prod['uv_total'] = this.uv_total ? 'SI' : 'NO';
+			encabezado_ing_prod['uv_sobre_impr'] = this.uv_sobre_impr ? 'SI' : 'NO';
 			encabezado_ing_prod['uv_select'] = this.uv_select ? 'SI' : 'NO';
 			encabezado_ing_prod['relam_delam'] = this.relam_delam ? 'SI' : 'NO';
 			encabezado_ing_prod['hot_stamping_acabados'] = this.hot_stamping ? 'SI' : 'NO';
@@ -1587,6 +1595,7 @@ export class AdminIngProductosComponent implements OnInit {
 				encabezado_ing_prod['troquel_plano_cod'] = this.troquel_plano_cod;
 				//encabezado_ing_prod['uv_total'] = this.uv_total
 				encabezado_ing_prod['uv_total'] = this.uv_total ? 'SI' : 'NO';
+				encabezado_ing_prod['uv_sobre_impr'] = this.uv_sobre_impr ? 'SI' : 'NO';
 				encabezado_ing_prod['uv_select'] = this.uv_select ? 'SI' : 'NO';
 				encabezado_ing_prod['relam_delam'] = this.relam_delam ? 'SI' : 'NO';
 				encabezado_ing_prod['hot_stamping_acabados'] = this.hot_stamping ? 'SI' : 'NO';

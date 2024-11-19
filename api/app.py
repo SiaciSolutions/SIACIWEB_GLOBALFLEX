@@ -4015,7 +4015,7 @@ def generar_ing_producto():
   
   sql = """INSERT INTO ing_de_producto (CodEmpresa, fecIngProd,
     razon_social_ing_prod, ruc_ing_prod, nombre_comercial_ing_prod, referencia, alto, ancho, proveedor, impresora, bobinadora, material_imprimir, ancho_material, 
-    cilindro, cortador, colores, rep_des, filas, columnas, forma_etq, cod_cilindro, cod_plano, uv_total, uv_select, relam_delam, hot_stamping, cold_folid, repujado, lami_mate, lami_brillan, 
+    cilindro, cortador, colores, rep_des, columnas, forma_etq, cod_cilindro, cod_plano, uv_total, uv_select, relam_delam, hot_stamping, cold_folid, repujado, lami_mate, lami_brillan, 
     primario_c, primario_m, primario_k,primario_y, 
     pantone_1, pantone_2, pantone_3, pantone_4, pantone_5, pantone_6, pantone_7, 
     anilox_vC, anilox_vM, anilox_vY, anilox_vK, 
@@ -4027,16 +4027,16 @@ def generar_ing_producto():
     tipo_dispensado, diametro_rollo, peso_rollo, medida, dispensado_taca,
     embobinado_exterior, embobinado_interior, 
     img_etiqueta,
-    ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion
+    ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion, uv_sobre_impr
           )  VALUES ('{}','{}',
+                  '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
                   '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
                   '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
-                  '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
-                  '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}' 
+                  '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}' ,'{}'
               )"""\
     .format(datos_limpios['codemp'],datos_limpios['fecIngProd'],
             datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['nombre_comercial'],datos_limpios['referencia'],datos_limpios['medida_alto'],datos_limpios['medida_ancho'],datos_limpios['proveedor'],datos_limpios['impresora'],datos_limpios['bobinadora'],datos_limpios['material_imprimir'],datos_limpios['ancho_material'],
-            datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['filas'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foild'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
+            datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foild'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
             datos_limpios['primario_C'],datos_limpios['primario_M'],datos_limpios['primario_K'],datos_limpios['primario_Y'],
             datos_limpios['pantone_1'],datos_limpios['pantone_2'],datos_limpios['pantone_3'],datos_limpios['pantone_4'],datos_limpios['pantone_5'],datos_limpios['pantone_6'],datos_limpios['pantone_7'],
             datos_limpios['anilox_vC'],datos_limpios['anilox_vM'],datos_limpios['anilox_vY'],datos_limpios['anilox_vK'],
@@ -4048,7 +4048,7 @@ def generar_ing_producto():
             datos_limpios['tipo_dispensado'],datos_limpios['diametro_rollo'], datos_limpios['peso_rollo'], datos_limpios['medida_dispensado'], datos_limpios['taca'], 
             datos_limpios['embobinado_ext_seleccionado'], datos_limpios['embobinado_interior_seleccionado'],
             img_etiqueta,
-            datos_limpios['ejecutivo_ventas'], datos_limpios['impreso_res'], datos_limpios['supervisador_res'], datos_limpios['jefe_prod'])
+            datos_limpios['ejecutivo_ventas'], datos_limpios['impreso_res'], datos_limpios['supervisador_res'], datos_limpios['jefe_prod'],datos_limpios['uv_sobre_impr'],datos_limpios['codemp'])
   print (sql)
   curs.execute(sql)
   conn.commit()
@@ -4087,7 +4087,7 @@ def actualizar_ing_producto():
     tipo_dispensado='{}', diametro_rollo='{}', peso_rollo='{}', medida='{}', dispensado_taca='{}',
     embobinado_exterior='{}', embobinado_interior='{}', 
     img_etiqueta ='{}',
-    ejecutivo_ventas='{}', impreso_responsable='{}', supervisado_responsable='{}', jefe_produccion='{}'
+    ejecutivo_ventas='{}', impreso_responsable='{}', supervisado_responsable='{}', jefe_produccion='{}' , uv_sobre_impr='{}'
     where codEmpresa = {} and codIngProd ='{}'
   """.format(datos_limpios['fecIngProd'],
             datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['nombre_comercial'],datos_limpios['referencia'],datos_limpios['medida_alto'],datos_limpios['medida_ancho'],datos_limpios['proveedor'],datos_limpios['impresora'],datos_limpios['bobinadora'],datos_limpios['material_imprimir'],datos_limpios['ancho_material'],
@@ -4103,7 +4103,7 @@ def actualizar_ing_producto():
             datos_limpios['tipo_dispensado'],datos_limpios['diametro_rollo'], datos_limpios['peso_rollo'], datos_limpios['medida_dispensado'], datos_limpios['taca'], 
             datos_limpios['embobinado_ext_seleccionado'], datos_limpios['embobinado_interior_seleccionado'],
             img_etiqueta,
-            datos_limpios['ejecutivo_ventas'], datos_limpios['impreso_res'], datos_limpios['supervisador_res'], datos_limpios['jefe_prod'],
+            datos_limpios['ejecutivo_ventas'], datos_limpios['impreso_res'], datos_limpios['supervisador_res'], datos_limpios['jefe_prod'], datos_limpios['uv_sobre_impr'],
             datos_limpios['codemp'], datos_limpios['CodIngProd'])
   print(sql)
   curs.execute(sql)
@@ -4172,7 +4172,7 @@ def get_ing_producto():
           tipo_dispensado, diametro_rollo, peso_rollo, medida, dispensado_taca,
           embobinado_exterior, embobinado_interior, 
           ruta_img,
-          ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion 
+          ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion , uv_sobre_impr
         FROM ing_de_producto WHERE codIngProd = '{}' and codEmpresa = '{}'
 	      """.format(codIngProd,codemp)
   curs.execute(sql)
@@ -4191,7 +4191,7 @@ def get_ing_producto():
     'tinta_sticky_vM', 'tinta_sticky_vY', 'tinta_sticky_vK', 'tinta_sticky_1', 'tinta_sticky_2', 'tinta_sticky_3',
     'tinta_sticky_4', 'tinta_sticky_5', 'tinta_sticky_6', 'tinta_sticky_7', 'tipo_dispensado', 'diametro_rollo',
     'peso_rollo', 'medida_dispensado', 'taca', 'embobinado_ext_seleccionado', 'embobinado_interior_seleccionado',
-    'ruta_img', 'ejecutivo_ventas', 'impreso_res', 'supervisador_res', 'jefe_prod'
+    'ruta_img', 'ejecutivo_ventas', 'impreso_res', 'supervisador_res', 'jefe_prod' , 'uv_sobre_impr'
     ]
   print(r)
   
@@ -4200,11 +4200,11 @@ def get_ing_producto():
       print("hay imagen")
       arr_path_img = r[81].split('\\')
       img_name = arr_path_img[-1]
-      art = (r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], r[35], r[36], r[37], r[38], r[39], r[40], r[41], r[42], r[43], r[44], r[45], r[46], r[47], r[48], r[49], r[50], r[51], r[52], r[53], r[54], r[55], r[56], r[57], r[58], r[59], r[60], r[61], r[62], r[63], r[64], r[65], r[66], r[67], r[68], r[69], r[70], r[71], r[72], r[73], r[74], r[75], r[76], r[77], r[78], r[79], r[80], '../../assets/img_ing_productos/'+img_name, r[82], r[83], r[84], r[85])
+      art = (r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], r[35], r[36], r[37], r[38], r[39], r[40], r[41], r[42], r[43], r[44], r[45], r[46], r[47], r[48], r[49], r[50], r[51], r[52], r[53], r[54], r[55], r[56], r[57], r[58], r[59], r[60], r[61], r[62], r[63], r[64], r[65], r[66], r[67], r[68], r[69], r[70], r[71], r[72], r[73], r[74], r[75], r[76], r[77], r[78], r[79], r[80], '../../assets/img_ing_productos/'+img_name, r[82], r[83], r[84], r[85], r[86])
       d = dict(zip(campos, art))
     else:
       print("NO HAY IMAGEN")
-      art = (r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], r[35], r[36], r[37], r[38], r[39], r[40], r[41], r[42], r[43], r[44], r[45], r[46], r[47], r[48], r[49], r[50], r[51], r[52], r[53], r[54], r[55], r[56], r[57], r[58], r[59], r[60], r[61], r[62], r[63], r[64], r[65], r[66], r[67], r[68], r[69], r[70], r[71], r[72], r[73], r[74], r[75], r[76], r[77], r[78], r[79], r[80], '../../assets/img_ing_productos/subir-imagen.png', r[82], r[83], r[84], r[85])
+      art = (r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], r[35], r[36], r[37], r[38], r[39], r[40], r[41], r[42], r[43], r[44], r[45], r[46], r[47], r[48], r[49], r[50], r[51], r[52], r[53], r[54], r[55], r[56], r[57], r[58], r[59], r[60], r[61], r[62], r[63], r[64], r[65], r[66], r[67], r[68], r[69], r[70], r[71], r[72], r[73], r[74], r[75], r[76], r[77], r[78], r[79], r[80], '../../assets/img_ing_productos/subir-imagen.png', r[82], r[83], r[84], r[86])
       d = dict(zip(campos, art))
   else:
     d = {'codus1': False}
