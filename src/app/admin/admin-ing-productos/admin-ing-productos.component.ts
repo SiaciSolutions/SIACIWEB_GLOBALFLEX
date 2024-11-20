@@ -1323,13 +1323,13 @@ export class AdminIngProductosComponent implements OnInit {
 			encabezado_ing_prod['primario_M'] = this.primario_M ? 'SI' : 'NO';
 			encabezado_ing_prod['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
 			encabezado_ing_prod['primario_K'] = this.primario_K ? 'SI' : 'NO';
-			encabezado_ing_prod['pantone_1'] = this.pantone_1;
-			encabezado_ing_prod['pantone_2'] = this.pantone_2;
-			encabezado_ing_prod['pantone_3'] = this.pantone_3;
-			encabezado_ing_prod['pantone_4'] = this.pantone_4;
-			encabezado_ing_prod['pantone_5'] = this.pantone_5;
-			encabezado_ing_prod['pantone_6'] = this.pantone_6;
-			encabezado_ing_prod['pantone_7'] = this.pantone_7;
+			encabezado_ing_prod['pantone_1'] = this.pantone_1 ? this.pantone_1 : null;
+			encabezado_ing_prod['pantone_2'] = this.pantone_2 ? this.pantone_2 : null;
+			encabezado_ing_prod['pantone_3'] = this.pantone_3 ? this.pantone_3 : null;
+			encabezado_ing_prod['pantone_4'] = this.pantone_4 ? this.pantone_4 : null;
+			encabezado_ing_prod['pantone_5'] = this.pantone_5 ? this.pantone_5 : null;
+			encabezado_ing_prod['pantone_6'] = this.pantone_6 ? this.pantone_6 : null;
+			encabezado_ing_prod['pantone_7'] = this.pantone_7 ? this.pantone_7 : null;
 			//SEGUNDA FILA
 			if(this.anilox_vC){
 				encabezado_ing_prod['anilox_vC'] = this.anilox_vC;
@@ -1351,14 +1351,50 @@ export class AdminIngProductosComponent implements OnInit {
 			}else{
 				encabezado_ing_prod['anilox_vK'] = 0;
 			}
-			encabezado_ing_prod['anilox_1'] = this.anilox_1;
-			encabezado_ing_prod['anilox_2'] = this.anilox_2;
-			encabezado_ing_prod['anilox_3'] = this.anilox_3;
-			encabezado_ing_prod['anilox_4'] = this.anilox_4;
-			encabezado_ing_prod['anilox_5'] = this.anilox_5;
-			encabezado_ing_prod['anilox_6'] = this.anilox_6;
-			encabezado_ing_prod['anilox_7'] = this.anilox_7;
-			//TERCERA FILA
+			
+			if(this.anilox_1){
+				encabezado_ing_prod['anilox_1'] = this.anilox_1;
+			}
+			else{
+				encabezado_ing_prod['anilox_1'] = null;
+			}
+			if(this.anilox_2){
+				encabezado_ing_prod['anilox_2'] = this.anilox_2;
+			}
+			else{
+				encabezado_ing_prod['anilox_2'] = null;
+			}
+			if(this.anilox_3){
+				encabezado_ing_prod['anilox_3'] = this.anilox_3;
+			}
+			else{
+				encabezado_ing_prod['anilox_3'] = null;
+			}
+			if(this.anilox_4){
+				encabezado_ing_prod['anilox_4'] = this.anilox_4;
+			}
+			else{
+				encabezado_ing_prod['anilox_4'] = null;
+			}
+			if(this.anilox_5){
+				encabezado_ing_prod['anilox_5'] = this.anilox_5;
+			}
+			else{
+				encabezado_ing_prod['anilox_5'] = null;
+			}
+			if(this.anilox_6){
+				encabezado_ing_prod['anilox_6'] = this.anilox_6;
+			}
+			else{
+				encabezado_ing_prod['anilox_6'] = null;
+			}
+			if(this.anilox_7){
+				encabezado_ing_prod['anilox_7'] = this.anilox_7;
+			}
+			else{
+				encabezado_ing_prod['anilox_7'] = null;
+			}
+		//TERCERA FILA
 			if(this.prov_fabricante_vC){
 				encabezado_ing_prod['prov_fabricante_vC'] = this.prov_fabricante_vC;
 				
@@ -1385,13 +1421,50 @@ export class AdminIngProductosComponent implements OnInit {
 				encabezado_ing_prod['prov_fabricante_vK'] = null;
 
 			}
-			encabezado_ing_prod['prov_fabricante_1'] = this.prov_fabricante_1;
-			encabezado_ing_prod['prov_fabricante_2'] = this.prov_fabricante_2;
-			encabezado_ing_prod['prov_fabricante_3'] = this.prov_fabricante_3;
-			encabezado_ing_prod['prov_fabricante_4'] = this.prov_fabricante_4;
-			encabezado_ing_prod['prov_fabricante_5'] = this.prov_fabricante_5;
-			encabezado_ing_prod['prov_fabricante_6'] = this.prov_fabricante_6;
-			encabezado_ing_prod['prov_fabricante_7'] = this.prov_fabricante_7;
+			
+			if(this.prov_fabricante_1){
+				encabezado_ing_prod['prov_fabricante_1'] = this.prov_fabricante_1;
+			}
+			else{
+				encabezado_ing_prod['anilox_1'] = null
+			}
+			if(this.prov_fabricante_2){
+				encabezado_ing_prod['prov_fabricante_2'] = this.prov_fabricante_2;
+			}
+			else{
+				encabezado_ing_prod['prov_fabricante_2'] = null
+			}
+			if(this.prov_fabricante_3){
+				encabezado_ing_prod['prov_fabricante_3'] = this.prov_fabricante_3;
+			}
+			else{
+				encabezado_ing_prod['prov_fabricante_3'] = null
+			}
+			if(this.prov_fabricante_4){
+				encabezado_ing_prod['prov_fabricante_4'] = this.prov_fabricante_4;
+			}
+			else{
+				encabezado_ing_prod['prov_fabricante_4'] = null
+			}
+			if(this.prov_fabricante_5){
+				encabezado_ing_prod['prov_fabricante_5'] = this.prov_fabricante_5;
+			}
+			else{
+				encabezado_ing_prod['prov_fabricante_5'] = null
+			}
+			if(this.prov_fabricante_6){
+				encabezado_ing_prod['prov_fabricante_6'] = this.prov_fabricante_6;
+			}
+			else{
+				encabezado_ing_prod['prov_fabricante_6'] = null
+			}
+			if(this.prov_fabricante_7){
+				encabezado_ing_prod['prov_fabricante_7'] = this.prov_fabricante_7;
+			}
+			else{
+				encabezado_ing_prod['prov_fabricante_7'] = null
+			}
+
 			//CUARTA FILA
 			if(this.tinta_sticky_vC){
 				encabezado_ing_prod['tinta_sticky_vC'] = this.tinta_sticky_vC;
@@ -1417,13 +1490,13 @@ export class AdminIngProductosComponent implements OnInit {
 				encabezado_ing_prod['tinta_sticky_vK'] = null;
 			}
 			
-			encabezado_ing_prod['tinta_sticky_1'] = this.tinta_sticky_1;
-			encabezado_ing_prod['tinta_sticky_2'] = this.tinta_sticky_2;
-			encabezado_ing_prod['tinta_sticky_3'] = this.tinta_sticky_3;
-			encabezado_ing_prod['tinta_sticky_4'] = this.tinta_sticky_4;
-			encabezado_ing_prod['tinta_sticky_5'] = this.tinta_sticky_5;
-			encabezado_ing_prod['tinta_sticky_6'] = this.tinta_sticky_6;
-			encabezado_ing_prod['tinta_sticky_7'] = this.tinta_sticky_7;
+			encabezado_ing_prod['tinta_sticky_1'] = this.tinta_sticky_1 ? this.tinta_sticky_1 :null;
+			encabezado_ing_prod['tinta_sticky_2'] = this.tinta_sticky_2 ? this.tinta_sticky_2 :null;
+			encabezado_ing_prod['tinta_sticky_3'] = this.tinta_sticky_3 ? this.tinta_sticky_3 :null;
+			encabezado_ing_prod['tinta_sticky_4'] = this.tinta_sticky_4 ? this.tinta_sticky_4 :null;
+			encabezado_ing_prod['tinta_sticky_5'] = this.tinta_sticky_5 ? this.tinta_sticky_5 :null;
+			encabezado_ing_prod['tinta_sticky_6'] = this.tinta_sticky_6 ? this.tinta_sticky_6 :null;
+			encabezado_ing_prod['tinta_sticky_7'] = this.tinta_sticky_7 ? this.tinta_sticky_7 :null;
 			
 			//********DISPENSADO***********
 			if (this.tipo_dispensado == 'Manual' ){
@@ -1556,13 +1629,13 @@ export class AdminIngProductosComponent implements OnInit {
 				encabezado_ing_prod['primario_M'] = this.primario_M ? 'SI' : 'NO';
 				encabezado_ing_prod['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
 				encabezado_ing_prod['primario_K'] = this.primario_K ? 'SI' : 'NO';
-				encabezado_ing_prod['pantone_1'] = this.pantone_1;
-				encabezado_ing_prod['pantone_2'] = this.pantone_2;
-				encabezado_ing_prod['pantone_3'] = this.pantone_3;
-				encabezado_ing_prod['pantone_4'] = this.pantone_4;
-				encabezado_ing_prod['pantone_5'] = this.pantone_5;
-				encabezado_ing_prod['pantone_6'] = this.pantone_6;
-				encabezado_ing_prod['pantone_7'] = this.pantone_7;
+				encabezado_ing_prod['pantone_1'] = this.pantone_1 ? this.pantone_1 : null;
+				encabezado_ing_prod['pantone_2'] = this.pantone_2 ? this.pantone_2 : null;
+				encabezado_ing_prod['pantone_3'] = this.pantone_3 ? this.pantone_3 : null;
+				encabezado_ing_prod['pantone_4'] = this.pantone_4 ? this.pantone_4 : null;
+				encabezado_ing_prod['pantone_5'] = this.pantone_5 ? this.pantone_5 : null;
+				encabezado_ing_prod['pantone_6'] = this.pantone_6 ? this.pantone_6 : null;
+				encabezado_ing_prod['pantone_7'] = this.pantone_7 ? this.pantone_7 : null;
 				//SEGUNDA FILA
 				if(this.anilox_vC){
 					encabezado_ing_prod['anilox_vC'] = this.anilox_vC;
@@ -1584,13 +1657,13 @@ export class AdminIngProductosComponent implements OnInit {
 				}else{
 					encabezado_ing_prod['anilox_vK'] = 0;
 				}
-				encabezado_ing_prod['anilox_1'] = this.anilox_1;
-				encabezado_ing_prod['anilox_2'] = this.anilox_2;
-				encabezado_ing_prod['anilox_3'] = this.anilox_3;
-				encabezado_ing_prod['anilox_4'] = this.anilox_4;
-				encabezado_ing_prod['anilox_5'] = this.anilox_5;
-				encabezado_ing_prod['anilox_6'] = this.anilox_6;
-				encabezado_ing_prod['anilox_7'] = this.anilox_7;
+				encabezado_ing_prod['anilox_1'] = this.anilox_1 ? this.anilox_1 : null;
+				encabezado_ing_prod['anilox_2'] = this.anilox_2 ? this.anilox_2 : null;
+				encabezado_ing_prod['anilox_3'] = this.anilox_3 ? this.anilox_3 : null;
+				encabezado_ing_prod['anilox_4'] = this.anilox_4 ? this.anilox_4 : null;
+				encabezado_ing_prod['anilox_5'] = this.anilox_5 ? this.anilox_5 : null;
+				encabezado_ing_prod['anilox_6'] = this.anilox_6 ? this.anilox_6 : null;
+				encabezado_ing_prod['anilox_7'] = this.anilox_7 ? this.anilox_7 : null;
 				//TERCERA FILA
 				if(this.prov_fabricante_vC){
 					encabezado_ing_prod['prov_fabricante_vC'] = this.prov_fabricante_vC;
@@ -1618,13 +1691,48 @@ export class AdminIngProductosComponent implements OnInit {
 					encabezado_ing_prod['prov_fabricante_vK'] = null;
 					
 				}
-				encabezado_ing_prod['prov_fabricante_1'] = this.prov_fabricante_1;
-				encabezado_ing_prod['prov_fabricante_2'] = this.prov_fabricante_2;
-				encabezado_ing_prod['prov_fabricante_3'] = this.prov_fabricante_3;
-				encabezado_ing_prod['prov_fabricante_4'] = this.prov_fabricante_4;
-				encabezado_ing_prod['prov_fabricante_5'] = this.prov_fabricante_5;
-				encabezado_ing_prod['prov_fabricante_6'] = this.prov_fabricante_6;
-				encabezado_ing_prod['prov_fabricante_7'] = this.prov_fabricante_7;
+				if(this.prov_fabricante_1){
+					encabezado_ing_prod['prov_fabricante_1'] = this.prov_fabricante_1;
+				}
+				else{
+					encabezado_ing_prod['anilox_1'] = null
+				}
+				if(this.prov_fabricante_2){
+					encabezado_ing_prod['prov_fabricante_2'] = this.prov_fabricante_2;
+				}
+				else{
+					encabezado_ing_prod['prov_fabricante_2'] = null
+				}
+				if(this.prov_fabricante_3){
+					encabezado_ing_prod['prov_fabricante_3'] = this.prov_fabricante_3;
+				}
+				else{
+					encabezado_ing_prod['prov_fabricante_3'] = null
+				}
+				if(this.prov_fabricante_4){
+					encabezado_ing_prod['prov_fabricante_4'] = this.prov_fabricante_4;
+				}
+				else{
+					encabezado_ing_prod['prov_fabricante_4'] = null
+				}
+				if(this.prov_fabricante_5){
+					encabezado_ing_prod['prov_fabricante_5'] = this.prov_fabricante_5;
+				}
+				else{
+					encabezado_ing_prod['prov_fabricante_5'] = null
+				}
+				if(this.prov_fabricante_6){
+					encabezado_ing_prod['prov_fabricante_6'] = this.prov_fabricante_6;
+				}
+				else{
+					encabezado_ing_prod['prov_fabricante_6'] = null
+				}
+				if(this.prov_fabricante_7){
+					encabezado_ing_prod['prov_fabricante_7'] = this.prov_fabricante_7;
+				}
+				else{
+					encabezado_ing_prod['prov_fabricante_7'] = null
+				}
 				//CUARTA FILA
 				if(this.tinta_sticky_vC){
 					encabezado_ing_prod['tinta_sticky_vC'] = this.tinta_sticky_vC;
@@ -1650,13 +1758,13 @@ export class AdminIngProductosComponent implements OnInit {
 					encabezado_ing_prod['tinta_sticky_vK'] = null;
 				}
 				
-				encabezado_ing_prod['tinta_sticky_1'] = this.tinta_sticky_1;
-				encabezado_ing_prod['tinta_sticky_2'] = this.tinta_sticky_2;
-				encabezado_ing_prod['tinta_sticky_3'] = this.tinta_sticky_3;
-				encabezado_ing_prod['tinta_sticky_4'] = this.tinta_sticky_4;
-				encabezado_ing_prod['tinta_sticky_5'] = this.tinta_sticky_5;
-				encabezado_ing_prod['tinta_sticky_6'] = this.tinta_sticky_6;
-				encabezado_ing_prod['tinta_sticky_7'] = this.tinta_sticky_7;
+				encabezado_ing_prod['tinta_sticky_1'] = this.tinta_sticky_1 ? this.tinta_sticky_1 :null;
+				encabezado_ing_prod['tinta_sticky_2'] = this.tinta_sticky_2 ? this.tinta_sticky_2 :null;
+				encabezado_ing_prod['tinta_sticky_3'] = this.tinta_sticky_3 ? this.tinta_sticky_3 :null;
+				encabezado_ing_prod['tinta_sticky_4'] = this.tinta_sticky_4 ? this.tinta_sticky_4 :null;
+				encabezado_ing_prod['tinta_sticky_5'] = this.tinta_sticky_5 ? this.tinta_sticky_5 :null;
+				encabezado_ing_prod['tinta_sticky_6'] = this.tinta_sticky_6 ? this.tinta_sticky_6 :null;
+				encabezado_ing_prod['tinta_sticky_7'] = this.tinta_sticky_7 ? this.tinta_sticky_7 :null;
 				
 				//********DISPENSADO***********
 				if (this.tipo_dispensado == 'Manual' ){

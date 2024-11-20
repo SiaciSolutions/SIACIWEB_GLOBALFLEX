@@ -53,6 +53,7 @@ urlmail = 'http://' + coneccion.ip + ':' + coneccion.puerto + '/mail/'
 ################################### SIRVIOOOOO  #################################################################
 # app.config['UPLOAD_FOLDER'] = 'C:\\wamp\\www\\TEST_acople_webfe_PEDIDO_PDV_TALLERES\\src\\assets\\img_talleres'
 app.config['UPLOAD_FOLDER'] = APP_PATH+'\\img_talleres_desa'
+app.config['UPLOAD_FOLDER_DESPACHOS'] = APP_PATH+'\\img_despachos'
 app.config['UPLOAD_FOLDER_ARTICULOS'] = APP_PATH+'\\img_articulos'
 app.config['UPLOAD_FOLDER_ING_PRODUCTOS'] = APP_PATH+'\\img_ing_productos'
 
@@ -1112,7 +1113,7 @@ def lista_pedidos():
   print (datos) 
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   curs = conn.cursor()
-  campos = ['numtra', 'codcli','nomusu','fectra','nomcli','observ','totnet','status','email','tiptra']
+  campos = ['numtra', 'codcli','nomusu','fectra','nomcli','observ','totnet','status','email','tiptra','fecha_entrega','status_entrega']
 
   sql = """ SELECT p.numtra,p.codcli,p.codusu,DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra,c.nomcli,
   p.soli_gra,round((p.totnet+p.iva_cantidad),2) as total_iva, 
@@ -1120,7 +1121,9 @@ def lista_pedidos():
   WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' 
   THEN 'FACTURADO'WHEN estado = 'E' THEN 'EN ESPERA' WHEN estado = 'C' THEN 'COMPRADA'  WHEN estado = 'I' THEN 'SOLICITADO'
   ELSE 'STATUS_NO_ENCONTRADO' END) AS status,
-  c.email , p.tiptra
+  c.email , p.tiptra,
+  (SELECT fecha_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as fecha_entrega,
+  (SELECT status_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as status_entrega
   FROM encabezadopedpro p, clientes c where p.tiptra in (1,2) and p.codemp='{}'
   and p.fectra between '{}' and '{}' and p.codusu='{}'
   and p.codemp = c.codemp and p.codcli = c.codcli and codalm='01'  and estado in ('P','I') order by p.fectra desc""".format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['usuario'])
@@ -1132,7 +1135,7 @@ def lista_pedidos():
   arrresp = []
   for r in regs:
     d = dict(zip(campos, r))
-    print(arrresp)
+ #   print(arrresp)
     arrresp.append(d)
 
   print("CERRANDO SESION SIACI")
@@ -1141,6 +1144,128 @@ def lista_pedidos():
   conn.close()
 
   return (jsonify(arrresp))
+
+
+@app.route('/lista_despachos_pedidos', methods=['POST'])
+def lista_despachos_pedidos():
+  datos = request.json
+  print ('ENTRADAAAAA')
+  print (datos) 
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+
+  campos = ['numtra', 'codcli','nomusu','fectra','nomcli','observ','total_iva','status','email','fecha_entrega','hora_entrega','direccion_entrega','ruta','idruta','id_agencia','status_entrega','tiptra','id_pedido_ruta','observacion_entrega']
+  
+  datos["tipacc"] = 'T'
+  print ('ENTRADA LUEGO TIPACC')
+  if (datos["tipacc"] == 'T'):
+      
+	  sql = """ SELECT top 500 p.numtra,p.codcli,p.codusu,
+			DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra,c.nomcli,
+			p.soli_gra,round((p.totnet+p.iva_cantidad),2) as total_iva,
+			(CASE WHEN estado = 'P' THEN 'EMITIDO' WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' THEN 'FACTURADO'WHEN estado = 'E' THEN 'EN ESPERA' WHEN estado = 'C' THEN 'COMPRADA' ELSE 'STATUS_NO_ENCONTRADO' END) AS status,
+			c.email, DATEFORMAT(pr.fecha_entrega, 'DD-MM-YYYY') as fecha_entrega_planificada,CONVERT(VARCHAR, pr.hora_entrega, 108),dir_agencia,r.descripcion,pr.idruta,a.id_agencia, pr.status_entrega, p.tiptra, pr.id_pedido_ruta, pr.observacion_entrega
+			FROM encabezadopedpro p, clientes c, pedido_ruta pr, agencia_cliente a, ruta r
+			where p.tiptra=1 and p.codemp='{}' 
+			and pr.idruta = trim(r.codruta)
+		--	and a.idruta = trim(r.codruta) 
+			and p.codemp=r.codemp
+			and p.codemp = c.codemp 
+			and p.codcli = c.codcli 
+			and codalm='01' 
+			and estado <>'A' 
+			and pr.numtra_pedido = p.numtra
+			and a.empresa = p.codemp
+			and a.codcli = p.codcli
+			and a.id_agencia = pr.id_agencia
+            and pr.status_entrega <> 'POR PLANIFICAR'
+            and fecha_entrega between '{}' and  '{}'
+            and pr.idruta like '{}'
+			order by p.fectra desc
+        """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['idruta']) 
+  print (sql)        
+  
+  curs.execute(sql)
+
+  regs = curs.fetchall()
+  arrresp = []
+  # arr_up = []
+  for r in regs:
+    # print (r)
+    reg = (r[0],r[1],r[2],r[3],r[4],r[5],convert_decimal(r[6]),r[7],r[8],r[9],r[10],r[11],r[12],r[13],r[14],r[15],r[16],r[17],r[18])
+    d = dict(zip(campos, reg))
+    arrresp.append(d)
+    # arr_up.append(arrresp)
+
+  # arr_up = []
+  print("CERRANDO SESION SIACI")
+  # print(arrresp)
+  curs.close()
+  conn.close()
+
+  return (jsonify(arrresp))
+  
+@app.route('/get_pedidos_ruta_despacho', methods=['POST'])
+def get_pedidos_ruta_despacho():
+
+  datos = request.json
+  print ('ENTRADAAAAA get_pedidos_ruta_despacho')
+  print (datos) 
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+
+  campos = ['status_entrega','fecha_entrega','hora_entrega','observacion_entrega', 'fecha_entrega_efectiva','hora_entrega_efectiva']
+  
+  sql = """ select status_entrega,fecha_entrega,hora_entrega,observacion_entrega,fecha_entrega_efectiva,hora_entrega_efectiva from pedido_ruta where id_pedido_ruta={} and empresa ='{}'
+	""".format(datos['id_pedido_ruta'],datos['codemp'])
+    
+  curs.execute(sql)
+  print (sql)
+  reg = curs.fetchone()
+  d = dict(zip(campos, reg))
+  
+  
+  print("CERRANDO SESION SIACI")
+  # print(arrresp)
+  curs.close()
+  conn.close()
+
+  return (jsonify(d))
+  
+  
+  
+@app.route('/actualizar_despacho_pedido', methods=['POST'])
+def actualizar_despacho_pedido():
+  datos = request.json
+  print ("########## APLICAR ACTUALIZACION DESPACHO PEDIDO ######")
+  print (datos)
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+
+  dateTimeObj = datetime.now()
+  hora_entrega_efectiva = dateTimeObj.strftime("%H:%M:%S")
+  print (hora_entrega_efectiva)
+
+  # timestampStr= dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S)")
+  fecha_entrega_efectiva = dateTimeObj.strftime("%Y-%m-%d")
+  print (fecha_entrega_efectiva)
+  
+  sql = """update pedido_ruta p set 
+  p.status_entrega = '{}', p.fecha_entrega_efectiva= '{}' , p.hora_entrega_efectiva = '{}' , p.observacion_entrega = '{}'
+  where p.id_pedido_ruta = '{}' and p.empresa = '{}'""".format(datos['status_entrega'],fecha_entrega_efectiva,hora_entrega_efectiva,datos['observacion_entrega'],datos['id_pedido_ruta'] ,datos['codemp'])
+  print (sql) 
+  curs.execute(sql)
+  conn.commit()
+
+  # curs.close()
+  conn.close()
+  sleep (0.5)  
+  d = {'status': 'EXITOSO'}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+  
+
   
   
 # @app.route('/ticket/<ticketname>')
@@ -1523,7 +1648,7 @@ def articulos_ingresos():
      (select i.poriva from iva i where i.codiva=a.codiva) as poriva , 
      round(((poriva*cospro)/100),2) as precio_iva, cospro,codgrupo from articulos a
      where (a.nomart like '%{}%' or a.codart like '%{}%' 
-     or a.codart = (select codart from v_articulos where codalterno = '{}'))
+     or a.codart = (select v.codart from v_articulos v where v.codalterno = '{}' and v.codemp=a.codemp))
      and a.codemp = '{}' 
      order by a.nomart asc""".format(datos['nomart'],datos['nomart'],datos['nomart'],datos['codemp'])
   
@@ -4918,11 +5043,48 @@ def generar_pedido_ruta():
   
   if (datos['existe_fecha_entrega']=='SI'):
     sql = "INSERT INTO pedido_ruta (empresa,numtra_pedido,fectra,hora,idruta,id_agencia,status_entrega,fecha_entrega,hora_entrega) values('{}','{}','{}','{}','{}','{}','{}','{}','{}')"\
-          .format(datos['empresa'] ,datos['numtra_pedido'],datos['fectra'],hora,datos['idruta'],datos['id_agencia'],'POR PLANIFICAR',datos['fecha_entrega'],datos['hora_entrega'])
+          .format(datos['empresa'] ,datos['numtra_pedido'],datos['fectra'],hora,datos['idruta'],datos['id_agencia'],'PLANIFICADO',datos['fecha_entrega'],datos['hora_entrega'])
 
   if (datos['existe_fecha_entrega']=='NO'):
     sql = "INSERT INTO pedido_ruta (empresa,numtra_pedido,fectra,hora,idruta,id_agencia,status_entrega) values('{}','{}','{}','{}','{}','{}','{}')"\
           .format(datos['empresa'] ,datos['numtra_pedido'],datos['fectra'],hora,datos['idruta'],datos['id_agencia'],'POR PLANIFICAR')
+   
+  print (sql) 
+  curs.execute(sql)
+  conn.commit()
+  
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  
+  d = {'status': 'RUTA PEDIDO GENERADA'}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+  
+@app.route('/actualizar_pedido_ruta', methods=['POST'])
+def actualizar_pedido_ruta():
+  datos = request.json
+  print ("##########  ENTRADA ACTUALIZAR PEDIDO RUTAAAA ######")
+  print (datos)
+  
+  dateTimeObj = datetime.now()
+  hora= dateTimeObj.strftime("%H:%M:%S")
+  print (hora)
+
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  sql = ''
+  
+  if (datos['existe_fecha_entrega']=='SI'):
+    sql = "update pedido_ruta  set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' where numtra_pedido= '{}' and empresa='{}'"\
+          .format(datos['fecha_entrega'],datos['idruta'],datos['id_agencia'],'PLANIFICADO',datos['numtra_pedido'],datos['empresa'])
+
+  if (datos['existe_fecha_entrega']=='NO'):
+    sql = "update pedido_ruta  set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' where numtra_pedido= '{}' and empresa='{}'"\
+          .format(datos['fecha_entrega'],datos['idruta'],datos['id_agencia'],'POR PLANIFICAR',datos['numtra_pedido'],datos['empresa'])
+    # sql = "INSERT INTO pedido_ruta (empresa,numtra_pedido,fectra,hora,idruta,id_agencia,status_entrega) values('{}','{}','{}','{}','{}','{}','{}')"\
+          # .format(datos['empresa'] ,datos['numtra_pedido'],datos['fectra'],hora,datos['idruta'],datos['id_agencia'],'POR PLANIFICAR')
    
   print (sql) 
   curs.execute(sql)
@@ -5131,6 +5293,7 @@ def get_sucursal_pedido():
           select idruta,id_agencia,
           (select r.descripcion from ruta r where trim(r.codruta) = pr.idruta and r.codemp = pr.empresa) as ruta,
           (select dir_agencia ac from agencia_cliente ac where ac.empresa = pr.empresa and ac.id_agencia = pr.id_agencia) as dir_agencia,
+          (select tipo_agencia ac from agencia_cliente ac where ac.empresa = pr.empresa and ac.id_agencia = pr.id_agencia) as tipo_agencia,
 		  DATEFORMAT(fecha_entrega, 'DD-MM-YYYY') as fecha_entrega_formateado,fecha_entrega,hora_entrega
           from pedido_ruta pr
           where pr.empresa = '{}'
@@ -5138,7 +5301,7 @@ def get_sucursal_pedido():
           """.format(datos['codemp'],datos['pedido'])
     curs = conn.cursor()
     curs.execute(sql)
-    campos = ['idruta','id_agencia','nombre_ruta','dir_agencia','fecha_entrega_formateado','fecha_entrega','hora_entrega']
+    campos = ['idruta','id_agencia','nombre_ruta','dir_agencia','tipo_agencia','fecha_entrega_formateado','fecha_entrega','hora_entrega']
     # regs = curs.fetchall()
     # arr_datos = [] 
     # for reg in regs:
@@ -5171,6 +5334,8 @@ def update_sucursal_pedido():
         conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
     except Exception as e:
         print (str(e))
+        
+
     sql = """      
            update pedido_ruta set idruta = '{}', id_agencia = '{}', fecha_entrega = '{}', hora_entrega = '{}' where numtra_pedido = '{}' and empresa='{}';
           """.format(datos['idruta'],datos['id_agencia'],datos['fecha_entrega'],datos['hora_entrega'],datos['numtra_pedido'],datos['empresa'])
@@ -5390,7 +5555,8 @@ def get_rutas():
     curs.execute(sql)
     # campos = ['idruta','nombre_ruta']
     regs = curs.fetchall()
-    arr_datos = [] 
+    # arr_datos = ['%','TODAS LAS RUTAS'] 
+    arr_datos = [{'idruta':'%','nombre_ruta':'TODAS LAS RUTAS'}]
     for reg in regs:
         datos_rutas = {}
         datos_rutas['idruta'] = reg[0]
@@ -6329,6 +6495,103 @@ def uploader():
   return(response)
   
   
+@app.route("/uploadFile_despacho", methods=['POST'])
+def uploadFile_despacho():
+ if request.method == 'POST':
+  # obtenemos el archivo del input "archivo"
+  datos = request
+  # directorio = 'datos'
+  # datos['dir']
+  
+  # dest = APP_PATH+'\\GENERADOS\\'+recv['NUMERO_AUTORIZACION']+'.pdf'
+				# print ('########  CONVERTIDOR PDF INSTANCIADO PARA CONVERTIR COMPROBANTE: '+recv['COMPROBANTE']+'########')
+				# exitoso = 0
+				# while True:
+					# try:
+						# if os.path.isdir(dest):
+  
+  
+  print (request)
+  print (request.form)
+  print (request.form["dir"])
+  id_pedido_ruta = request.form["dir"][3:]
+  codemp = request.form["dir"][:2]
+  print (id_pedido_ruta)
+  print (codemp)
+  print (request.files)
+  print (request.files['uploads'])
+  
+  f = request.files['uploads']
+  filename = secure_filename(f.filename)
+  directorio = request.form["dir"]
+  
+  
+  # Guardamos el archivo en el directorio "Archivos PDF"
+  
+  if not (os.path.isdir(app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio)):
+     os.mkdir(app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio)
+  f.save(os.path.join(app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio, filename))
+  
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  
+  sql = """
+  select  cname
+  from    SYS.SYSCOLUMNS
+  where   tname = 'imagen_orden'
+  and     cname like 'imagen%'
+   """
+  print (sql) 
+  curs = conn.cursor()
+  curs.execute(sql)
+  regs = curs.fetchall()
+  arrresp = []
+  imagen_escoger = ''
+  for r in regs:
+    print (r)
+    sql = """
+    SELECT {} FROM "DBA"."imagen_despacho" where id_pedido_ruta='{}' and codemp='{}'
+    """.format(r[0],id_pedido_ruta,codemp)
+    curs = conn.cursor()
+    curs.execute(sql)
+    imagen = curs.fetchone()
+    if imagen:
+        if (imagen[0] == None):
+           imagen_escoger = r[0]
+           print (imagen_escoger) 
+           break
+    else:
+       imagen_escoger = 'imagen1'
+
+  
+  if (imagen_escoger):
+     if (imagen_escoger == 'imagen1'):
+        sql = """
+        insert into imagen_despacho
+        (codemp,id_pedido_ruta,{})values
+        ('{}',{},'{}','{}')
+         """.format(imagen_escoger,codemp,id_pedido_ruta,app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio+'\\'+filename)
+        print (sql) 
+        curs = conn.cursor()
+        curs.execute(sql)
+        conn.commit()
+     else :
+        sql = """
+        update imagen_despacho set {} = '{}' where codemp = '{}' and id_pedido_ruta ='{}'
+        """.format(imagen_escoger,app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio+'\\'+filename,codemp,id_pedido_ruta)
+        print (sql) 
+        curs = conn.cursor()
+        curs.execute(sql)
+        conn.commit()
+
+  curs.close()
+  
+  
+  result = {'resultado': 'Archivo subido exitosamente'} 
+  response = make_response(dumps(result, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+  
+  
 #########  SERVICIOS PARA MANEJAR DETALLE VEHICULO #######################
   
 @app.route("/lista_img", methods=['POST'])
@@ -6376,6 +6639,36 @@ def lista_audios():
          arr_path_img = f.split('\\')
          img_name = arr_path_img[-1]
          img = (img_name,'assets/img_talleres/'+directorio+'/'+img_name)
+         # print (f)
+         # print (img_name)
+         a = dict(zip(campos, img))
+         arr_img.append(a)
+  # print (arr_img)
+	  
+  # result = {'resultado': 'imagenes'} 
+  response = make_response(dumps(arr_img, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+  
+#########  SERVICIOS PARA MANEJAR DETALLE VEHICULO #######################
+  
+@app.route("/lista_img_despacho", methods=['POST'])
+def lista_img_despacho():
+  datos = request.json
+  directorio = datos['dir']
+  campos = ['nombre', 'src']
+  arr_img = []
+  print (app.config['UPLOAD_FOLDER_DESPACHOS'])
+  
+          # if ((not recv) or (not (recv['result']['code'] in ['000.100.110', '000.100.112', '000.000.000']))):
+  extensions = ("*.png","*.jpg","*.jpeg",)
+  # for f in glob.glob(app.config['UPLOAD_FOLDER']+'\\'+directorio+'\\*'):
+  for extension in extensions:
+     for f in glob.glob(app.config['UPLOAD_FOLDER_DESPACHOS']+'\\'+directorio+'\\'+extension):
+         print (f)
+         arr_path_img = f.split('\\')
+         img_name = arr_path_img[-1]
+         img = (img_name,'assets/img_despachos/'+directorio+'/'+img_name)
          # print (f)
          # print (img_name)
          a = dict(zip(campos, img))

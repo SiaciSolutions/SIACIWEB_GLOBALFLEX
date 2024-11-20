@@ -3,12 +3,12 @@
   <section class="content-header">
     <h1>
       <!-- Page Header 1111 -->
-	   Pedidos
-      <small>Consulta de los pedidos/proformas generado por el usuario</small>
+	   Lista Despachos Pedidos
+      <small>Consulta de los despachos para su correspondiente registro y entrega</small>
     </h1>
     <ol class="breadcrumb">
-      <li><i class="fa fa-dashboard"></i>Pedidos</li>
-      <li class="active">Lista de pedidos</li>
+      <li><i class="fa fa-dashboard"></i>Despachos</li>
+      <li class="active">Lista de Despachos</li>
     </ol>
   </section>
   
@@ -20,7 +20,7 @@
         </div>
         <div class="alert alert-success alert-dismissable">
             <button aria-hidden="true" data-dismiss="alert" class="close" type="button">X</button>
-            <h4>	<i class="icon fa fa-check"></i> Éxito</h4> Pedido agregado con éxito 
+            <h4>	<i class="icon fa fa-check"></i> Éxito</h4> Despacho registrado con éxito 
 		</div>
     </div>
 	
@@ -32,7 +32,7 @@
         </div>
         <div class="alert alert-success alert-dismissable">
             <button aria-hidden="true" data-dismiss="alert" class="close" type="button">X</button>
-            <h4>	<i class="icon fa fa-check"></i> Éxito</h4> Pedido actualizado con éxito 
+            <h4>	<i class="icon fa fa-check"></i> Éxito</h4> Despacho registrado con éxito 
 		</div>
     </div>
 	
@@ -132,46 +132,43 @@
 	    <div class="col-xs-12">
             <div class="box box-primary">
 				<div class="box-header">
-					<label for="reference">SELECCIONE RANGO DE FECHA DE PEDIDOS EMITIDOS</label>
+					<label for="reference">SELECCIONE RANGO DE FECHA DE LOS DESPACHO ENTREGADO/POR ENTREGAR</label>
                 </div>
 				 <div class="box-header text-left">
 
 				 
-				  <div class="col-md-3">
+				  <div class="col-md-2">
 								<label for="fecha_desde">Fecha desde: </label>
 								<input [(ngModel)]="fecha_desde" type="date" name="fecha_desde" placeholder="dd-mm-yyyy" value="" min="1997-01-01" max="2030-12-31">
 								
 				 </div>
 
-				 <div class="col-md-3">
+				 <div class="col-md-2">
 								<label for="fecha_hasta">Fecha hasta: </label>
 								<input [(ngModel)]="fecha_hasta" type="date" name="fecha_hasta" placeholder="dd-mm-yyyy" value="" min="1997-01-01" max="2030-12-31">
 				 </div>
+				 <div class="col-md-3">
+					<div class="form-group">
+						<label>Ruta:</label>
+						<select  name="ruta" [(ngModel)]="ruta" class="form-control select2 tip" style="width:100%;">
+<!-- 						<option [ngValue]="undefined" disabled  selected>Seleccione</option> -->
+						<option *ngFor="let e of lista_rutas"  [value]="e.idruta">{{e.nombre_ruta}}</option>
+						</select>
+					
+					</div>
+				</div>
 				
 				<div class="col-md-2">
 							<br>
 							<input  type="submit" (click)="buscar_factura_fecha()"  name="Buscar" value="Buscar por fecha" class="btn btn-primary">
 				</div>
+
+
+
+
+
 				</div>
-				<!-- <div class="box-header"> -->
-					<!-- <!-- <div class="col-md-3"> --> 
-					  <!-- <!-- <h3 class="box-title">Filtrar por fecha de entrega del pedido</h3> --> 
-					<!-- <!-- </div> --> 
-					<!-- <div class="col-md-4"> -->
-					  <!-- <h3 class="box-title">Filtrar por fecha de entrega del pedido</h3> -->
-						<!-- <mat-form-field> -->
-						<!-- <input matInput [matDatepicker]="picker" placeholder="Escoja fecha" [(ngModel)]="fecha_entrega_busqueda" name="fectra" > -->
-						<!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> -->
-						<!-- <mat-datepicker #picker></mat-datepicker> -->
-						<!-- </mat-form-field> -->
-					<!-- <button  type="button" id="filtrar_fecha_entrega" (click)="buscar_fecha_entrega()" class="btn btn-primary" title="filtrar" ><i class="fa fa-fw fa-search"></i></button> -->
-					<!-- <button  type="button" id="ver_listado_completo" (click)="ver_listado_completo()" class="btn btn-warning" title="filtrar" >Ver todo el listado</button> -->
-					<!-- </div> -->
-			
-
-
-					
-					
+				
 					
                 <!-- </div> -->
 				
@@ -198,17 +195,21 @@
 				<!-- <table *ngIf="!loading" datatable [dtOptions]="dtOptions" class="dataTable">  -->
 						<thead>
 						<tr>
-						  <th>Fecha</th>
-						  <th>No. Doc</th>
-						  <th>TipoDoc</th>
-						  <th>Vendedor</th>
+						  <th>Fecha Entrega</th>
+						  <th>NoPedido</th>
+						  <th>IdDespacho</th>
+<!-- 						  <th>TipoDoc</th> -->
+<!-- 						  <th>Vendedor</th> -->
 						  <th>Cliente</th>
-						 <!--  <th>Email</th> -->
-						  <th>Total (USD)</th>
-						  <th>Observación</th>
-						  <th>Estado</th>
-						  <th>Fecha/hora entrega</th>
-						  <th>Status Entrega</th>
+						  <th>Dir Entrega</th>
+						  
+						  <th>Hora Entrega</th>
+<!-- 						  <th>Email</th> -->
+<!-- 						  <th>Total (USD)</th> -->
+						  <th>Observación/Entrega</th>
+						  <th>Ruta</th>
+						  <th>Estado Envio</th>
+						  <!-- <th>Fecha/hora entrega</th> -->
 						  <!-- <th>Direcc entrega</th> -->
 						  <!-- <th>Ruta asignada</th> -->
 						  <th style="width:95px;" role="columnheader" rowspan="1" colspan="1" >Acciones</th>
@@ -218,54 +219,54 @@
 					  
 					<tbody *ngIf="(lista_pedidos?.length != 0) && (!loading) ">
 					  <tr *ngFor="let el of lista_pedidos;">
-						  <td>{{el.fectra}}</td>
+						  <td>{{el.fecha_entrega}}</td>
 						  <td>{{el.numtra}}</td>
-						  <td *ngIf="el.tiptra==1">
+						  <td>{{el.id_pedido_ruta}}</td>
+<!-- 						  <td *ngIf="el.tiptra==1">
 						  PEDIDO
 						  </td>
 						  <td *ngIf="el.tiptra==2">
 						  PROFORMA
-						  </td>
-						  <td>{{el.nomusu}}</td>
+						  </td> -->
+	<!-- 					  <td>{{el.nomusu}}</td> -->
 						  <td>{{el.nomcli}}</td>
-						  <!-- <td>{{el.email}}</td> -->
-						  <td>{{el.totnet}}</td>
-						  <td>{{el.observ}}</td>
-						  <td>{{el.status}}</td>
-						  <td>{{el.fecha_entrega}}</td>
-						  <td>{{el.status_entrega}}</td>
-						  <!-- <td *ngIf="el.fecha_entrega">{{el.fecha_entrega}} / {{el.hora_entrega}}</td> -->
-						  <!-- <td *ngIf="!el.fecha_entrega" class="text-center" style="color:red">POR PLANIFICAR</td> -->
-						  <!-- <td>{{el.direccion_entrega}} -->
-						  <!-- </td> -->
-						  <!-- <td> -->
-						  <!-- <div *ngIf="el!== edit_ruta" class="text-center">{{el.ruta}} -->
-						  	<!-- <a *ngIf="el!== edit_ruta" (click)="edit_ruta_pedido(el)"  class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="Editar ruta"></i></a>  -->
-							<!-- </div> -->
-							
-							<!-- <!-- EL QUE SIRVE -->
-							<!-- <select *ngIf="el===edit_ruta" #ruta  name="change_iva" class="form-control" (change)="update_ruta(el.numtra,el.id_agencia,ruta.value)"> -->
-							<!-- <option [ngValue]="undefined" disabled  selected>Seleccione ruta</option> -->
-							<!-- <option  *ngFor="let e of lista_rutas; let i = index;"  [value]="e.idruta" >{{e.nombre_ruta}}</option> -->
-							<!-- </select> -->
-							
-							
-						  <!-- </td> -->
+						  <td>{{el.direccion_entrega}}</td>
+						  
+						  <td>{{el.hora_entrega}}</td>
+<!-- 						  <td>{{el.email}}</td> -->
+<!-- 						  <td>{{el.totnet}}</td> -->
+						  <td *ngIf="el.status_entrega == 'PLANIFICADO'" >{{el.observ}}</td>
+						  <td *ngIf="el.status_entrega == 'NO DESPACHADO'" >{{el.observacion_entrega}}</td>
+						  <td *ngIf="el.status_entrega == 'DESPACHADO'" >{{el.observacion_entrega}}</td>
+						  <td>{{el.ruta}}</td>
+
+						<td class="text-center" *ngIf="el.status_entrega == 'PLANIFICADO'">
+							<span style="color:blue;font-weight:bold" >{{el.status_entrega}}</span>
+						</td>
+						
+						<td class="text-center" *ngIf="el.status_entrega == 'NO DESPACHADO'">
+						<span style="color:red;font-weight:bold" > {{el.status_entrega}}</span>
+						</td>
+						
+						<td class="text-center" *ngIf="el.status_entrega == 'DESPACHADO'" >
+							<span style="color:green;font-weight:bold" >{{el.status_entrega}}</span>
+						</td>
+
 						  <td class="">
 						    <div class="text-center">
                                 <div class="btn-group">
 
 									<!-- <a routerLink="/admin/ver_pedidos" [queryParams]="{usuario:usuario,empresa: empresa,pedido:el.numtra,sucursal:el.direccion_entrega}"  class="tip btn btn-primary btn-xs"><i class="fa fa-file-text-o" title="Ver pedido"></i></a>  -->
 									
-									<a *ngIf="srv.getConfEditPedido() != 'NO'" routerLink="/admin/crear_pedidos" [queryParams]="{usuario:usuario,empresa: empresa,pedido:el.numtra,tiptra:el.tiptra}" class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="Editar pedido"></i></a> 
-									
+									<a *ngIf="el.status_entrega == 'PLANIFICADO'" routerLink="/admin/registro_despachos" [queryParams]="{usuario:usuario,empresa: empresa,pedido:el.numtra,tiptra:el.tiptra,id_pedido_ruta:el.id_pedido_ruta,status_entrega:el.status_entrega}" class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="registrar despacho"></i>Registrar Despacho</a> 
+									<a *ngIf="el.status_entrega == 'DESPACHADO' || el.status_entrega == 'NO DESPACHADO'" routerLink="/admin/registro_despachos" [queryParams]="{usuario:usuario,empresa: empresa,pedido:el.numtra,tiptra:el.tiptra,id_pedido_ruta:el.id_pedido_ruta,status_entrega:el.status_entrega}" class="tip btn btn-danger btn-xs"><i class="fa fa-edit" title="ver despacho"></i>Ver Despacho</a> 
 									<!-- <a href="http://amort.lavisita360.com/purchases/delete/6" onclick="return confirm('Usted va a eliminar la compra, por favor haga clic en Aceptar para eliminar.')" title="" class="tip btn btn-danger btn-xs" data-original-title="Eliminar Compra"><i class="fa fa-trash-o"></i></a> -->
 									
 									<a *ngIf="srv.getConfCorreoFact() != 'NO'" (click)="correo_facturacion(el.numtra,el.nomcli)" class="tip btn btn-danger btn-xs" ><i class="fa fa-envelope" title="Enviar correo facturar pedido" ></i></a>
 									<!-- <a (click)="confirm_delete()"   class="tip btn btn-danger btn-xs" ><i class="fa fa-envelope" title="Enviar correo facturar pedido" ></i></a> -->
 									
 									<a *ngIf="srv.getConfCorreoPedCli() != 'NO'" (click)="correo_pedido(el.numtra,el.nomcli,el.email)"  class="tip btn btn-success btn-xs" ><i class="fa fa-envelope" title="Reenviar correo pedido" ></i></a>
-									<a  (click)="generar_pdf_ped(el.numtra,el.tiptra)"  class="tip btn btn-danger btn-xs" ><i class="fa fa-search" title="Ver/Imprimir" ></i></a>
+<!-- 									<a  (click)="generar_pdf_ped(el.numtra,el.tiptra)"  class="tip btn btn-danger btn-xs" ><i class="fa fa-search" title="Ver/Imprimir" ></i></a> -->
 								
 								</div>
                             </div>
@@ -273,58 +274,6 @@
 					  </tr>
 					</tbody> 
 				</table>
-				
-					<!-- <table datatable [dtOptions]="dtOptions" class="row-border hover"> -->
-					<!-- <table datatable [dtOptions]="dtOptions" class="row-border hover"> -->
-					  <!-- <!-- <thead> --> 
-						<!-- <!-- <tr> --> 
-						  <!-- <!-- <th>ID</th> --> 
-						  <!-- <!-- <th>First name</th> --> 
-						  <!-- <!-- <th>Last name</th> -->
-						<!-- <!-- </tr> --> 
-					  <!-- <!-- </thead> --> 
-					  <!-- <!-- <tbody *ngIf="persons?.length != 0"> --> 
-						  <!-- <!-- <tr *ngFor="let person of persons"> --> 
-							  <!-- <!-- <td>{{ person.id }}</td> --> 
-							  <!-- <!-- <td>{{ person.firstName }}</td> --> 
-							  <!-- <!-- <td>{{ person.lastName }}</td> --> 
-						  <!-- <!-- </tr> --> 
-					  <!-- <!-- </tbody> --> 
-					  <!-- <!-- <tbody *ngIf="persons?.length == 0"> --> 
-						<!-- <!-- <tr> --> 
-						  <!-- <!-- <td colspan="3" class="no-data-available">No data!</td> --> 
-						<!-- <!-- </tr> --> 
-					  <!-- <!-- <tbody> --> 
-					  
-					  <!-- <thead> -->
-						<!-- <tr> -->
-						  <!-- <th>Fecha</th> -->
-						  <!-- <th>No. Doc</th> -->
-						  <!-- <th>Cod.Cli</th> -->
-						  <!-- <th>Cliente</th> -->
-						  <!-- <th>Total con IVA</th> -->
-						  <!-- <th>Observación</th> -->
-						  <!-- <th>Estado</th> -->
-						<!-- </tr> -->
-					  <!-- </thead> -->
-					  
-					<!-- <tbody *ngIf="(lista_pedidos?.length != 0) && (!loading) "> -->
-					  <!-- <tr *ngFor="let el of lista_pedidos;"> -->
-						  <!-- <td>{{el.fectra}}</td> -->
-						  <!-- <td>{{el.numtra}}</td> -->
-						  <!-- <td>{{el.codcli}}</td> -->
-						  <!-- <td>{{el.nomcli}}</td> -->
-						  <!-- <td>{{el.total_iva}}</td> -->
-						  <!-- <td>{{el.observ}}</td> -->
-						  <!-- <td>{{el.status}}</td> -->
-					  <!-- </tr> -->
-					<!-- </tbody>  -->
-					<!-- <tbody *ngIf="lista_pedidos?.length == 0"> -->
-						<!-- <tr> -->
-						  <!-- <td colspan="3" class="no-data-available">No data!</td> -->
-						<!-- </tr> -->
-					  <!-- <tbody> -->
-					<!-- </table> -->
 	
 					</div>
 				</div>

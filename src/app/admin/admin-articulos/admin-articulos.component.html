@@ -495,11 +495,15 @@
 						<!-- </div> -->
 						<br>
 						
-						<div class="form-group">
+						<div *ngIf="consulta_codbarra == 0" class="form-group">
                             <!-- <input  #generar_pe type="submit"  disabled name="add_purchase" value="Guardar articulo" class="btn btn-danger"> -->
 							<input *ngIf="!accion_actualizar" type="submit"  name="add_purchase" value="Guardar articulo" (click)="crear_producto()"class="btn btn-primary">
 							<input *ngIf="accion_actualizar" type="submit"  name="add_purchase" value="Guardar articulo" (click)="actualiza_producto()"class="btn btn-primary">
 							<input routerLink="/admin/lista_productos" [queryParams]="{usuario:usuario,empresa: empresa}" type="submit"  name="add_purchase" value="Ir a lista articulo" class="btn btn-danger">
+						</div>
+						<div *ngIf="consulta_codbarra > 0" class="form-group">
+                            <!-- <input  #generar_pe type="submit"  disabled name="add_purchase" value="Guardar articulo" class="btn btn-danger"> -->
+							<input routerLink="/admin/codbarra_producto" [queryParams]="{usuario:usuario,empresa: empresa}" type="submit"  name="add_purchase" value="Ir consulta CodBarra" class="btn btn-success">
 						</div>
 					
             </div>

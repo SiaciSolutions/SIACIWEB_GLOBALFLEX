@@ -102,6 +102,7 @@
 				 <ul class="treeview-menu" style="display: none;">
 					<li class="active" (click)="ocultar_menu_moviles()"><a routerLink="crear_productos" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Crear Producto</a></li>
 					<li class="active" (click)="ocultar_menu_moviles()" ><a routerLink="lista_productos" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Lista de Productos</a></li>
+					<li class="active" (click)="ocultar_menu_moviles()" ><a routerLink="codbarra_producto" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Busqueda por CodBarras</a></li>
 				</ul>
 			  </li>
 
@@ -240,6 +241,21 @@
 		  <!-- <li><a routerLink="dashboard3"><i class="fa fa-circle-o"></i> Dashboard v3</a></li> -->
         </ul>
       </li> 
+
+	  <li class="treeview">
+        <a href="#">
+            <i class="fa fa-fw fa-university"></i> <span>SUCURSAL CLIENTES</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+        <ul class="treeview-menu">
+          <!-- <li class="active"><a routerLink="crear_clientes" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Crear Cliente</a></li> -->
+		  <li class="active"><a routerLink="consulta_sucursales" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Consultar/Modif Sucursal</a></li>
+          <!-- <li><a routerLink="dashboard2"><i class="fa fa-circle-o"></i> Dashboard v2</a></li> -->
+		  <!-- <li><a routerLink="dashboard3"><i class="fa fa-circle-o"></i> Dashboard v3</a></li> -->
+        </ul>
+      </li>
 	  
 	  <!--  -->
 	  
@@ -276,6 +292,7 @@
           <!-- <li><a href="#"><i class="fa fa-circle-o"></i>Agregar Pedido</a></li> -->
         </ul>
       </li>
+<<<<<<< HEAD
 	<!--####################### INGENIERIA DE PRODUCTOS#######################################-->
 	<li *ngIf="auth.getPedidos() != 'NO'" class="treeview">
         <a href="#">
@@ -295,6 +312,9 @@
 			<!-- <li><a href="#"><i class="fa fa-circle-o"></i>Agregar Pedido</a></li> -->
         </ul>
     </li>
+=======
+	  	  
+>>>>>>> 994780f01e082e252e9bf8494e9d01a68dea71f3
 	 <!--####################### MULTINIVEL PEDIDOS#######################################-->
       <li *ngIf="auth.getConfPedidoMedico() != 'NO'" class="treeview">
         <a href="#">
@@ -317,7 +337,7 @@
 	 <li *ngIf="auth.getCalendario() != 'NO'"  class="treeview">
         <a href="#">
 		<i class="fa fa-calendar"></i> 
-		<span>Caledario</span>
+		<span>CALENDARIO</span>
 			<span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -325,6 +345,20 @@
         <ul class="treeview-menu">
 		<li (click)="ocultar_menu_moviles()"><a routerLink="agenda_calendario" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Ver calendario</a></li>
         <li (click)="ocultar_menu_moviles()" ><a routerLink="admin-reporte-pedidos" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Reporte de rutas por fechas</a></li>
+		</ul>
+      </li>
+
+	  <li  class="treeview">
+        <a href="#">
+		<i class="fa fa-truck"></i> 
+		<span>DESPACHOS</span>
+			<span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+        <ul class="treeview-menu">
+<!-- 		<li (click)="ocultar_menu_moviles()"><a routerLink="agenda_calendario" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Ver calendario</a></li> -->
+        <li (click)="ocultar_menu_moviles()" ><a routerLink="despachos_pedidos" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Lista de Despachos</a></li>
 		</ul>
       </li>
 	  

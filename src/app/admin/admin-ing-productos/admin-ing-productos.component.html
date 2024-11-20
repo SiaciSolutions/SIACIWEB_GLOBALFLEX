@@ -499,25 +499,25 @@
 													<input type="number" name="anilox_vK" id="anilox_vK"   [(ngModel)]="anilox_vK"  class="form-control ui-autocomplete-input" placeholder="(#)" autocomplete="off" [disabled]="!primario_K" [min]="1">
 												</td>
 												<td class="col-md-1">
-													<input type="number" name="anilox_1" id="anilox_1"   [(ngModel)]="anilox_1"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [min]="1">
+													<input type="number" name="anilox_1" id="anilox_1"   [(ngModel)]="anilox_1"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_1 || pantone_1.trim() === ''" [min]="1">
 												</td>
 												<td class="col-md-1">
-													<input type="number" name="anilox_2" id="anilox_2"   [(ngModel)]="anilox_2"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [min]="1">
+													<input type="number" name="anilox_2" id="anilox_2"   [(ngModel)]="anilox_2"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_2 || pantone_2.trim() === ''" [min]="1">
 												</td>
 												<td class="col-md-1">
-													<input type="number" name="anilox_3" id="anilox_3"   [(ngModel)]="anilox_3"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [min]="1">
+													<input type="number" name="anilox_3" id="anilox_3"   [(ngModel)]="anilox_3"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_3 || pantone_3.trim() === ''" [min]="1">
 												</td>
 												<td class="col-md-1">
-													<input type="number" name="anilox_4" id="anilox_4"   [(ngModel)]="anilox_4"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [min]="1">
+													<input type="number" name="anilox_4" id="anilox_4"   [(ngModel)]="anilox_4"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_4 || pantone_4.trim() === ''" [min]="1">
 												</td>
 												<td class="col-md-1">
-													<input type="number" name="anilox_5" id="anilox_5"   [(ngModel)]="anilox_5"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [min]="1">
+													<input type="number" name="anilox_5" id="anilox_5"   [(ngModel)]="anilox_5"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_5 || pantone_5.trim() === ''" [min]="1">
 												</td>
 												<td class="col-md-1">
-													<input type="number" name="anilox_6" id="anilox_6"   [(ngModel)]="anilox_6"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [min]="1">
+													<input type="number" name="anilox_6" id="anilox_6"   [(ngModel)]="anilox_6"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_6 || pantone_6.trim() === ''" [min]="1">
 												</td>
 												<td class="col-md-1">
-													<input type="number" name="anilox_7" id="anilox_7"   [(ngModel)]="anilox_7"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [min]="1">
+													<input type="number" name="anilox_7" id="anilox_7"   [(ngModel)]="anilox_7"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_7 || pantone_7.trim() === ''" [min]="1">
 												</td>
 											</tr>
 											<tr>
@@ -552,43 +552,43 @@
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="prov_fabricante_1" [(ngModel)]="prov_fabricante_1" class="form-control select2 tip" style="width:100%;">
+													<select name="prov_fabricante_1" [(ngModel)]="prov_fabricante_1" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_1 || pantone_1.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="prov_fabricante_2" [(ngModel)]="prov_fabricante_2" class="form-control select2 tip" style="width:100%;">
+													<select name="prov_fabricante_2" [(ngModel)]="prov_fabricante_2" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_2 || pantone_2.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="prov_fabricante_3" [(ngModel)]="prov_fabricante_3" class="form-control select2 tip" style="width:100%;">
+													<select name="prov_fabricante_3" [(ngModel)]="prov_fabricante_3" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_3 || pantone_3.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="prov_fabricante_4" [(ngModel)]="prov_fabricante_4" class="form-control select2 tip" style="width:100%;">
+													<select name="prov_fabricante_4" [(ngModel)]="prov_fabricante_4" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_4 || pantone_4.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="prov_fabricante_5" [(ngModel)]="prov_fabricante_5" class="form-control select2 tip" style="width:100%;">
+													<select name="prov_fabricante_5" [(ngModel)]="prov_fabricante_5" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_5 || pantone_5.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="prov_fabricante_6" [(ngModel)]="prov_fabricante_6" class="form-control select2 tip" style="width:100%;">
+													<select name="prov_fabricante_6" [(ngModel)]="prov_fabricante_6" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_6 || pantone_6.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="prov_fabricante_7" [(ngModel)]="prov_fabricante_7" class="form-control select2 tip" style="width:100%;">
+													<select name="prov_fabricante_7" [(ngModel)]="prov_fabricante_7" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_7 || pantone_7.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
 													</select>
@@ -626,43 +626,43 @@
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="tinta_sticky_1" [(ngModel)]="tinta_sticky_1" class="form-control select2 tip" style="width:100%;">
+													<select name="tinta_sticky_1" [(ngModel)]="tinta_sticky_1" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_1 || pantone_1.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="tinta_sticky_2" [(ngModel)]="tinta_sticky_2" class="form-control select2 tip" style="width:100%;">
+													<select name="tinta_sticky_2" [(ngModel)]="tinta_sticky_2" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_2 || pantone_2.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="tinta_sticky_3" [(ngModel)]="tinta_sticky_3" class="form-control select2 tip" style="width:100%;">
+													<select name="tinta_sticky_3" [(ngModel)]="tinta_sticky_3" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_3 || pantone_3.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="tinta_sticky_4" [(ngModel)]="tinta_sticky_4" class="form-control select2 tip" style="width:100%;">
+													<select name="tinta_sticky_4" [(ngModel)]="tinta_sticky_4" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_4 || pantone_4.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="tinta_sticky_5" [(ngModel)]="tinta_sticky_5" class="form-control select2 tip" style="width:100%;">
+													<select name="tinta_sticky_5" [(ngModel)]="tinta_sticky_5" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_5 || pantone_5.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="tinta_sticky_6" [(ngModel)]="tinta_sticky_6" class="form-control select2 tip" style="width:100%;">
+													<select name="tinta_sticky_6" [(ngModel)]="tinta_sticky_6" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_6 || pantone_6.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
 													</select>
 												</td>
 												<td class="col-md-1">
-													<select name="tinta_sticky_7" [(ngModel)]="tinta_sticky_7" class="form-control select2 tip" style="width:100%;">
+													<select name="tinta_sticky_7" [(ngModel)]="tinta_sticky_7" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_7 || pantone_7.trim() === ''">
 														<option [ngValue]="undefined" disabled  selected>Seleccione</option>
 														<option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
 													</select>

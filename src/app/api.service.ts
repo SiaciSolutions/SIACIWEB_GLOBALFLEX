@@ -10,26 +10,9 @@ import { catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  // public apiUrl = 'http://192.168.0.55';
-  
-  // public apiUrl = 'http://192.168.101.4';
-  //public apiUrl = 'http://192.168.100.11';
-    // public apiUrl = 'https://192.168.100.11';
- 
-  // public apiUrl = 'https://192.168.101.2';
-    // public apiUrl = 'https://192.168.0.24';
-	public apiUrl = 'https://127.0.0.1';
-  //public apiUrl = 'https://192.168.0.146';
-		// public apiUrl = 'https:// 192.168.0.146';
-	
-  // public apiUrl = 'https://192.168.0.13';
-  // public apiUrl = 'https://192.168.101.7';
-    
-	// public apiUrl = 'https://192.168.101.5';
-	// public apiUrl = 'https://192.168.101.2';
-	 // public apiUrl = 'https://192.168.133.214';
-  
-    // public apiUrl = 'https://192.168.100.112';
+   public apiUrl = 'https://192.168.100.110';
+  //public apiUrl = 'https://192.168.0.10';
+  //public apiUrl = 'https://127.0.0.1'; 
   fecha_hora
   public port = '5009';
   
@@ -272,36 +255,6 @@ public getConfCambioVendedorPed(): string {
  }
  
  
- 
-   
-
-   
-   
-
-   
-
-   
-   
-   	  // localStorage.setItem('act_articulos', param['act_articulos'])
-	  // localStorage.setItem('act_servicios', param['act_servicios'])
-	  // localStorage.setItem('act_egr_bod', param['act_egr_bod'])
-   
-   
-
-   	  // localStorage.setItem('act_pago_tarjeta_pdv', param['act_pago_tarjeta_pdv'])
-   
-   
- 
- 
-	  // localStorage.setItem('act_pago_efectivo_pdv', param['act_pago_efectivo_pdv'])
-	  // localStorage.setItem('act_pago_cheque_pdv', param['act_pago_cheque_pdv'])
-	  // localStorage.setItem('act_pago_trans_pdv', param['act_pago_trans_pdv'])
-	  // localStorage.setItem('act_pago_credito_pdv', param['act_pago_credito_pdv'])
-	  // localStorage.setItem('act_edicion_plazo_credito_pdv', param['act_edicion_plazo_credito_pdv'])
-
-
-	
-	
 
   reporte(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/reporte', param);
@@ -536,6 +489,10 @@ public getConfCambioVendedorPed(): string {
   lista_pedidos(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/lista_pedidos', param);
   }
+
+  lista_despachos_pedidos(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/lista_despachos_pedidos', param);
+  }
   
   lista_servicios(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/lista_servicios', param);
@@ -567,6 +524,10 @@ public getConfCambioVendedorPed(): string {
   }
   generar_pedido_ruta(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/generar_pedido_ruta', param);
+  }
+
+  actualizar_pedido_ruta(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_pedido_ruta', param);
   }
   get_rutas(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/get_rutas', param);
@@ -696,14 +657,6 @@ public getConfCambioVendedorPed(): string {
   }
   
   
-  
-  
-  
-  
-  
-  
-  
-  
   carga_perfil(param) {
 	  console.log ("##### CARGA DE PERFIL  #####")
 	  console.log (param)
@@ -819,6 +772,18 @@ public getConfCambioVendedorPed(): string {
       catchError(this.errorMgmt)
     )
   }
+
+    ////  ##### SERVICIOS DE SUBA DE ARCHIVO (FOTOS)   //////
+    uploadFile_despacho(formData) {
+      // let urlAPI = 'http://localhost:3000/api/upload';
+      // return this.http.post(urlAPI, formData);
+    return this.http.post(this.apiUrl + ':' + this.port + '/uploadFile_despacho', formData, {
+        reportProgress: true,
+        observe: 'events'
+      }).pipe(
+        catchError(this.errorMgmt)
+      )
+    }
   
    upload_imagen_art_serv(formData) {
     // let urlAPI = 'http://localhost:3000/api/upload';
@@ -838,6 +803,10 @@ public getConfCambioVendedorPed(): string {
    lista_img(param) {
 	return this.http.post(this.apiUrl + ':' + this.port + '/lista_img',param)
   }
+
+  lista_img_despacho(param) {
+    return this.http.post(this.apiUrl + ':' + this.port + '/lista_img_despacho',param)
+    }
   
    errorMgmt(error: HttpErrorResponse) {
     let errorMessage = '';
@@ -874,7 +843,7 @@ public getConfCambioVendedorPed(): string {
     return this.http.post(this.apiUrl + ':' + this.port + '/guardar_series_ingreso_bodega', param);
   }
   
-        guardar_cod_barra_lote(param): Observable<any> {
+  guardar_cod_barra_lote(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/guardar_cod_barra_lote', param);
   }
     lista_ingresos(param): Observable<any> {
@@ -938,6 +907,15 @@ public getConfCambioVendedorPed(): string {
       get_renglones_egreso(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/get_renglones_egreso', param);
   }
+
+  actualizar_despacho_pedido(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_despacho_pedido', param);
+  }
+  get_pedidos_ruta_despacho(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/get_pedidos_ruta_despacho', param);
+  }
+
+  
   
   
     
@@ -1118,6 +1096,7 @@ public getConfCambioVendedorPed(): string {
         lista_pedidos_medicos(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/lista_pedidos_medicos', param);
   }
+  
   
    eliminar_articulo(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_articulo', param);

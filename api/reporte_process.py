@@ -21,7 +21,7 @@ from zipfile import ZipFile
 import enviar_correo as correo
 import gen_pdf_pedidos as pdf
 APP_PATH = os.getcwd()
-from flaskthreads import AppContextThread
+# from flaskthreads import AppContextThread
 
 
 
@@ -483,7 +483,9 @@ if __name__ == "__main__":
 	app.config['SESSION_TYPE'] = 'memcached'
 	PUERTO_EXE = '5002'
 
-	app.run(host='0.0.0.0',threaded=True, port=PUERTO_EXE)
+
+	# app.run(host='0.0.0.0',threaded=True, port=PUERTO_EXE)
+	app.run(host='0.0.0.0',debug=True,port=PUERTO_EXE,ssl_context=('SIACI_WEB.crt', 'SIACI_WEB.key'), threaded=True)
 	
 
 
