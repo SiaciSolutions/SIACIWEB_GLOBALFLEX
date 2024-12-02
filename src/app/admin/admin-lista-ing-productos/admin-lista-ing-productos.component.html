@@ -245,9 +245,11 @@
 									
 									<a *ngIf="srv.getConfCorreoFact() != 'NO'" (click)="correo_facturacion(el.numtra,el.nomcli)" class="tip btn btn-danger btn-xs" ><i class="fa fa-envelope" title="Enviar correo facturar pedido" ></i></a>
 									<!-- <a (click)="confirm_delete()"   class="tip btn btn-danger btn-xs" ><i class="fa fa-envelope" title="Enviar correo facturar pedido" ></i></a> -->
+<!-- 									<a (click)="eliminar_ingproducto(el.CodIngProd)"   class="tip btn btn-danger btn-xs" ><i class="fa fa-times" title="Eliminar" ></i></a> -->
 									
 									<a *ngIf="srv.getConfCorreoPedCli() != 'NO'" (click)="correo_pedido(el.numtra,el.nomcli,el.email)"  class="tip btn btn-success btn-xs" ><i class="fa fa-envelope" title="Reenviar correo pedido" ></i></a>
-									<a  (click)="generar_pdf_ingProd(el.CodIngProd)"  class="tip btn btn-danger btn-xs" ><i class="fa fa-search" title="Ver/Imprimir" ></i></a>
+									<a  (click)="generar_pdf_ingProd(el.CodIngProd)"  class="tip btn btn-success btn-xs" ><i class="fa fa-search" title="Ver/Imprimir" ></i></a>
+									<a *ngIf="srv.getTipacc() == 'T'" (click)="eliminar_ingproducto(el.CodIngProd)"   class="tip btn btn-danger btn-xs" ><i class="fa fa-times" title="Eliminar" ></i> Eliminar</a>
 								
 								</div>
                             </div>

@@ -131,7 +131,7 @@ export class AdminIngProductosComponent implements OnInit {
 	medida_ancho: number;
 	proveedor: string;
 	impresora: string;
-	bobinadora: string;
+	bobinadora: string = null;
 	material_imprimir: string;
 	ancho_material: number;
 	cilindro: string;
@@ -141,17 +141,17 @@ export class AdminIngProductosComponent implements OnInit {
 	filas: number;
 	columnas: number;
 	formato_seleccionado: string;
-	cilindro_cod: string;
-	troquel_plano_cod: string;
+	cilindro_cod: string = null;
+	troquel_plano_cod: string = null;
 	uv_total: boolean; 
 	uv_sobre_impr: boolean;
 	uv_select: boolean;
 	relam_delam: boolean;
 	hot_stamping: boolean;
-	cold_folid: boolean;
+	cold_foil: boolean;
 	repujado_ing_prod: boolean;
 	lami_mate: boolean;
-	lami_brillan: boolean;
+	laminado_brillan: boolean;
 	primario_C: boolean;
 	primario_M: boolean;
 	primario_Y: boolean;
@@ -603,10 +603,10 @@ export class AdminIngProductosComponent implements OnInit {
 		this.uv_select = data['uv_select'] === 'SI';
 		this.relam_delam = data['relam_delam'] === 'SI';
 		this.hot_stamping = data['hot_stamping_acabados'] === 'SI';
-		this.cold_folid = data['cold_foild'] === 'SI';
+		this.cold_foil = data['cold_foil'] === 'SI';
 		this.repujado_ing_prod = data['repujado'] === 'SI';
 		this.lami_mate = data['laminado_mate'] === 'SI';
-		this.lami_brillan = data['laminado_brillan'] === 'SI';
+		this.laminado_brillan = data['laminado_brillan'] === 'SI';
 
 		this.primario_C = data['primario_C'] === 'SI';
 		this.primario_M = data['primario_M'] === 'SI';
@@ -679,6 +679,114 @@ export class AdminIngProductosComponent implements OnInit {
 		});
 
 	}//  FIN BUSCAR ING. DE PRODUCTO
+
+
+	reset_valores_inferiores(valor){
+		console.log ("###### RESET VALORES #####")
+		console.log (valor)
+		console.log (this.pantone_1)
+
+
+/* 		pantone_1: string = null;
+	pantone_2: string = null;
+	pantone_3: string = null;
+	pantone_4: string = null;
+	pantone_5: string = null;
+	pantone_6: string = null;
+	pantone_7: string = null;
+
+	anilox_vC: number = null;
+	anilox_vM: number = null;
+	anilox_vY: number = null;
+	anilox_vK: number = null;
+	anilox_1: number = null;
+	anilox_2: number = null;
+	anilox_3: number = null;
+	anilox_4: number = null;
+	anilox_5: number = null;
+	anilox_6: number = null;
+	anilox_7: number = null ;
+	prov_fabricante_vC: string = null;
+	prov_fabricante_vM: string = null;
+	prov_fabricante_vY: string = null;
+	prov_fabricante_vK: string = null;
+	prov_fabricante_1: string = null;
+	prov_fabricante_2: string = null;
+	prov_fabricante_3: string = null;
+	prov_fabricante_4: string = null;
+	prov_fabricante_5: string = null;
+	prov_fabricante_6: string = null;
+	prov_fabricante_7: string = null;
+	tinta_sticky_vC: string = null;
+	tinta_sticky_vM: string = null;
+	tinta_sticky_vY: string = null;
+	tinta_sticky_vK: string = null;
+	tinta_sticky_1: string = null;
+	tinta_sticky_2: string = null;
+	tinta_sticky_3: string = null;
+	tinta_sticky_4: string = null;
+	tinta_sticky_5: string = null;
+	tinta_sticky_6: string = null;
+	tinta_sticky_7: string = null;
+ */
+		if (!this.primario_C && valor=='primario_C'){
+			this.anilox_vC = null
+			this.prov_fabricante_vC = null
+			this.tinta_sticky_vC = null
+		}
+		if (!this.primario_M && valor=='primario_M'){
+			this.anilox_vM = null
+			this.prov_fabricante_vM = null
+			this.tinta_sticky_vM = null
+		}
+		if (!this.primario_Y && valor=='primario_Y'){
+			this.anilox_vY = null
+			this.prov_fabricante_vY = null
+			this.tinta_sticky_vY = null
+		}
+		if (!this.primario_K && valor=='primario_K'){
+			this.anilox_vK = null
+			this.prov_fabricante_vK = null
+			this.tinta_sticky_vK = null
+		}
+		if((!this.pantone_1 || this.pantone_1.trim() === '') && valor == 'pantone_1' ){
+			this.anilox_1 = null
+			this.prov_fabricante_1 = null
+			this.tinta_sticky_1 = null
+		}
+		if((!this.pantone_2 || this.pantone_2.trim() === '') && valor == 'pantone_2' ){
+			this.anilox_2 = null
+			this.prov_fabricante_2 = null
+			this.tinta_sticky_2 = null
+		}
+		if((!this.pantone_3 || this.pantone_3.trim() === '') && valor == 'pantone_3' ){
+			this.anilox_3 = null
+			this.prov_fabricante_3 = null
+			this.tinta_sticky_3 = null
+		}
+		if((!this.pantone_4 || this.pantone_4.trim() === '') && valor == 'pantone_4' ){
+			this.anilox_4 = null
+			this.prov_fabricante_4 = null
+			this.tinta_sticky_4 = null
+		}
+		if((!this.pantone_5 || this.pantone_5.trim() === '') && valor == 'pantone_5' ){
+			this.anilox_5 = null
+			this.prov_fabricante_5 = null
+			this.tinta_sticky_5 = null
+		}
+		if((!this.pantone_6|| this.pantone_6.trim() === '') && valor == 'pantone_6' ){
+			this.anilox_6 = null
+			this.prov_fabricante_6 = null
+			this.tinta_sticky_6 = null
+		}
+		if((!this.pantone_7|| this.pantone_7.trim() === '') && valor == 'pantone_7' ){
+			this.anilox_7 = null
+			this.prov_fabricante_7 = null
+			this.tinta_sticky_7 = null
+		}
+
+
+	}
 	
 	formato_fecha (fecha){
 		return formatDate(fecha, 'dd-MM-yyyy', 'en-US', '-0500')
@@ -839,43 +947,43 @@ export class AdminIngProductosComponent implements OnInit {
 		}
 
 		//else if(!this.nombre_comercial){
-		//	alert("Por favor, ingesar el nombre comercial.")
+		//	alert("Por favor, ingresar el nombre comercial.")
 		//	return false;
 		//}
 		else if(!this.referencia){
-			alert("Por favor, ingesar la referencia.")
+			alert("Por favor, ingresar la referencia.")
 			return false;
 		}
 		else if(!this.medida_alto || this.medida_alto == 0){
-			alert("Por favor, ingesar la medida de alto.")
+			alert("Por favor, ingresar la medida de alto.")
 			return false;
 		}
 		else if(!this.medida_ancho || this.medida_ancho == 0){
-			alert("Por favor, ingesar la medida de ancho.")
+			alert("Por favor, ingresar la medida de ancho.")
 			return false;
 		}
 		else if(!this.proveedor){
-			alert("Por favor, ingesar el proveedor.")
+			alert("Por favor, ingresar el proveedor.")
 			return false;
 		}
 		else if(!this.impresora){
-			alert("Por favor, ingesar la impresora.")
+			alert("Por favor, ingresar la impresora.")
 			return false;
 		}
 /* 		else if(!this.bobinadora){
-			alert("Por favor, ingesar la bobinadora.")
+			alert("Por favor, ingresar la bobinadora.")
 			return false;
 		} */
 		else if(!this.material_imprimir){
-			alert("Por favor, ingesar el material a imprmir.")
+			alert("Por favor, ingresar el material a imprmir.")
 			return false;
 		}
 		else if(!this.ancho_material || this.ancho_material == 0){
-			alert("Por favor, ingesar el ancho del material.")
+			alert("Por favor, ingresar el ancho del material.")
 			return false;
 		}
 		else if(!this.cilindro){
-			alert("Por favor, ingesar el cilindro.")
+			alert("Por favor, ingresar el cilindro.")
 			return false;
 		}
 		else if(!this.cortador){
@@ -883,148 +991,148 @@ export class AdminIngProductosComponent implements OnInit {
 			return false;
 		}
 		else if(!this.color_seleccionado){
-			alert("Por favor, ingesar el color seleccionado.")
+			alert("Por favor, ingresar el color seleccionado.")
 			return false;
 		}
 		else if(!this.rep_des){
-			alert("Por favor, ingesar el REP. DES.")
+			alert("Por favor, ingresar el REP. DES.")
 			return false;
 		}
 /* 		else if(!this.filas || this.filas == 0){
-			alert("Por favor, ingesar las filas.")
+			alert("Por favor, ingresar las filas.")
 			return false;
 		} */
 		else if(!this.columnas || this.columnas == 0){
-			alert("Por favor, ingesar las columnas.")
+			alert("Por favor, ingresar las columnas.")
 			return false;
 		}
 		else if(!this.formato_seleccionado){
-			alert("Por favor, ingesar el formato seleccionado.")
+			alert("Por favor, ingresar el formato seleccionado.")
 			return false;
 		}
 /* 		else if(!this.cilindro_cod){
-			alert("Por favor, ingesar el codigo del cilindro.")
+			alert("Por favor, ingresar el codigo del cilindro.")
 			return false;
 		} */
 /* 		else if(!this.troquel_plano_cod){
-			alert("Por favor, ingesar el codigo del troquel.")
+			alert("Por favor, ingresar el codigo del troquel.")
 			return false;
 		} */
 		
 		
 	/* 	else if(!this.pantone_1){
-			alert("Por favor, ingesar el Pantone 1.")
+			alert("Por favor, ingresar el Pantone 1.")
 			return false;
 		}
 		else if(!this.pantone_2){
-			alert("Por favor, ingesar el Pantone 2.")
+			alert("Por favor, ingresar el Pantone 2.")
 			return false;
 		}
 		else if(!this.pantone_3){
-			alert("Por favor, ingesar el Pantone 3.")
+			alert("Por favor, ingresar el Pantone 3.")
 			return false;
 		}
 		else if(!this.pantone_4){
-			alert("Por favor, ingesar el Pantone 4.")
+			alert("Por favor, ingresar el Pantone 4.")
 			return false;
 		}
 		else if(!this.pantone_5){
-			alert("Por favor, ingesar el Pantone 5.")
+			alert("Por favor, ingresar el Pantone 5.")
 			return false;
 		}
 		else if(!this.pantone_6){
-			alert("Por favor, ingesar el Pantone 6.")
+			alert("Por favor, ingresar el Pantone 6.")
 			return false;
 		}
 		else if(!this.pantone_7){
-			alert("Por favor, ingesar el Pantone 7.")
+			alert("Por favor, ingresar el Pantone 7.")
 			return false;
 		}
 		
 		else if(!this.anilox_1 || this.anilox_1 == 0){
-			alert("Por favor, ingesar el anilox 1.")
+			alert("Por favor, ingresar el anilox 1.")
 			return false;
 		}
 		else if(!this.anilox_2 || this.anilox_2 == 0){
-			alert("Por favor, ingesar el anilox 2.")
+			alert("Por favor, ingresar el anilox 2.")
 			return false;
 		}
 		else if(!this.anilox_3 || this.anilox_3 == 0){
-			alert("Por favor, ingesar el anilox 3.")
+			alert("Por favor, ingresar el anilox 3.")
 			return false;
 		}
 		else if(!this.anilox_4 || this.anilox_4 == 0){
-			alert("Por favor, ingesar el anilox 4.")
+			alert("Por favor, ingresar el anilox 4.")
 			return false;
 		}
 		else if(!this.anilox_5 || this.anilox_5 == 0){
-			alert("Por favor, ingesar el anilox 5.")
+			alert("Por favor, ingresar el anilox 5.")
 			return false;
 		}
 		else if(!this.anilox_6 || this.anilox_6 == 0){
-			alert("Por favor, ingesar el anilox 6.")
+			alert("Por favor, ingresar el anilox 6.")
 			return false;
 		}
 		else if(!this.anilox_7 || this.anilox_7 == 0){
-			alert("Por favor, ingesar el anilox 7.")
+			alert("Por favor, ingresar el anilox 7.")
 			return false;
 		}
 		
 		else if(!this.prov_fabricante_1){
-			alert("Por favor, ingesar el fabricante 1.")
+			alert("Por favor, ingresar el fabricante 1.")
 			return false;
 		}
 		else if(!this.prov_fabricante_2){
-			alert("Por favor, ingesar el fabricante 2.")
+			alert("Por favor, ingresar el fabricante 2.")
 			return false;
 		}
 		else if(!this.prov_fabricante_3){
-			alert("Por favor, ingesar el fabricante 3.")
+			alert("Por favor, ingresar el fabricante 3.")
 			return false;
 		}
 		else if(!this.prov_fabricante_4){
-			alert("Por favor, ingesar el fabricante 4.")
+			alert("Por favor, ingresar el fabricante 4.")
 			return false;
 		}
 		else if(!this.prov_fabricante_5){
-			alert("Por favor, ingesar el fabricante 5.")
+			alert("Por favor, ingresar el fabricante 5.")
 			return false;
 		}
 		else if(!this.prov_fabricante_6){
-			alert("Por favor, ingesar el fabricante 6.")
+			alert("Por favor, ingresar el fabricante 6.")
 			return false;
 		}
 		else if(!this.prov_fabricante_7){
-			alert("Por favor, ingesar el fabricante 7.")
+			alert("Por favor, ingresar el fabricante 7.")
 			return false;
 		}
 		
 		else if(!this.tinta_sticky_1){
-			alert("Por favor, ingesar el tinta/sticky 1.")
+			alert("Por favor, ingresar el tinta/sticky 1.")
 			return false;
 		}
 		else if(!this.tinta_sticky_2){
-			alert("Por favor, ingesar el tinta/sticky 2.")
+			alert("Por favor, ingresar el tinta/sticky 2.")
 			return false;
 		}
 		else if(!this.tinta_sticky_3){
-			alert("Por favor, ingesar el tinta/sticky 3.")
+			alert("Por favor, ingresar el tinta/sticky 3.")
 			return false;
 		}
 		else if(!this.tinta_sticky_4){
-			alert("Por favor, ingesar el tinta/sticky 4.")
+			alert("Por favor, ingresar el tinta/sticky 4.")
 			return false;
 		}
 		else if(!this.tinta_sticky_5){
-			alert("Por favor, ingesar el tinta/sticky 5.")
+			alert("Por favor, ingresar el tinta/sticky 5.")
 			return false;
 		}
 		else if(!this.tinta_sticky_6){
-			alert("Por favor, ingesar el tinta/sticky 6.")
+			alert("Por favor, ingresar el tinta/sticky 6.")
 			return false;
 		}
 		else if(!this.tinta_sticky_7){
-			alert("Por favor, ingesar el tinta/sticky 7.")
+			alert("Por favor, ingresar el tinta/sticky 7.")
 			return false;
 		} */
 		else if(!this.tipo_dispensado){
@@ -1032,11 +1140,11 @@ export class AdminIngProductosComponent implements OnInit {
 			return false;
 		}
 /* 		else if(!this.diametro_rollo || this.diametro_rollo == 0){
-			alert("Por favor, ingesar el  diametro del rollo.")
+			alert("Por favor, ingresar el  diametro del rollo.")
 			return false;
 		} */
 /* 		else if(!this.peso_rollo || this.peso_rollo == 0){
-			alert("Por favor, ingesar el peso del rollo.")
+			alert("Por favor, ingresar el peso del rollo.")
 			return false;
 		} */
 /* 		else if(!this.medida_dispensado || this.medida_dispensado == 0){
@@ -1048,7 +1156,7 @@ export class AdminIngProductosComponent implements OnInit {
 			return false;
 		} */
 		else if(!this.embobinado_ext_seleccionado){
-			alert("Por favor, ingesar el embobinado Exterior.")
+			alert("Por favor, ingresar el embobinado Exterior.")
 			return false;
 		}
 		//COMPROBACION DE LA IMAGEN
@@ -1091,43 +1199,43 @@ export class AdminIngProductosComponent implements OnInit {
 		}
 
 		//else if(!this.nombre_comercial){
-		//	alert("Por favor, ingesar el nombre comercial.")
+		//	alert("Por favor, ingresar el nombre comercial.")
 		//	return false;
 		//}
 		else if(!this.referencia){
-			alert("Por favor, ingesar la referencia.")
+			alert("Por favor, ingresar la referencia.")
 			return false;
 		}
 		else if(!this.medida_alto || this.medida_alto == 0){
-			alert("Por favor, ingesar la medida de alto.")
+			alert("Por favor, ingresar la medida de alto.")
 			return false;
 		}
 		else if(!this.medida_ancho || this.medida_ancho == 0){
-			alert("Por favor, ingesar la medida de ancho.")
+			alert("Por favor, ingresar la medida de ancho.")
 			return false;
 		}
 		else if(!this.proveedor){
-			alert("Por favor, ingesar el proveedor.")
+			alert("Por favor, ingresar el proveedor.")
 			return false;
 		}
 		else if(!this.impresora){
-			alert("Por favor, ingesar la impresora.")
+			alert("Por favor, ingresar la impresora.")
 			return false;
 		}
 /* 		else if(!this.bobinadora){
-			alert("Por favor, ingesar la bobinadora.")
+			alert("Por favor, ingresar la bobinadora.")
 			return false;
 		} */
 		else if(!this.material_imprimir){
-			alert("Por favor, ingesar el material a imprmir.")
+			alert("Por favor, ingresar el material a imprmir.")
 			return false;
 		}
 		else if(!this.ancho_material || this.ancho_material == 0){
-			alert("Por favor, ingesar el ancho del material.")
+			alert("Por favor, ingresar el ancho del material.")
 			return false;
 		}
 		else if(!this.cilindro){
-			alert("Por favor, ingesar el cilindro.")
+			alert("Por favor, ingresar el cilindro.")
 			return false;
 		}
 		else if(!this.cortador){
@@ -1135,148 +1243,148 @@ export class AdminIngProductosComponent implements OnInit {
 			return false;
 		}
 		else if(!this.color_seleccionado){
-			alert("Por favor, ingesar el color seleccionado.")
+			alert("Por favor, ingresar el color seleccionado.")
 			return false;
 		}
 		else if(!this.rep_des){
-			alert("Por favor, ingesar el REP. DES.")
+			alert("Por favor, ingresar el REP. DES.")
 			return false;
 		}
 /* 		else if(!this.filas || this.filas == 0){
-			alert("Por favor, ingesar las filas.")
+			alert("Por favor, ingresar las filas.")
 			return false;
 		} */
 		else if(!this.columnas || this.columnas == 0){
-			alert("Por favor, ingesar las columnas.")
+			alert("Por favor, ingresar las columnas.")
 			return false;
 		}
 		else if(!this.formato_seleccionado){
-			alert("Por favor, ingesar el formato seleccionado.")
+			alert("Por favor, ingresar el formato seleccionado.")
 			return false;
 		}
 /* 		else if(!this.cilindro_cod){
-			alert("Por favor, ingesar el codigo del cilindro.")
+			alert("Por favor, ingresar el codigo del cilindro.")
 			return false;
 		} */
 /* 		else if(!this.troquel_plano_cod){
-			alert("Por favor, ingesar el codigo del troquel.")
+			alert("Por favor, ingresar el codigo del troquel.")
 			return false;
 		} */
 		
 		
 	/* 	else if(!this.pantone_1){
-			alert("Por favor, ingesar el Pantone 1.")
+			alert("Por favor, ingresar el Pantone 1.")
 			return false;
 		}
 		else if(!this.pantone_2){
-			alert("Por favor, ingesar el Pantone 2.")
+			alert("Por favor, ingresar el Pantone 2.")
 			return false;
 		}
 		else if(!this.pantone_3){
-			alert("Por favor, ingesar el Pantone 3.")
+			alert("Por favor, ingresar el Pantone 3.")
 			return false;
 		}
 		else if(!this.pantone_4){
-			alert("Por favor, ingesar el Pantone 4.")
+			alert("Por favor, ingresar el Pantone 4.")
 			return false;
 		}
 		else if(!this.pantone_5){
-			alert("Por favor, ingesar el Pantone 5.")
+			alert("Por favor, ingresar el Pantone 5.")
 			return false;
 		}
 		else if(!this.pantone_6){
-			alert("Por favor, ingesar el Pantone 6.")
+			alert("Por favor, ingresar el Pantone 6.")
 			return false;
 		}
 		else if(!this.pantone_7){
-			alert("Por favor, ingesar el Pantone 7.")
+			alert("Por favor, ingresar el Pantone 7.")
 			return false;
 		}
 		
 		else if(!this.anilox_1 || this.anilox_1 == 0){
-			alert("Por favor, ingesar el anilox 1.")
+			alert("Por favor, ingresar el anilox 1.")
 			return false;
 		}
 		else if(!this.anilox_2 || this.anilox_2 == 0){
-			alert("Por favor, ingesar el anilox 2.")
+			alert("Por favor, ingresar el anilox 2.")
 			return false;
 		}
 		else if(!this.anilox_3 || this.anilox_3 == 0){
-			alert("Por favor, ingesar el anilox 3.")
+			alert("Por favor, ingresar el anilox 3.")
 			return false;
 		}
 		else if(!this.anilox_4 || this.anilox_4 == 0){
-			alert("Por favor, ingesar el anilox 4.")
+			alert("Por favor, ingresar el anilox 4.")
 			return false;
 		}
 		else if(!this.anilox_5 || this.anilox_5 == 0){
-			alert("Por favor, ingesar el anilox 5.")
+			alert("Por favor, ingresar el anilox 5.")
 			return false;
 		}
 		else if(!this.anilox_6 || this.anilox_6 == 0){
-			alert("Por favor, ingesar el anilox 6.")
+			alert("Por favor, ingresar el anilox 6.")
 			return false;
 		}
 		else if(!this.anilox_7 || this.anilox_7 == 0){
-			alert("Por favor, ingesar el anilox 7.")
+			alert("Por favor, ingresar el anilox 7.")
 			return false;
 		}
 		
 		else if(!this.prov_fabricante_1){
-			alert("Por favor, ingesar el fabricante 1.")
+			alert("Por favor, ingresar el fabricante 1.")
 			return false;
 		}
 		else if(!this.prov_fabricante_2){
-			alert("Por favor, ingesar el fabricante 2.")
+			alert("Por favor, ingresar el fabricante 2.")
 			return false;
 		}
 		else if(!this.prov_fabricante_3){
-			alert("Por favor, ingesar el fabricante 3.")
+			alert("Por favor, ingresar el fabricante 3.")
 			return false;
 		}
 		else if(!this.prov_fabricante_4){
-			alert("Por favor, ingesar el fabricante 4.")
+			alert("Por favor, ingresar el fabricante 4.")
 			return false;
 		}
 		else if(!this.prov_fabricante_5){
-			alert("Por favor, ingesar el fabricante 5.")
+			alert("Por favor, ingresar el fabricante 5.")
 			return false;
 		}
 		else if(!this.prov_fabricante_6){
-			alert("Por favor, ingesar el fabricante 6.")
+			alert("Por favor, ingresar el fabricante 6.")
 			return false;
 		}
 		else if(!this.prov_fabricante_7){
-			alert("Por favor, ingesar el fabricante 7.")
+			alert("Por favor, ingresar el fabricante 7.")
 			return false;
 		}
 		
 		else if(!this.tinta_sticky_1){
-			alert("Por favor, ingesar el tinta/sticky 1.")
+			alert("Por favor, ingresar el tinta/sticky 1.")
 			return false;
 		}
 		else if(!this.tinta_sticky_2){
-			alert("Por favor, ingesar el tinta/sticky 2.")
+			alert("Por favor, ingresar el tinta/sticky 2.")
 			return false;
 		}
 		else if(!this.tinta_sticky_3){
-			alert("Por favor, ingesar el tinta/sticky 3.")
+			alert("Por favor, ingresar el tinta/sticky 3.")
 			return false;
 		}
 		else if(!this.tinta_sticky_4){
-			alert("Por favor, ingesar el tinta/sticky 4.")
+			alert("Por favor, ingresar el tinta/sticky 4.")
 			return false;
 		}
 		else if(!this.tinta_sticky_5){
-			alert("Por favor, ingesar el tinta/sticky 5.")
+			alert("Por favor, ingresar el tinta/sticky 5.")
 			return false;
 		}
 		else if(!this.tinta_sticky_6){
-			alert("Por favor, ingesar el tinta/sticky 6.")
+			alert("Por favor, ingresar el tinta/sticky 6.")
 			return false;
 		}
 		else if(!this.tinta_sticky_7){
-			alert("Por favor, ingesar el tinta/sticky 7.")
+			alert("Por favor, ingresar el tinta/sticky 7.")
 			return false;
 		} */
 		else if(!this.tipo_dispensado){
@@ -1284,15 +1392,15 @@ export class AdminIngProductosComponent implements OnInit {
 			return false;
 		}
 	/* 	else if(!this.diametro_rollo || this.diametro_rollo == 0){
-			alert("Por favor, ingesar el  diametro del rollo.")
+			alert("Por favor, ingresar el  diametro del rollo.")
 			return false;
 		} */
 	/* 	else if(!this.peso_rollo || this.peso_rollo == 0){
-			alert("Por favor, ingesar el peso del rollo.")
+			alert("Por favor, ingresar el peso del rollo.")
 			return false;
 		} */
 	/* 	else if(!this.medida_dispensado || this.medida_dispensado == 0){
-			alert("Por favor, ingesar la medida del dispensado.")
+			alert("Por favor, ingresar la medida del dispensado.")
 			return false;
 		} */
 		else if(!this.taca){
@@ -1300,7 +1408,7 @@ export class AdminIngProductosComponent implements OnInit {
 			return false;
 		}
 		else if(!this.embobinado_ext_seleccionado){
-			alert("Por favor, ingesar el embobinado Exterior.")
+			alert("Por favor, ingresar el embobinado Exterior.")
 			return false;
 		}
 		//COMPROBACION DE LA IMAGEN
@@ -1365,10 +1473,10 @@ export class AdminIngProductosComponent implements OnInit {
 			encabezado_ing_prod['uv_select'] = this.uv_select ? 'SI' : 'NO';
 			encabezado_ing_prod['relam_delam'] = this.relam_delam ? 'SI' : 'NO';
 			encabezado_ing_prod['hot_stamping_acabados'] = this.hot_stamping ? 'SI' : 'NO';
-			encabezado_ing_prod['cold_foild'] = this.hot_stamping ? 'SI' : 'NO';
+			encabezado_ing_prod['cold_foil'] = this.cold_foil ? 'SI' : 'NO';
 			encabezado_ing_prod['repujado'] = this.repujado_ing_prod ? 'SI' : 'NO';
 			encabezado_ing_prod['laminado_mate'] = this.lami_mate ? 'SI' : 'NO';
-			encabezado_ing_prod['laminado_brillan'] = this.lami_brillan ? 'SI' : 'NO';
+			encabezado_ing_prod['laminado_brillan'] = this.laminado_brillan ? 'SI' : 'NO';
 			
 			//*****TABLA PRIMARIOS Y COLORES PLANOS**********
 			encabezado_ing_prod['primario_C'] = this.primario_C ? 'SI' : 'NO';
@@ -1599,10 +1707,10 @@ export class AdminIngProductosComponent implements OnInit {
 				encabezado_ing_prod['uv_select'] = this.uv_select ? 'SI' : 'NO';
 				encabezado_ing_prod['relam_delam'] = this.relam_delam ? 'SI' : 'NO';
 				encabezado_ing_prod['hot_stamping_acabados'] = this.hot_stamping ? 'SI' : 'NO';
-				encabezado_ing_prod['cold_foild'] = this.hot_stamping ? 'SI' : 'NO';
+				encabezado_ing_prod['cold_foil'] = this.cold_foil ? 'SI' : 'NO';
 				encabezado_ing_prod['repujado'] = this.repujado_ing_prod ? 'SI' : 'NO';
 				encabezado_ing_prod['laminado_mate'] = this.lami_mate ? 'SI' : 'NO';
-				encabezado_ing_prod['laminado_brillan'] = this.lami_brillan ? 'SI' : 'NO';
+				encabezado_ing_prod['laminado_brillan'] = this.laminado_brillan ? 'SI' : 'NO';
 				
 				//*****TABLA PRIMARIOS Y COLORES PLANOS**********
 				encabezado_ing_prod['primario_C'] = this.primario_C ? 'SI' : 'NO';

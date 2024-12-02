@@ -215,14 +215,27 @@ class GEN_PDF():
 		ruta_plantilla_pedidos=r[0]
         
         
-		sql = """SELECT DATEFORMAT(fecha_entrega, 'DD-MM-YYYY'),substring(hora_entrega,1,8) as hora FROM "DBA"."pedido_ruta" where numtra_pedido='{}' and empresa='{}'""".format(numtra,codemp)
+		# sql = """SELECT DATEFORMAT(fecha_entrega, 'DD-MM-YYYY'),substring(hora_entrega,1,8) as hora, 
+        # FROM "DBA"."pedido_ruta" where numtra_pedido='{}' and empresa='{}'
+        # """.format(numtra,codemp)
+		sql = """SELECT DATEFORMAT(pr.fecha_entrega, 'DD-MM-YYYY'),substring(pr.hora_entrega,1,8) as hora,
+		(select dir_agencia from agencia_cliente a where a.empresa=pr.empresa and a.id_agencia = pr.id_agencia) 
+		FROM pedido_ruta pr where pr.numtra_pedido='{}' and pr.empresa='{}'
+		""".format(numtra,codemp)
+		print (sql)
 		curs.execute(sql)
 		r = curs.fetchone()
 		print (r)
-		if (r[0]) : 
-			fecha_entrega = r[0]+' / '+r[1]
+		if (r != None) :
+			if r[0] :
+				fecha_entrega = r[0]+' / '+r[1]
+				direccion_entrega = r[2]
+			else :
+				fecha_entrega = 'POR PLANIFICAR'
+				direccion_entrega = ''
 		else:
-			fecha_entrega = 'POR PLANIFICAR'
+			fecha_entrega = 'NO APLICA'
+			direccion_entrega = ''
         
 		conn.close()
 
@@ -258,11 +271,11 @@ class GEN_PDF():
                     'condiciones_pago':condiciones_pago,
                     'validez':info_adicional,
                     'tiempo_entrega':tiempo_entrega,
-                    'fecha_entrega':fecha_entrega
-                    
-                    
+                    'fecha_entrega':fecha_entrega,
+                    'direccion_entrega':direccion_entrega,
+                    'tiptra':tiptra
 		}
-
+		print (context)
 		tpl.render(context)
 		if (tiptra=='1'):
 			word_out = APP_PATH+'\\PLANTILLA_PEDIDOS\\PEDIDO_'+codemp+'_'+num_pedido+'_WEB.docx'
@@ -823,9 +836,11 @@ class GEN_PDF():
           ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion ,uv_sobre_impr
         FROM ing_de_producto WHERE codIngProd = '{}' and codEmpresa = '{}'
 	      """.format(codIngProd,codemp)
+		print (sql)
 		curs.execute(sql)
 		r = curs.fetchone()
 		print (r)
+
 
 		#PRIMER RENGLON
 		razon_social_ing_prod  = r[0]
@@ -876,13 +891,13 @@ class GEN_PDF():
 		anilox_vM  = '	' if r[40] == 0 else r[40]
 		anilox_vK  = '	' if r[42] == 0 else r[42]
 		anilox_vY  = '	' if r[41] == 0 else r[41]
-		anilox_1  = r[43]
-		anilox_2  = r[44]
-		anilox_3  = r[45]
-		anilox_4  = r[46]
-		anilox_5  = r[47]
-		anilox_6  = r[48]
-		anilox_7  = r[49]
+		anilox_1  =  '	' if r[43] == 0 else r[43]
+		anilox_2  = '	' if r[44] == 0 else r[44]
+		anilox_3  = '	' if r[45] == 0 else r[45]
+		anilox_4  = '	' if r[46] == 0 else r[46]
+		anilox_5  = '	' if r[47] == 0 else r[47]
+		anilox_6  = '	' if r[48] == 0 else r[48]
+		anilox_7  = '	' if r[49] == 0 else r[49]
 		#FILA PROVEEDOR/FABRICANTE
 		prov_fabricante_vC  = r[50]
 		prov_fabricante_vM  = r[51]
@@ -909,10 +924,10 @@ class GEN_PDF():
 		tinta_sticky_7  = r[71]
 		#CUARTO RENGLON, EMPIEZA TABLA DE TIPO DE DISPENSADO
 		tipo_dispensado  = r[72]
-		diametro_rollo  = r[73]
-		peso_rollo  = r[74]
-		medida  = r[76]
-		dispensado_taca  = r[75]
+		diametro_rollo  = str(r[73])+' cm' if r[73] > 0 else ''
+		peso_rollo  =  str(r[74])+' Kg' if r[74] > 0 else ''
+		medida  =  str(r[75])+' cm' if r[75] > 0 else ''
+		dispensado_taca  = r[76]
 		#QUINTO RENGLON, EMPIEZA SENTIDO SALIDA
 		embobinado_exterior  = r[77]
 		embobinado_interior  = r[78]
@@ -925,7 +940,15 @@ class GEN_PDF():
 		jefe_produccion  = r[83]
 		uv_sobre_impr  = 'X' if r[84] == 'SI' else ''
         
-		ruta_plantilla_pedidos="\\PLANTILLA_PEDIDOS\\INGENIERIA_DE_PRODUCTO.docx"
+        
+		sql = """SELECT VALOR FROM "DBA"."parametros_siaciweb" where parametro='FORMATO_INGPRODUCTO' AND CODEMP='{}'""".format(codemp)
+		curs.execute(sql)
+		r = curs.fetchone()
+		print (r)
+        
+		ruta_plantilla_pedidos=r[0]
+        
+		# ruta_plantilla_pedidos="\\PLANTILLA_PEDIDOS\\INGENIERIA_DE_PRODUCTO.docx"
 		conn.close()
 
 		tpl=DocxTemplate(APP_PATH+ruta_plantilla_pedidos)
@@ -1015,8 +1038,8 @@ class GEN_PDF():
 					't_dispensado' : tipo_dispensado,
 					'diametro' : diametro_rollo,
 					'peso' : peso_rollo,
-					'taca' : medida,
-					'med' : dispensado_taca,
+					'taca' : dispensado_taca,
+					'med' : medida,
 					#QUINTO RENGLON
 					'emb_ext' : embobinado_exterior,
 					'emb_int' : embobinado_interior,

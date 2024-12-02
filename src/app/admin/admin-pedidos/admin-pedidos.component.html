@@ -647,7 +647,7 @@
 	</div>	 
 </div>
 
-<div class="form-group">
+<div *ngIf="tiptra == 1" class="form-group">
     <label>DEFINIR LUGAR DE ENTREGA</label>
 	<!-- <div class="form-group"> -->
 					  <div class="radio">
@@ -754,9 +754,9 @@
 				<select *ngIf="(lista_surcursales && lista_surcursales.length > 0)"
 				name="sucursal" [(ngModel)]="id_direccion_sucursal_seleccionado" (change)="set_id_dir_sucursal();" class="form-control select2 tip" style="width:100%;">
 					<!-- <option [ngValue]="undefined" selected>Seleccione</option> -->
-					<option [ngValue]="undefined" disabled selected>Seleccione</option>
+					<option [ngValue]="undefined"  selected>Seleccione</option>
 					<!-- <option *ngFor="let e of caja_lista; let i = index;" [value]="e.numcaj">{{e.nomcaj}}</option> -->
-					<option *ngFor="let e of lista_surcursales; let i = index;" [value]="e.id_agencia+'|'+e.dir_agencia">{{e.dir_agencia}}</option>
+					<option *ngFor="let e of lista_surcursales;" [value]="e.id_agencia+'|'+e.dir_agencia">{{e.dir_agencia}}</option>
 				</select>
 				
 				<input *ngIf="!lista_surcursales" type="text" value="POR FAVOR SELECCIONE LA RUTA...!!!"  class="form-control ui-autocomplete-input" autocomplete="off" disabled>

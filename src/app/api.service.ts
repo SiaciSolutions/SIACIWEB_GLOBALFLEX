@@ -1129,6 +1129,9 @@ public getConfCambioVendedorPed(): string {
      eliminar_servicio(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_servicio', param);
   }
+  eliminar_ingproducto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_ingproducto', param);
+  }
   
    buscar_articulos_pedido(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/buscar_articulos_pedido', param);

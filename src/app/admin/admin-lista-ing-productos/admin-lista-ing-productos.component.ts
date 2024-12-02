@@ -602,6 +602,32 @@ export class AdminListaIngProductosComponent implements OnInit {
 
 
 	}//FIN ENVIO CORREO PEDIDO
+
+	eliminar_ingproducto(CodIngProd): void {
+		let datos = {};
+		this.loading = true;
+		datos['codemp'] = this.empresa;	
+		datos['CodIngProd'] = CodIngProd;	
+		
+	
+		if (confirm("******* ESTAS SEGURO DE ELIMINAR ESTA ING PRODUCTO ?  *******..???")){
+			this.srv.eliminar_ingproducto(datos).subscribe(
+			   data => {
+				   console.log (data)
+				   if (data['STATUS'] == 'EXITOSO'){
+					 alert("IngProducto ha sido eliminado con Exito..!!!")
+					   
+				   }else{
+					alert("Error al eliminar IngProducto por el siguiente error: "+data['STATUS'] )
+				   }
+				   
+					this.ngOnInit()
+				}); 
+		}else{
+			this.loading = false;
+		}
+		
+	}
 	
 	
 }

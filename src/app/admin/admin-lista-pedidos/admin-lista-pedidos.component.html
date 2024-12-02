@@ -221,10 +221,10 @@
 						  <td>{{el.fectra}}</td>
 						  <td>{{el.numtra}}</td>
 						  <td *ngIf="el.tiptra==1">
-						  PEDIDO
+							<span style="color:red;font-weight:bold" >PEDIDO</span>
 						  </td>
 						  <td *ngIf="el.tiptra==2">
-						  PROFORMA
+							<span style="color:green;font-weight:bold" >PROFORMA</span>
 						  </td>
 						  <td>{{el.nomusu}}</td>
 						  <td>{{el.nomcli}}</td>
@@ -233,7 +233,34 @@
 						  <td>{{el.observ}}</td>
 						  <td>{{el.status}}</td>
 						  <td>{{el.fecha_entrega}}</td>
-						  <td>{{el.status_entrega}}</td>
+<!-- 						  <td *ngIf="el.tiptra == 2">{{el.status_entrega}}</td> -->
+						  <td *ngIf="el.tiptra == 2">
+							<span style="color:red;font-weight:bold">**NO APLICA**</span>
+						</td>
+
+						<td class="text-center" *ngIf="el.tiptra == 1 && el.status_entrega == 'PLANIFICADO'">
+							<span style="color:blue;font-weight:bold" >{{el.status_entrega}}</span>
+						</td>
+						
+						<td class="text-center" *ngIf="el.tiptra == 1 && el.status_entrega == 'NO DESPACHADO'">
+						<span style="color:red;font-weight:bold" > {{el.status_entrega}}</span>
+						</td>
+						
+						<td class="text-center" *ngIf="el.tiptra == 1 && el.status_entrega == 'DESPACHADO'" >
+							<span style="color:green;font-weight:bold" >{{el.status_entrega}}</span>
+						</td>
+
+						<td class="text-center" *ngIf="el.tiptra == 1 && el.status_entrega == 'ENTREGADO MENSAJERO'" >
+							<span style="color:rgb(79, 128, 0);font-weight:bold" >{{el.status_entrega}}</span>
+						</td>
+
+						<td class="text-center" *ngIf="el.tiptra == 1 && el.status_entrega == 'POR PLANIFICAR'" >
+							<span style="color:rgb(248, 143, 6);font-weight:bold" >{{el.status_entrega}}</span>
+						</td>
+
+
+
+						  
 						  <!-- <td *ngIf="el.fecha_entrega">{{el.fecha_entrega}} / {{el.hora_entrega}}</td> -->
 						  <!-- <td *ngIf="!el.fecha_entrega" class="text-center" style="color:red">POR PLANIFICAR</td> -->
 						  <!-- <td>{{el.direccion_entrega}} -->

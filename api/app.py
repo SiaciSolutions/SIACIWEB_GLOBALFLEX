@@ -437,7 +437,8 @@ def impreso():
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   curs = conn.cursor()
   #campos = ['usuario']
-  sql = "SELECT nombre+' '+apelli FROM nom_funcionarios where codemp = '{}'".format(datos['codemp'])
+  # sql = "SELECT nombre+' '+apelli FROM nom_funcionarios where codemp = '{}'".format(datos['codemp'])
+  sql = "SELECT DISTINCT (nombre+' '+apelli) FROM nom_funcionarios"
   print(sql)
   curs.execute(sql)
   regs = curs.fetchall()
@@ -1164,9 +1165,9 @@ def lista_pedidos():
   print (datos) 
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   curs = conn.cursor()
-  campos = ['numtra', 'codcli','nomusu','fectra','nomcli','observ','totnet','status','email','tiptra','fecha_entrega','status_entrega']
+  campos = ['numtra', 'codcli','nomusu','fectra','nomcli','observ','totnet','status','email','tiptra','fecha_entrega','status_entrega','fectra_vista']
 
-  sql = """ SELECT p.numtra,p.codcli,p.codusu,DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra,c.nomcli,
+  sql = """ SELECT p.numtra,p.codcli,p.codusu,fectra,c.nomcli,
   p.soli_gra,round((p.totnet+p.iva_cantidad),2) as total_iva, 
   (CASE WHEN estado = 'P' THEN 'EMITIDO' 
   WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' 
@@ -1174,7 +1175,8 @@ def lista_pedidos():
   ELSE 'STATUS_NO_ENCONTRADO' END) AS status,
   c.email , p.tiptra,
   (SELECT fecha_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as fecha_entrega,
-  (SELECT status_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as status_entrega
+  (SELECT status_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as status_entrega,
+  DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra_vista
   FROM encabezadopedpro p, clientes c where p.tiptra in (1,2) and p.codemp='{}'
   and p.fectra between '{}' and '{}' 
   --and p.codusu='{}'
@@ -4036,7 +4038,7 @@ def generar_ing_producto():
               )"""\
     .format(datos_limpios['codemp'],datos_limpios['fecIngProd'],
             datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['nombre_comercial'],datos_limpios['referencia'],datos_limpios['medida_alto'],datos_limpios['medida_ancho'],datos_limpios['proveedor'],datos_limpios['impresora'],datos_limpios['bobinadora'],datos_limpios['material_imprimir'],datos_limpios['ancho_material'],
-            datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foild'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
+            datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foil'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
             datos_limpios['primario_C'],datos_limpios['primario_M'],datos_limpios['primario_K'],datos_limpios['primario_Y'],
             datos_limpios['pantone_1'],datos_limpios['pantone_2'],datos_limpios['pantone_3'],datos_limpios['pantone_4'],datos_limpios['pantone_5'],datos_limpios['pantone_6'],datos_limpios['pantone_7'],
             datos_limpios['anilox_vC'],datos_limpios['anilox_vM'],datos_limpios['anilox_vY'],datos_limpios['anilox_vK'],
@@ -4091,7 +4093,7 @@ def actualizar_ing_producto():
     where codEmpresa = {} and codIngProd ='{}'
   """.format(datos_limpios['fecIngProd'],
             datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['nombre_comercial'],datos_limpios['referencia'],datos_limpios['medida_alto'],datos_limpios['medida_ancho'],datos_limpios['proveedor'],datos_limpios['impresora'],datos_limpios['bobinadora'],datos_limpios['material_imprimir'],datos_limpios['ancho_material'],
-            datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['filas'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foild'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
+            datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['filas'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foil'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
             datos_limpios['primario_C'],datos_limpios['primario_M'],datos_limpios['primario_K'],datos_limpios['primario_Y'],
             datos_limpios['pantone_1'],datos_limpios['pantone_2'],datos_limpios['pantone_3'],datos_limpios['pantone_4'],datos_limpios['pantone_5'],datos_limpios['pantone_6'],datos_limpios['pantone_7'],
             datos_limpios['anilox_vC'],datos_limpios['anilox_vM'],datos_limpios['anilox_vY'],datos_limpios['anilox_vK'],
@@ -4182,7 +4184,7 @@ def get_ing_producto():
     'codIngProd', 'fecIngProd', 'razon_social', 'ruc', 'nombre_comercial', 'referencia', 'medida_alto', 'medida_ancho',
     'proveedor', 'impresora', 'bobinadora', 'material_imprimir', 'ancho_material', 'cilindro', 'cortador',
     'color_seleccionado', 'rep_des', 'filas', 'columnas', 'formato_seleccionado', 'cilindro_cod', 'troquel_plano_cod',
-    'uv_total', 'uv_select', 'relam_delam', 'hot_stamping_acabados', 'cold_foild', 'repujado', 'laminado_mate',
+    'uv_total', 'uv_select', 'relam_delam', 'hot_stamping_acabados', 'cold_foil', 'repujado', 'laminado_mate',
     'laminado_brillan', 'primario_C', 'primario_M', 'primario_K', 'primario_Y', 'pantone_1', 'pantone_2', 'pantone_3',
     'pantone_4', 'pantone_5', 'pantone_6', 'pantone_7', 'anilox_vC', 'anilox_vM', 'anilox_vY', 'anilox_vK', 'anilox_1',
     'anilox_2', 'anilox_3', 'anilox_4', 'anilox_5', 'anilox_6', 'anilox_7', 'prov_fabricante_vC', 'prov_fabricante_vM',
@@ -5133,26 +5135,36 @@ def actualizar_pedido_ruta():
 
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   curs = conn.cursor()
-  sql = ''
+  sql = "select count(*) from pedido_ruta where numtra_pedido= '{}' and empresa='{}'"\
+         .format(datos['numtra_pedido'],datos['empresa'])
+  curs.execute(sql)
+  r = curs.fetchone()
   
-  if (datos['existe_fecha_entrega']=='SI'):
-    sql = "update pedido_ruta set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' ,hora_entrega= '{}' where numtra_pedido= '{}' and empresa='{}'"\
+  if (r[0] > 0):
+    if (datos['existe_fecha_entrega']=='SI'):
+      sql = "update pedido_ruta set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' ,hora_entrega= '{}' where numtra_pedido= '{}' and empresa='{}'"\
           .format(datos['fecha_entrega'],datos['idruta'],datos['id_agencia'],'PLANIFICADO',datos['hora_entrega'],datos['numtra_pedido'],datos['empresa'])
 
-  if (datos['existe_fecha_entrega']=='NO'):
-    sql = "update pedido_ruta  set idruta='{}',id_agencia='{}', status_entrega ='{}', fecha_entrega = null, hora_entrega=null where numtra_pedido= '{}' and empresa='{}'"\
+    if (datos['existe_fecha_entrega']=='NO'):
+      sql = "update pedido_ruta  set idruta='{}',id_agencia='{}', status_entrega ='{}', fecha_entrega = null, hora_entrega=null where numtra_pedido= '{}' and empresa='{}'"\
           .format(datos['idruta'],datos['id_agencia'],'POR PLANIFICAR',datos['numtra_pedido'],datos['empresa'])
-    # sql = "update pedido_ruta  set fecha_entrega='{}',idruta='{}',id_agencia='{}', status_entrega ='{}' where numtra_pedido= '{}' and empresa='{}'"\
-          # .format(datos['fecha_entrega'],datos['idruta'],datos['id_agencia'],'POR PLANIFICAR',datos['numtra_pedido'],datos['empresa'])
-    # sql = "INSERT INTO pedido_ruta (empresa,numtra_pedido,fectra,hora,idruta,id_agencia,status_entrega) values('{}','{}','{}','{}','{}','{}','{}')"\
-          # .format(datos['empresa'] ,datos['numtra_pedido'],datos['fectra'],hora,datos['idruta'],datos['id_agencia'],'POR PLANIFICAR')
-   
-  print (sql) 
-  curs.execute(sql)
-  conn.commit()
-  
-  print("CERRANDO SESION SIACI")
-  curs.close()
+    print (sql) 
+    curs.execute(sql)
+    conn.commit()
+    print("CERRANDO SESION SIACI")
+    curs.close()
+  else :
+    if (datos['existe_fecha_entrega']=='SI'):
+       sql = "INSERT INTO pedido_ruta (empresa,numtra_pedido,fectra,hora,idruta,id_agencia,status_entrega,fecha_entrega,hora_entrega) values('{}','{}','{}','{}','{}','{}','{}','{}','{}')"\
+          .format(datos['empresa'] ,datos['numtra_pedido'],datos['fectra'],hora,datos['idruta'],datos['id_agencia'],'PLANIFICADO',datos['fecha_entrega'],datos['hora_entrega'])
+
+    if (datos['existe_fecha_entrega']=='NO'):
+       sql = "INSERT INTO pedido_ruta (empresa,numtra_pedido,fectra,hora,idruta,id_agencia,status_entrega) values('{}','{}','{}','{}','{}','{}','{}')"\
+          .format(datos['empresa'] ,datos['numtra_pedido'],datos['fectra'],hora,datos['idruta'],datos['id_agencia'],'POR PLANIFICAR')
+    print (sql) 
+    curs.execute(sql)
+    conn.commit()
+     
   conn.close()
   
   d = {'status': 'RUTA PEDIDO GENERADA'}
@@ -8107,6 +8119,7 @@ def eliminar_articulo():
 
   return (jsonify(d))
   
+  
 @app.route('/eliminar_servicio', methods=['POST'])
 def eliminar_servicio():
   datos = request.json
@@ -8130,6 +8143,33 @@ def eliminar_servicio():
        d = {'STATUS': 'Este servicio con código << '+datos['codser']+' >> ha sido utilizado en alguna transacción en el sistema y no puede ser eliminado'}
     else:
        d = {'STATUS': str(e)}
+
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+
+  return (jsonify(d))
+  
+  
+@app.route('/eliminar_ingproducto', methods=['POST'])
+def eliminar_ingproducto():
+  datos = request.json
+  print ('ENTRADAAAAA')
+  print (datos) 
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+ 
+  sql = """ delete from ing_de_producto where codIngProd='{}';
+  """.format(datos['CodIngProd'])
+  print (sql)
+  try:
+    curs.execute(sql)
+    conn.commit()
+    d = {'STATUS': 'EXITOSO'}
+  except Exception as e:
+    print (str(e))
+    d = {'STATUS': str(e)}
 
 
   print("CERRANDO SESION SIACI")

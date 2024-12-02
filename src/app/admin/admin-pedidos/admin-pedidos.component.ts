@@ -664,10 +664,6 @@ export class AdminPedidosComponent implements OnInit {
 		
 		// }
 		
-		
-		
-		
-		
 	}
 	
 	
@@ -705,6 +701,7 @@ export class AdminPedidosComponent implements OnInit {
 					this.nombre_ruta = undefined
 					this.id_agencia = undefined
 					this.dir_agencia = undefined
+					this.id_nombre_ruta_seleccionado = undefined
 					this.val_exist_sucursal = true
 				}
 					
@@ -1727,7 +1724,7 @@ export class AdminPedidosComponent implements OnInit {
 	
 	
 	// if ((this.dato_cliente) && (this.articulos_pedido.length > 0) && (this.email_cliente) ){
-	if ((this.dato_cliente) && (this.articulos_pedido.length > 0)){
+	if (this.valida_datos()){
 
 	 let encabezado_pedido= this.dato_cliente
 	 encabezado_pedido['codus1'] = this.usuario;
@@ -1825,41 +1822,42 @@ export class AdminPedidosComponent implements OnInit {
 
 										let datos_pedido_ruta = {};
 										
-										datos_pedido_ruta['empresa'] = this.empresa
-										datos_pedido_ruta['numtra_pedido'] = numtra
-										datos_pedido_ruta['idruta'] = this.idruta
-										datos_pedido_ruta['id_agencia'] = this.id_agencia
-										let fectra_string = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500')
-										datos_pedido_ruta['fectra'] = fectra_string
-				  
-										if (fecha_entrega == this.fectra['value']){
-											datos_pedido_ruta['fecha_entrega'] = this.fectra
-										}else{
-											datos_pedido_ruta['fecha_entrega'] = fecha_entrega
-										}
-										datos_pedido_ruta['hora_entrega'] = '00:00:00'
-										
-										if (this.exist_fecha_entrega){
-										 datos_pedido_ruta['existe_fecha_entrega'] = 'SI'
-										}else{
-										 datos_pedido_ruta['existe_fecha_entrega'] = 'NO'
-										}
-										
-										// this.fectra = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
-										
-									
-										this.srv.generar_pedido_ruta(datos_pedido_ruta).subscribe(
-											result => {
-												console.log(result)
-											
-											},
-											error => {
-												console.error(error)
+										if (this.tiptra == 1) {
+											datos_pedido_ruta['empresa'] = this.empresa
+											datos_pedido_ruta['numtra_pedido'] = numtra
+											datos_pedido_ruta['idruta'] = this.idruta
+											datos_pedido_ruta['id_agencia'] = this.id_agencia
+											let fectra_string = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500')
+											datos_pedido_ruta['fectra'] = fectra_string
+					
+											if (fecha_entrega == this.fectra['value']){
+												datos_pedido_ruta['fecha_entrega'] = this.fectra
+											}else{
+												datos_pedido_ruta['fecha_entrega'] = fecha_entrega
 											}
-										)
+											datos_pedido_ruta['hora_entrega'] = '00:00:00'
+											
+											if (this.exist_fecha_entrega){
+											datos_pedido_ruta['existe_fecha_entrega'] = 'SI'
+											}else{
+											datos_pedido_ruta['existe_fecha_entrega'] = 'NO'
+											}
+											
+											// this.fectra = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
+											
+										
+											this.srv.generar_pedido_ruta(datos_pedido_ruta).subscribe(
+												result => {
+													console.log(result)
+												
+												},
+												error => {
+													console.error(error)
+												}
+											)
 
 
-
+									}
 
 
 
@@ -1892,10 +1890,11 @@ export class AdminPedidosComponent implements OnInit {
 				}
 	
 			); 
-	}else {
+	}
+/* 	else {
 			
 			alert("Por favor llenar el campo Datos del cliente/Artículos del pedido/Correo electrónico..!!!")
-		}
+		} */
 	
 	}//FIN GENERA PEDIDO
 	
@@ -1931,7 +1930,7 @@ export class AdminPedidosComponent implements OnInit {
 	
 	
 	// if ((this.dato_cliente) && (this.articulos_pedido.length > 0) && (this.email_cliente) ){
-	if ((this.dato_cliente) && (this.articulos_pedido.length > 0)){
+	if (this.valida_datos()){
 
 	 let encabezado_pedido= this.dato_cliente
 	 encabezado_pedido['codus1'] = this.usuario;
@@ -2017,59 +2016,43 @@ export class AdminPedidosComponent implements OnInit {
 								    if (contador_proceso == longitud_renglones){
 										//###### SE VALIDA SI ESTA CONFIGURADO EL ENVIO DE CORREO DE LOS PEDIDOS  ########
 										
-										let datos_pedido_ruta = {};
-										
-										datos_pedido_ruta['empresa'] = this.empresa
-										datos_pedido_ruta['numtra_pedido'] = this.numtra
-										datos_pedido_ruta['idruta'] = this.idruta
-										datos_pedido_ruta['id_agencia'] = this.id_agencia
-										let fectra_string = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500')
-										datos_pedido_ruta['fectra'] = fectra_string
-				  
-										if (fecha_entrega == this.fectra['value']){
-											datos_pedido_ruta['fecha_entrega'] = this.fectra
-										}else{
-											datos_pedido_ruta['fecha_entrega'] = fecha_entrega
-										}
-										datos_pedido_ruta['hora_entrega'] = '00:00:00'
-										
-										if (this.exist_fecha_entrega){
-										 datos_pedido_ruta['existe_fecha_entrega'] = 'SI'
-										}else{
-										 datos_pedido_ruta['existe_fecha_entrega'] = 'NO'
-										}
-										
-										// this.fectra = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
-										
-									
-										this.srv.actualizar_pedido_ruta(datos_pedido_ruta).subscribe(
-											result => {
-												console.log(result)
+
+										if (this.tiptra == 1) {
+											let datos_pedido_ruta = {};
 											
-											},
-											error => {
-												console.error(error)
+											datos_pedido_ruta['empresa'] = this.empresa
+											datos_pedido_ruta['numtra_pedido'] = this.numtra
+											datos_pedido_ruta['idruta'] = this.idruta
+											datos_pedido_ruta['id_agencia'] = this.id_agencia
+											let fectra_string = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500')
+											datos_pedido_ruta['fectra'] = fectra_string
+					
+											if (fecha_entrega == this.fectra['value']){
+												datos_pedido_ruta['fecha_entrega'] = this.fectra
+											}else{
+												datos_pedido_ruta['fecha_entrega'] = fecha_entrega
 											}
-										)
+											datos_pedido_ruta['hora_entrega'] = '00:00:00'
+											
+											if (this.exist_fecha_entrega){
+											datos_pedido_ruta['existe_fecha_entrega'] = 'SI'
+											}else{
+											datos_pedido_ruta['existe_fecha_entrega'] = 'NO'
+											}
+											
+											// this.fectra = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
+											
 										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
-										
+											this.srv.actualizar_pedido_ruta(datos_pedido_ruta).subscribe(
+												result => {
+													console.log(result)
+												
+												},
+												error => {
+													console.error(error)
+												}
+											)
+										}
 										
 										if (this.srv.getConfCorreoPedCli() == 'SI'){
 											this.correo_pedido(numtra,this.email_cliente)
@@ -2086,24 +2069,46 @@ export class AdminPedidosComponent implements OnInit {
 
 						)
 					}//FIN RECORRIDO RENGLONES PEDIDOS
-				
-			
-			
-			
+
 					}
-			
-			
-			
-			
+
 				}
 	
 			); 
-	}else {
-			
-			alert("Por favor llenar el campo Datos del cliente/Artículos del pedido/Correo electrónico..!!!")
-		}
+	}
+	else {
+
+/* 			alert("Por favor llenar el campo Datos del cliente/Artículos del pedido") */
+
+		} 
 	
 	}//FIN GENERA PEDIDO
+
+	valida_datos (){
+       
+		if (!this.dato_cliente){
+			alert("Por favor llenar el campo Datos del cliente")
+			return false
+		} else if (this.articulos_pedido.length == 0){
+			alert("Por favor colocar los articulos a solicitar en el pedido/proforma.")
+			return false
+		}
+		
+		if (this.tiptra == 1){
+			if (!this.check_agencia || this.check_agencia.length == 0 ){
+				alert("Por favor, seleccionar una opcion de agencia Principal o Sucursal.")
+				return false
+			}
+			else if (!this.idruta || !this.nombre_ruta || !this.id_agencia || !this.dir_agencia || this.dir_agencia.length == 0 ){
+				alert("Por favor, colocar la dirección de la agencia destino")
+				return false
+			}
+		}
+
+		return true
+
+	}
+	
 	
 	correo_pedido(numtra,email) {
 		console.log("CORREO FACTURACION")
