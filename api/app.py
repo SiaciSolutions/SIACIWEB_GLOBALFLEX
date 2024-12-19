@@ -1168,7 +1168,7 @@ def lista_pedidos():
   campos = ['numtra', 'codcli','nomusu','fectra','nomcli','observ','totnet','status','email','tiptra','fecha_entrega','status_entrega','fectra_vista']
 
   sql = """ SELECT p.numtra,p.codcli,p.codusu,fectra,c.nomcli,
-  p.soli_gra,round((p.totnet+p.iva_cantidad),2) as total_iva, 
+  trim(p.soli_gra),round((p.totnet+p.iva_cantidad),2) as total_iva,
   (CASE WHEN estado = 'P' THEN 'EMITIDO' 
   WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' 
   THEN 'FACTURADO'WHEN estado = 'E' THEN 'EN ESPERA' WHEN estado = 'C' THEN 'COMPRADA'  WHEN estado = 'I' THEN 'SOLICITADO'

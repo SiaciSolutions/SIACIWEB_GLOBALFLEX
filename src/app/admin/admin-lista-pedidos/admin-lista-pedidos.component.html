@@ -230,7 +230,9 @@
 						  <td>{{el.nomcli}}</td>
 						  <!-- <td>{{el.email}}</td> -->
 						  <td>{{el.totnet}}</td>
-						  <td>{{el.observ}}</td>
+						  <td>
+							<textarea rows="3" cols="40" disabled>{{el.observ}}</textarea>
+						  </td>
 						  <td>{{el.status}}</td>
 						  <td>{{el.fecha_entrega}}</td>
 <!-- 						  <td *ngIf="el.tiptra == 2">{{el.status_entrega}}</td> -->
@@ -241,7 +243,7 @@
 						<td class="text-center" *ngIf="el.tiptra == 1 && el.status_entrega == 'PLANIFICADO'">
 							<span style="color:blue;font-weight:bold" >{{el.status_entrega}}</span>
 						</td>
-						
+
 						
 						<td class="text-center" *ngIf="el.tiptra == 1 && el.status_entrega == 'NO DESPACHADO'">
 						<span style="color:red;font-weight:bold" > {{el.status_entrega}}</span>
@@ -257,6 +259,9 @@
 
 						<td class="text-center" *ngIf="el.tiptra == 1 && el.status_entrega == 'POR PLANIFICAR'" >
 							<span style="color:rgb(248, 143, 6);font-weight:bold" >{{el.status_entrega}}</span>
+						</td>
+						
+						<td class="text-center" *ngIf="el.tiptra == 1 && !el.status_entrega">
 						</td>
 
 
