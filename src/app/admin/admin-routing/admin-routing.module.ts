@@ -47,6 +47,9 @@ import { AdminListaTranferenciasComponent } from './../admin-lista-transferencia
 import { AdminBusquedaCodBarraComponent } from './../admin-busqueda-codbarra/admin-busqueda-codbarra.component';
 import { AdminListaDespachoPedidosComponent } from './../admin-lista-despacho-ped/admin-lista-despachos-ped.component';
 import { AdminRegistroDespachoPedidosComponent } from './../admin-registro-despacho/admin-registro-despacho.component';
+import { AdminFichaPreprensaComponent } from './../admin-ficha-preprensa/admin-ficha-preprensa.component';
+import { AdminListaFichasPreprensaComponent } from './../admin-lista-ficha-preprensa/admin-lista-ficha-preprensa.component';
+
 
 
 
@@ -277,6 +280,19 @@ import { AdminRegistroDespachoPedidosComponent } from './../admin-registro-despa
             path: 'registro_despachos',
             component: AdminRegistroDespachoPedidosComponent
           }
+		  ,
+		  {
+            path: 'registro_fichapreprensa',
+            component: AdminFichaPreprensaComponent
+          }
+		  ,
+		  {
+            path: 'lista_fichapreprensa',
+            component: AdminListaFichasPreprensaComponent
+          }
+		  
+		  
+		  
 		  
         ]
       }

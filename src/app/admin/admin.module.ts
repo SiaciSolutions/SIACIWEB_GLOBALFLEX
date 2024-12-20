@@ -55,7 +55,8 @@ import { AdminRegistroDespachoPedidosComponent } from './admin-registro-despacho
 
 import { AdminIngProductosComponent } from './admin-ing-productos/admin-ing-productos.component';
 import { AdminListaIngProductosComponent } from './admin-lista-ing-productos/admin-lista-ing-productos.component';
-
+import { AdminFichaPreprensaComponent } from './admin-ficha-preprensa/admin-ficha-preprensa.component';
+import { AdminListaFichasPreprensaComponent } from './admin-lista-ficha-preprensa/admin-lista-ficha-preprensa.component'
 
 
 
@@ -166,7 +167,9 @@ import {
 	AdminListaTranferenciasComponent,
 	AdminBusquedaCodBarraComponent,
 	AdminListaDespachoPedidosComponent,
-	AdminRegistroDespachoPedidosComponent
+	AdminRegistroDespachoPedidosComponent,
+	AdminFichaPreprensaComponent,
+	AdminListaFichasPreprensaComponent
 
 	
   ],
