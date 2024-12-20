@@ -2,6 +2,7 @@ import { AdminDashboard2Component } from './../admin-dashboard2/admin-dashboard2
 import { AdminDashboard3Component } from './../admin-dashboard3/admin-dashboard3.component';
 import { AdminPedidosComponent } from './../admin-pedidos/admin-pedidos.component';
 import { AdminIngProductosComponent } from './../admin-ing-productos/admin-ing-productos.component';
+import { AdminCotizadorComponent } from './../admin-cotizador/admin-cotizador.component';
 import { AdminClienteComponent } from './../admin-cliente/admin-cliente.component';
 // import { AdminDashboard1Component } from './../admin-dashboard1/admin-dashboard1.component';
 import { AdminComponent } from './../admin.component';
@@ -47,6 +48,7 @@ import { AdminListaTranferenciasComponent } from './../admin-lista-transferencia
 import { AdminBusquedaCodBarraComponent } from './../admin-busqueda-codbarra/admin-busqueda-codbarra.component';
 import { AdminListaDespachoPedidosComponent } from './../admin-lista-despacho-ped/admin-lista-despachos-ped.component';
 import { AdminRegistroDespachoPedidosComponent } from './../admin-registro-despacho/admin-registro-despacho.component';
+import { AdminListaContizacionesComponent } from './../admin-lista-cotizaciones/admin-lista-cotizaciones.component';
 
 
 
@@ -103,6 +105,10 @@ import { AdminRegistroDespachoPedidosComponent } from './../admin-registro-despa
 		  {
             path: 'lista_ing_productos',
             component: AdminListaIngProductosComponent
+          },
+      {
+            path: 'cotizar_producto',
+            component: AdminCotizadorComponent
           },
 		  {
             path: 'crear_clientes',
@@ -277,6 +283,15 @@ import { AdminRegistroDespachoPedidosComponent } from './../admin-registro-despa
             path: 'registro_despachos',
             component: AdminRegistroDespachoPedidosComponent
           }
+          ,
+      {
+                path: 'lista_cotizaciones',
+                component: AdminListaContizacionesComponent
+        }
+
+
+
+          
 		  
         ]
       }

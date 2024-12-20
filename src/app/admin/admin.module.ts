@@ -55,9 +55,8 @@ import { AdminRegistroDespachoPedidosComponent } from './admin-registro-despacho
 
 import { AdminIngProductosComponent } from './admin-ing-productos/admin-ing-productos.component';
 import { AdminListaIngProductosComponent } from './admin-lista-ing-productos/admin-lista-ing-productos.component';
-
-
-
+import { AdminCotizadorComponent } from './admin-cotizador/admin-cotizador.component';
+import { AdminListaContizacionesComponent } from './admin-lista-cotizaciones/admin-lista-cotizaciones.component';
 
 
 
@@ -90,6 +89,7 @@ import {
   MatListModule,
   MatAutocompleteModule
 } from '@angular/material';
+
 
 @NgModule({
   imports: [
@@ -166,7 +166,9 @@ import {
 	AdminListaTranferenciasComponent,
 	AdminBusquedaCodBarraComponent,
 	AdminListaDespachoPedidosComponent,
-	AdminRegistroDespachoPedidosComponent
+	AdminRegistroDespachoPedidosComponent,
+	AdminCotizadorComponent,
+	AdminListaContizacionesComponent
 
 	
   ],

@@ -1202,63 +1202,72 @@ def lista_pedidos():
 
 @app.route('/lista_despachos_pedidos', methods=['POST'])
 def lista_despachos_pedidos():
-  datos = request.json
-  print ('ENTRADAAAAA')
-  print (datos) 
-  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
-  curs = conn.cursor()
+    datos = request.json
+    print('ENTRADAAAAA')
+    print(datos) 
+    conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng, host=coneccion.host)
+    curs = conn.cursor()
 
-  campos = ['numtra', 'codcli','nomusu','fectra','nomcli','observ','total_iva','status','email','fecha_entrega','hora_entrega','direccion_entrega','ruta','idruta','id_agencia','status_entrega','tiptra','id_pedido_ruta','observacion_entrega']
-  
-  datos["tipacc"] = 'T'
-  print ('ENTRADA LUEGO TIPACC')
-  if (datos["tipacc"] == 'T'):
-      
-	  sql = """ SELECT top 500 p.numtra,p.codcli,p.codusu,
-			DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra,c.nomcli,
-			p.soli_gra,round((p.totnet+p.iva_cantidad),2) as total_iva,
-			(CASE WHEN estado = 'P' THEN 'EMITIDO' WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' THEN 'FACTURADO'WHEN estado = 'E' THEN 'EN ESPERA' WHEN estado = 'C' THEN 'COMPRADA' ELSE 'STATUS_NO_ENCONTRADO' END) AS status,
-			c.email, DATEFORMAT(pr.fecha_entrega, 'DD-MM-YYYY') as fecha_entrega_planificada,CONVERT(VARCHAR, pr.hora_entrega, 108),dir_agencia,r.descripcion,pr.idruta,a.id_agencia, pr.status_entrega, p.tiptra, pr.id_pedido_ruta, pr.observacion_entrega
-			FROM encabezadopedpro p, clientes c, pedido_ruta pr, agencia_cliente a, ruta r
-			where p.tiptra=1 and p.codemp='{}' 
-			and pr.idruta = trim(r.codruta)
-		--	and a.idruta = trim(r.codruta) 
-			and p.codemp=r.codemp
-			and p.codemp = c.codemp 
-			and p.codcli = c.codcli 
-			and codalm='01' 
-			and estado <>'A' 
-			and pr.numtra_pedido = p.numtra
-			and a.empresa = p.codemp
-			and a.codcli = p.codcli
-			and a.id_agencia = pr.id_agencia
-            and pr.status_entrega <> 'POR PLANIFICAR'
-            and fecha_entrega between '{}' and  '{}'
-            and pr.idruta like '{}'
-            and pr.status_entrega like '{}'
-			order by p.fectra desc
-        """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['idruta'],datos['status_entrega']) 
-  print (sql)        
-  
-  curs.execute(sql)
+    campos = ['numtra', 'codcli', 'nomusu', 'fectra', 'nomcli', 'observ', 'total_iva', 'status',
+              'email', 'fecha_entrega', 'hora_entrega', 'direccion_entrega', 'ruta', 'idruta',
+              'id_agencia', 'status_entrega', 'tiptra', 'id_pedido_ruta', 'observacion_entrega']
 
-  regs = curs.fetchall()
-  arrresp = []
-  # arr_up = []
-  for r in regs:
-    # print (r)
-    reg = (r[0],r[1],r[2],r[3],r[4],r[5],convert_decimal(r[6]),r[7],r[8],r[9],r[10],r[11],r[12],r[13],r[14],r[15],r[16],r[17],r[18])
-    d = dict(zip(campos, reg))
-    arrresp.append(d)
-    # arr_up.append(arrresp)
+    datos["tipacc"] = 'T'
+    print('ENTRADA LUEGO TIPACC')
+    if datos["tipacc"] == 'T':
 
-  # arr_up = []
-  print("CERRANDO SESION SIACI")
-  # print(arrresp)
-  curs.close()
-  conn.close()
+        sql = f""" 
+            SELECT top 500 p.numtra, p.codcli, p.codusu,
+                DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra, c.nomcli,
+                p.soli_gra, round((p.totnet+p.iva_cantidad), 2) as total_iva,
+                (CASE 
+                    WHEN estado = 'P' THEN 'EMITIDO' 
+                    WHEN estado = 'A' THEN 'ANULADO' 
+                    WHEN estado = 'S' THEN 'PROCESADO' 
+                    WHEN estado = 'F' THEN 'FACTURADO' 
+                    WHEN estado = 'E' THEN 'EN ESPERA' 
+                    WHEN estado = 'C' THEN 'COMPRADA' 
+                    ELSE 'STATUS_NO_ENCONTRADO' 
+                END) AS status,
+                c.email, 
+                DATEFORMAT(pr.fecha_entrega, 'DD-MM-YYYY') as fecha_entrega_planificada,
+                CONVERT(VARCHAR, pr.hora_entrega, 108), dir_agencia, r.descripcion, pr.idruta, 
+                a.id_agencia, pr.status_entrega, p.tiptra, pr.id_pedido_ruta, pr.observacion_entrega
+            FROM encabezadopedpro p, clientes c, pedido_ruta pr, agencia_cliente a, ruta r
+            WHERE p.tiptra=1 
+                AND p.codemp='{datos['codemp']}' 
+                AND pr.idruta = trim(r.codruta)
+                AND p.codemp=r.codemp
+                AND p.codemp = c.codemp 
+                AND p.codcli = c.codcli 
+                AND codalm='01' 
+                AND estado <>'A' 
+                AND pr.numtra_pedido = p.numtra
+                AND a.empresa = p.codemp
+                AND a.codcli = p.codcli
+                AND a.id_agencia = pr.id_agencia
+                AND pr.status_entrega <> 'POR PLANIFICAR'
+                AND fecha_entrega BETWEEN '{datos['fecha_desde']}' AND '{datos['fecha_hasta']}'
+                AND pr.idruta LIKE '{datos['idruta']}'
+                AND pr.status_entrega LIKE '{datos['status_entrega']}'
+            ORDER BY p.fectra DESC
+        """
 
-  return (jsonify(arrresp))
+    curs.execute(sql)
+    regs = curs.fetchall()
+
+    arrresp = []
+    for r in regs:
+        reg = (r[0], r[1], r[2], r[3], r[4], r[5], convert_decimal(r[6]), r[7], r[8],
+               r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18])
+        d = dict(zip(campos, reg))
+        arrresp.append(d)
+
+    print("CERRANDO SESION SIACI")
+    curs.close()
+    conn.close()
+
+    return jsonify(arrresp)
   
 @app.route('/get_pedidos_ruta_despacho', methods=['POST'])
 def get_pedidos_ruta_despacho():
@@ -3880,6 +3889,7 @@ def generar_pedido():
   print (ESTADO)
   
   sql = "SELECT seccue FROM secuencias where codalm=\'01\' and codsec = '{}' and codemp='{}'".format(datos['cod_secuencia'],datos['codemp'])
+  print (sql)
   curs.execute(sql)
   r = curs.fetchone()
   NEXT_NUMTRA=r[0]
