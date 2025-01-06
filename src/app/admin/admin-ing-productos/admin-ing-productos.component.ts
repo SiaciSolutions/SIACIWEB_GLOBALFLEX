@@ -521,29 +521,6 @@ export class AdminIngProductosComponent implements OnInit {
 				console.log(this.impresor_lista)
 			 });
 
-
-/* 		this.srv.supervisor(datos).subscribe(
-			data => {
-				console.log("OBTENIENDO SUPERVISOR")
-				console.log(data)
-				let option_defecto_final = {"codus": "01", "usuario": "*** OTRO SUPERVISOR ***"};
-				this.supervisor_lista = data
-				this.supervisor_lista.push(option_defecto_final)
-				console.log("SUPERVISOR LISTA")
-				console.log(this.supervisor_lista)
-			});
-			
-			this.srv.jefe_produccion(datos).subscribe(
-				data => {
-					console.log("OBTENIENDO PRODUCCION")
-					console.log(data)
-					let option_defecto_final = {"codus": "01", "usuario": "*** OTRA PRODUCCION ***"};
-					this.jefe_produccion_lista = data
-					this.jefe_produccion_lista.push(option_defecto_final) 
-					console.log("PRODUCCION LISTA")
-					console.log(this.jefe_produccion_lista)
-				}); */
-
 		this.buscar_encabezado_ingProducto();
 	}
 

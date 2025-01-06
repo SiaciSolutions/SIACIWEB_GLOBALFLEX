@@ -106,14 +106,42 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-.image-upload>input {
-  display: none;
-}
-
 .centered-container {
   max-width: 300px; /* Ajusta esto según tus necesidades */
   margin: 0 auto;
 }
+
+.radio-group {
+  display: flex;
+  gap: 15px; /* Ajusta el espacio entre las opciones */
+  align-items: center;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  margin-right: 10px; /* Espaciado adicional si es necesario */
+}
+
+.section-toggle button {
+  margin: 0 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s;
+}
+
+.section-toggle button.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.section-toggle button:hover {
+  background-color: #e7e7e7;
+}
+
 
 
 /* /* border: DE AQUI ABAJO ES LA TABLA SCROLL; */ 

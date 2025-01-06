@@ -97,6 +97,25 @@ def consulta_citas():
 	
 	return result
 
+@app.route('/obtener_articulos', methods=['POST'])	
+def obtener_articulos():
+    d = request.json
+    conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+    curs = conn.cursor()
+
+    sql = f"""SELECT codart, nomart FROM articulos where codemp = '{d['codemp']}'"""
+    dev = []
+    campos = ['codart', 'nomart']
+
+    curs.execute(sql)
+    resultados = curs.fetchall()
+
+    for row in resultados:
+      row_header = dict(zip(campos, row))
+      dev.append(row_header)                
+    
+    # Retorna los resultados en formato JSON
+    return jsonify(dev), 200
 
 
 def convert_decimal(d):
@@ -4070,6 +4089,91 @@ def generar_ing_producto():
   response.headers['content-type'] = 'application/json'
   return(response)
 
+@app.route('/generar_cotizacion', methods=['POST']) 
+def generar_cotizacion():
+  datos = request.json
+  print ("##########  ENTRADA GENERAR COTIZACION  ######")
+  codemp = datos['codemp']
+  codart = datos['codart']
+  fecha = datos['fecha']
+  cortador = datos['cortador']
+  cantidad_requerida = datos['cantidad_requerida']
+  cilindro = datos['cilindro']
+  s_i = datos['si']
+  color = datos['color']
+  num = datos['num']
+  alto = datos['alto']
+  ancho = datos['ancho']
+  gap_avance = datos['gap_avance']
+  gap_columnas = datos['gap_columnas']
+  gap_extremos = datos['gap_extremos']
+  filas = datos['filas']
+  tipoSeleccionado = datos['tipoSeleccionado']
+  nBobinas = datos['nBobinas']
+  cRollos = datos['cRollos']
+  impresion = datos['impresion']
+  kores = datos['kores']
+  cstamping = datos['cstamping']
+  relam = datos['relam']
+  mate = datos['mate']
+  troquel = datos['troquel']
+  brillante = datos['brillante']
+  horas = datos['horas']
+  combustible = datos['combustible']
+  cyrel = datos['cyrel']
+  gap_de_extremos = datos['gap_de_extremos']
+  costo = datos['costo']
+  cantidad = datos['cantidad']
+  costomp = datos['costomp']
+  putilidad = datos['putilidad']
+  
+  if s_i:
+    si = 'X'
+  else:
+    si = ''
+  
+  if color:
+    colores = 'X'
+  else:
+    colores = ''
+  
+  if tipoSeleccionado == 'TQ':
+    tq = 'X'
+    recto = ''
+  else:
+    tq = ''
+    recto = 'X'
+    
+  if cyrel:
+    cyreles = 'X'
+  else:
+    cyreles = ''
+  
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  sql = f"""INSERT INTO data_cotizaciones (codemp, fecha, codart, cortador, cilindro, cantidad_requerida, s_i, color, numero,
+    alto, ancho, gap_avance, gap_columnas, gap_extremos, recto, tq, filas, numero_bobinas,
+    cantidad_rollos, pvp_impresion, pvp_kores, cold_stamping, relam_delam, costo_laminado_mate,
+    costo_laminado_brillante, pvp_troquel, horas_produccion, transporte_combustible,
+    cyrel, gap_de_extremos, costo_cm2, cantidad_cyreles, costo_mp, putilidad
+    ) VALUES ('{codemp}','{fecha}',
+                  '{codart}', '{cortador}', '{cilindro}', '{cantidad_requerida}', '{si}', '{colores}', 
+                  '{num}', '{alto}', '{ancho}', '{gap_avance}', '{gap_columnas}', 
+                  '{gap_extremos}', '{recto}', '{tq}', '{filas}', '{nBobinas}', '{cRollos}',
+                  '{impresion}', '{kores}', '{cstamping}', '{relam}', '{mate}', 
+                  '{brillante}', '{troquel}', '{horas}', '{combustible}', '{cyreles}', 
+                  '{gap_de_extremos}', '{costo}', '{cantidad}', '{costomp}', '{putilidad}'
+    );"""
+  print (sql)
+  curs.execute(sql)
+  conn.commit()
+  
+  d = {'status': 'INSERTADO CON EXITO'}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
 @app.route('/actualizar_ing_producto', methods=['POST'])
 def actualizar_ing_producto():
   datos = request.json
@@ -4130,6 +4234,225 @@ def actualizar_ing_producto():
   response.headers['content-type'] = 'application/json'
   return(response)
 
+@app.route('/actualizar_cotizacion', methods=['POST'])
+def actualizar_cotizacion():
+  datos = request.json
+  print(datos)
+  print("INGRESANDO AL UPDATE")
+  codemp = datos['codemp']
+  codart = datos['codart']
+  fecha = datos['fecha']
+  cortador = datos['cortador']
+  cantidad_requerida = datos['cantidad_requerida']
+  cilindro = datos['cilindro']
+  s_i = datos['si']
+  color = datos['color']
+  num = datos['num']
+  alto = datos['alto']
+  ancho = datos['ancho']
+  gap_avance = datos['gap_avance']
+  gap_columnas = datos['gap_columnas']
+  gap_extremos = datos['gap_extremos']
+  filas = datos['filas']
+  tipoSeleccionado = datos['tipoSeleccionado']
+  nBobinas = datos['nBobinas']
+  cRollos = datos['cRollos']
+  impresion = datos['impresion']
+  kores = datos['kores']
+  cstamping = datos['cstamping']
+  relam = datos['relam']
+  mate = datos['mate']
+  troquel = datos['troquel']
+  brillante = datos['brillante']
+  horas = datos['horas']
+  combustible = datos['combustible']
+  cyrel = datos['cyrel']
+  gap_de_extremos = datos['gap_de_extremos']
+  costo = datos['costo']
+  cantidad = datos['cantidad']
+  costomp = datos['costomp']
+  putilidad = datos['putilidad']
+  codcot = datos['codCot']
+  if s_i:
+    si = 'X'
+  else:
+    si = ''
+  
+  if color:
+    colores = 'X'
+  else:
+    colores = ''
+  
+  if tipoSeleccionado == 'TQ':
+    tq = 'X'
+    recto = ''
+  else:
+    tq = ''
+    recto = 'X'
+    
+  if cyrel:
+    cyreles = 'X'
+  else:
+    cyreles = ''
+  
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  sqla = """
+    commit;
+  """
+  curs.execute(sqla)
+  
+  
+  sql = f"""
+  UPDATE data_cotizaciones
+    SET
+    codemp = '{codemp}',
+    fecha = '{fecha}',
+    codart = '{codart}', 
+    cortador = '{cortador}',
+    cilindro = '{cilindro}',
+    cantidad_requerida = '{cantidad_requerida}',
+    s_i = '{si}',
+    color = '{colores}',
+    numero = '{num}',
+    alto = '{alto}',
+    ancho = '{ancho}',
+    gap_avance = '{gap_avance}',
+    gap_columnas = '{gap_columnas}',
+    gap_extremos = '{gap_extremos}',
+    recto = '{recto}',
+    tq = '{tq}',
+    filas = '{filas}', 
+    numero_bobinas = '{nBobinas}',
+    cantidad_rollos = '{cRollos}',
+    pvp_impresion = '{impresion}', 
+    pvp_kores = '{kores}',
+    cold_stamping = '{cstamping}', 
+    relam_delam = '{relam}', 
+    costo_laminado_mate = '{mate}', 
+    costo_laminado_brillante = '{brillante}',
+    pvp_troquel = '{troquel}',
+    horas_produccion = '{horas}',
+    transporte_combustible ='{combustible}',
+    cyrel = '{cyreles}', 
+    gap_de_extremos = '{gap_de_extremos}',
+    costo_cm2 = '{costo}',
+    cantidad_cyreles = '{cantidad}',
+    costo_mp = '{costomp}',
+    putilidad = '{putilidad}'
+    WHERE
+    num_cotizacion = '{codcot}';
+  """
+  print(sql)
+  curs.execute(sql)
+  conn.commit()
+  
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  
+  d = {'status': 'ACTUALIZADO CON EXITO'}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
+@app.route('/calcular_cotizacion', methods=['POST'])
+def calcular_cotizacion():
+  datos = request.json
+  print ("##########  ENTRADA CALCULAR COTIZACION  ######")
+  print (datos)
+  codemp = datos['codemp']
+  cortador = datos['cortador']
+  cantidad_requerida = datos['cantidad_requerida']
+  num = datos['num']
+  alto = datos['alto']
+  ancho = datos['ancho']
+  gap_avance = datos['gap_avance']
+  gap_columnas = datos['gap_columnas']
+  gap_extremos = datos['gap_extremos']
+  filas = datos['filas']
+  nBobinas = datos['nBobinas']
+  cRollos = datos['cRollos']
+  impresion = datos['impresion']
+  kores = datos['kores']
+  cstamping = datos['cstamping']
+  relam = datos['relam']
+  mate = datos['mate']
+  troquel = datos['troquel']
+  brillante = datos['brillante']
+  horas = datos['horas']
+  combustible = datos['combustible']
+  gap_de_extremos = datos['gap_de_extremos']
+  costo = datos['costo']
+  cantidad = datos['cantidad']
+  costomp = datos['costomp']
+  costomp = round(costomp,3)
+  putilidad = datos['utilidad']
+  
+  anchomp = (ancho*filas)+(gap_columnas+gap_extremos)
+  cantidadProducir = 100000/(alto+gap_avance)*filas
+  cantidadDescontadoDesperdicio = cantidadProducir-(cantidadProducir*0.1)
+  totalRollos = cantidadProducir/cRollos
+  cKores = totalRollos
+  cstampingCU = (anchomp*300)*0.065
+  laminado_mate = (anchomp*100)*mate
+  laminado_brillante = (anchomp*100)*brillante
+  anchoEtq = ancho*filas
+  if filas > 1:
+    gap_entre_columnas = 0.6*1 #este valor multiplica por 1 pero en un caso lo hace por 3 asi que debemos definir bien qué valor usar
+  else:
+    gap_entre_columnas = 0  
+  
+  total_ancho_cyrel = anchoEtq*gap_entre_columnas*gap_de_extremos
+  altoLado = cortador + 0.6
+  costo_cyrel_unitario = total_ancho_cyrel*altoLado*costo
+  costoTotalCyrel = costo_cyrel_unitario*cantidad
+  
+  #Valores a entregar:
+  costoBobina = costomp*(anchomp*100)
+  costoBobina = round(costoBobina,2)
+  otroscostos = cstampingCU+cstamping+laminado_mate+laminado_brillante+troquel+combustible
+  otroscostos = round(otroscostos,2)
+  manoObra = (450.04/240)*horas
+  manoObra = round(manoObra,2)
+  costoproduccion = costoBobina+otroscostos+manoObra
+  costoproduccion = round(costoproduccion,2)
+  costoUE = costoproduccion/cantidadDescontadoDesperdicio
+  costoUE = round(costoUE,6)
+  utilidadE = costoUE * (putilidad/100)
+  utilidadE = round(utilidadE,6)
+  pvpNoIva = costoUE+utilidadE
+  pvpNoIva = round(pvpNoIva,6)
+  pvpIva = (pvpNoIva*0.12)+pvpNoIva #iva quemado debe obtenerse de la base de datos pero queda en 12 para prueba
+  pvpIva = round(pvpIva,6)
+  utilidad = costoproduccion*(putilidad/100)
+  utilidad = round(utilidad,2)
+  ventaNoIva = costoproduccion+utilidad+costoTotalCyrel
+  ventaNoIva = round(ventaNoIva,2)
+  iva = ventaNoIva*0.12 #iva quemado
+  iva = round(iva,2)
+  ventatotal = ventaNoIva+iva
+  ventatotal = round(ventatotal,3)
+  
+  d ={
+    'costoBobina': costoBobina,
+    'otroscostos': otroscostos,
+    'manoObra': manoObra,
+    'costoproduccion': costoproduccion,
+    'costoUE': costoUE,
+    'utilidadE': utilidadE,
+    'pvpNoIva': pvpNoIva,
+    'pvpIva': pvpIva,
+    'utilidad': utilidad,
+    'ventaNoIva': ventaNoIva,
+    'iva': iva,
+    'ventatotal': ventatotal
+  }
+  print(d)
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
 
 @app.route('/lista_ing_productos', methods=['POST'])
 def lista_ing_productos():
@@ -4157,6 +4480,35 @@ def lista_ing_productos():
   # print(arrresp)
   curs.close()
   conn.close()
+
+  return (jsonify(arrresp))
+
+@app.route('/lista_cotizacion', methods=['POST'])
+def lista_cotizacion():
+  datos = request.json
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  campos = ['CodCot','fecha','codart','cilindro']
+
+  sql = """ SELECT num_cotizacion, fecha, codart, cilindro 
+  FROM data_cotizaciones where codemp = '{}' and fecha between '{}' and '{}' order by fecha;
+  """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'])
+  curs.execute(sql)
+  print (sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    d = dict(zip(campos, r))
+    print(arrresp)
+    arrresp.append(d)
+
+  #print(arrresp)
+  print("CERRANDO SESION SIACI")
+  # print(arrresp)
+  curs.close()
+  conn.close()
+  print(arrresp)
 
   return (jsonify(arrresp))
 
@@ -4220,6 +4572,67 @@ def get_ing_producto():
       d = dict(zip(campos, art))
   else:
     d = {'codus1': False}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  print (d)
+  
+	#return(response)
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  
+  return(response)
+
+@app.route('/get_cotizador', methods=['POST'])
+def get_cotizador():
+  datos = request.json
+  print (datos)
+  codemp=datos['codemp']
+  codCot=datos['codCot']
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  # SELECT p.numtra,DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra , DATEFORMAT(p.fecult, 'DD-MM-YYYY') as fecult ,c.rucced,c.nombres,c.dircli,c.codcli,c.telcli,c.email,p.observ,p.totnet,p.iva_cantidad,p.codusu,p.ciucli,
+  sql = """
+        SELECT cortador, cilindro, cantidad_requerida, s_i, color, numero, alto, ancho, gap_avance, gap_columnas,
+        gap_extremos, recto, filas, numero_bobinas, cantidad_rollos, pvp_impresion, pvp_kores,
+        cold_stamping, relam_delam, costo_laminado_mate, costo_laminado_brillante, pvp_troquel,
+        horas_produccion, transporte_combustible, cyrel, gap_de_extremos, costo_cm2, cantidad_cyreles, costo_mp, putilidad, codart
+        FROM data_cotizaciones WHERE num_cotizacion = '{}' and codemp = '{}'
+	      """.format(codCot,codemp)
+  curs.execute(sql)
+  print (sql)
+  r = curs.fetchone()
+  print(r)
+  campos = [
+    'cortador','cilindro','cantidad_requerida', 'si', 'color', 'numero', 'alto', 'ancho', 'gap_avance', 'gap_columnas',
+        'gap_extremos', 'tipo', 'filas', 'numero_bobinas', 'cantidad_rollos', 'pvp_impresion', 'pvp_kores',
+        'cold_stamping', 'relam_delam', 'costo_laminado_mate', 'costo_laminado_brillante', 'pvp_troquel',
+        'horas_produccion', 'transporte_combustible', 'cyrel', 'gap_de_extremos', 'costo_cm2', 'cantidad_cyreles', 'costomp', 'utilidad', 'codart'
+    ]
+  
+  if r[3] == '' or None:
+    si = False
+  else:
+    si = True
+
+  if r[4] == 'X':
+    color = True
+  else:
+    color = False
+  
+  if r[11] == 'X':
+    tipo = 'RECTO'
+  else:
+    tipo = 'TQ'
+  if r[24] == 'X':
+    cyrel = True
+  else:
+    cyrel = False
+    
+  art = (r[0], r[1], r[2], si, color, r[5], r[6], r[7], r[8], r[9], r[10], tipo, r[12], r[13], r[14], r[15], r[16],
+   r[17], r[18], r[19], r[20], r[21], r[22], r[23], cyrel, r[25], r[26], r[27], r[28], r[29], r[30])
+  d = dict(zip(campos, art))
+
   response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
   response.headers['content-type'] = 'application/json'
   print (d)
@@ -8187,7 +8600,33 @@ def eliminar_ingproducto():
   conn.close()
 
   return (jsonify(d))
-  
+
+@app.route('/eliminar_cotizacion', methods=['POST'])
+def eliminar_cotizacion():
+  datos = request.json
+  print ('ELIMINANDO COTIZACION')
+  print (datos) 
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+ 
+  sql = """ delete from data_cotizaciones where num_cotizacion='{}';
+  """.format(datos['CodCot'])
+  print (sql)
+  try:
+    curs.execute(sql)
+    conn.commit()
+    d = {'STATUS': 'EXITOSO'}
+  except Exception as e:
+    print (str(e))
+    d = {'STATUS': str(e)}
+
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+
+  return (jsonify(d))
+
 @app.route('/actualizar_articulo', methods=['POST'])
 def actualizar_articulo():
   datos = request.json
