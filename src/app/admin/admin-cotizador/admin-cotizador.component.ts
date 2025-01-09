@@ -153,7 +153,7 @@ export class AdminCotizadorComponent implements OnInit {
 	codCot: number;
 	datos: any = {};
 	codart: string;
-	articulos: { codart: string; nomart: string }[] = [];
+	nombre_producto: string; 
 
 	
   constructor(
@@ -213,6 +213,77 @@ export class AdminCotizadorComponent implements OnInit {
 	
   } //FIN COSNTRUCTOR
 
+		busca_articulo() { 
+			if (this.patron_articulo ){
+				this.searching_articulo = true
+				let datos = {};
+				datos['nomart']  = this.patron_articulo;
+				datos['codemp']  = this.empresa;
+				datos['codcli']  = 'CONFIN';
+				datos['codalm']  = '01';
+					this.srv.buscar_articulos_pedido(datos).subscribe(data => {
+						
+					let longitud_data = data.length
+
+					if (longitud_data > 0 ) {
+						console.log(data)
+						this.articulo = data;
+						this.exist_articulo = true;
+						this.searching_articulo = false
+					}else {
+						alert("Antículo no encontrado con la palabra clave ingresada <<"+this.patron_articulo+">>");
+						this.searching_articulo = false
+						this.exist_articulo = false;
+					}
+					}); 
+				}else  { 
+					alert("Por favor llene el artículo / datos del cliente / almacen");
+				}
+		}
+
+		select_producto(codart,nomart) {		
+			this.exist_articulo = false;
+			this.patron_articulo = undefined;
+			this.codart = codart
+			this.nombre_producto = nomart
+		}
+
+    busqueda_razon_social() { 
+	if (this.patron_cliente){
+		const datos = {};
+		datos['codemp'] = this.empresa;
+		datos['patron_cliente'] = this.patron_cliente;
+			this.srv.busqueda_razon_social(datos).subscribe(data => {		
+				let longitud_data = data.length
+
+			if (longitud_data > 0 ) {
+				console.log(data)
+
+				this.razon_social_lista = data;
+				this.exist_razon_social = true;		
+				
+			}else {
+				alert("Razon Social no encontrado con la palabra clave ingresada <<"+this.patron_cliente+">>");
+				this.exist_razon_social = false;
+			}
+				
+
+			}); 
+		}else  { 
+			alert("Por favor llenar el campo Razon Social");
+		}
+	}
+	select_razon_social(ident,ruc,rz,correo,codcli,dircli) {
+		console.log ("Seleccion de cliente")
+	   
+	   this.dato_cliente= {"nomcli":rz,"rucced":ruc,"email":correo,"codcli":codcli,"dircli":dircli}
+	   this.ruc = ruc
+	   this.razon_social = rz
+	   this.email_cliente = correo
+	   this.clientes = true;
+	   this.exist_razon_social = false;
+	   this.patron_cliente = undefined;
+	}
   
 	buscar_encabezado_cotizador() {
 		const datos = {};
@@ -225,7 +296,12 @@ export class AdminCotizadorComponent implements OnInit {
 			console.log(data)
 			console.log ("EJECUTADA DATA CONSULTA")
 
-			let fecha =formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
+			let fecha = new Date(data['fecha'])
+			fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset())
+			this.fectra = new FormControl(fecha)
+
+			this.razon_social = data['razon']
+			this.nombre_producto = data['nomart']
 			this.cortador = data['cortador']
 			this.cantidad_requerida = data['cantidad_requerida']
 			this.cilindro = data['cilindro']
@@ -257,6 +333,7 @@ export class AdminCotizadorComponent implements OnInit {
 			this.costomp = data['costomp']
 			this.utilidad = data['utilidad']
 			this.codart = data['codart']
+			this.ruc = data['ruc']
 			});
 	
 		}	
@@ -270,19 +347,6 @@ export class AdminCotizadorComponent implements OnInit {
 
     ngOnInit() {
 		AdminLTE.init();
-		this.obtener_articulos();
-	}
-	
-	obtener_articulos(){
-		let datos = {
-			codemp: this.empresa,
-		  };
-  
-		  this.srv.obtener_articulos(datos).subscribe(
-			data=>{
-				this.articulos = data
-			}
-		)
 	}
 	
 	formato_fecha (fecha){
@@ -408,6 +472,14 @@ export class AdminCotizadorComponent implements OnInit {
 			alert("Por favor, seleccionar un articulo");
 			return false;
 		}
+		if (this.razon_social == null){
+			alert("Por favor, seleccionar Razón Social");
+			return false;
+		}
+		if (this.ruc == null){
+			alert("Por favor, seleccionar Razón Social");
+			return false;
+		}
 	
 		return true;
 	}
@@ -531,6 +603,14 @@ export class AdminCotizadorComponent implements OnInit {
 			alert("Por favor, seleccionar un articulo");
 			return false;
 		}
+		if (this.razon_social == null){
+			alert("Por favor, seleccionar Razón Social");
+			return false;
+		}
+		if (this.ruc == null){
+			alert("Por favor, seleccionar Razón Social");
+			return false;
+		}
 		return true
 	}
 
@@ -576,11 +656,10 @@ export class AdminCotizadorComponent implements OnInit {
    	generar_cotizacion() {
 	   if (this.validar_datos()){
 		this.calcular_cotizacion()
-		this.jstoday = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
 			let datos = {
 				codemp: this.empresa,
 				codart: this.codart,
-				fecha: this.jstoday,
+				nomart: this.nombre_producto,
 				cortador: this.cortador,
 				cantidad_requerida: this.cantidad_requerida,
 				cilindro: this.cilindro,
@@ -610,7 +689,10 @@ export class AdminCotizadorComponent implements OnInit {
 				costo: this.costo,
 				cantidad: this.cantidad,
 				costomp: this.costomp,
-				putilidad: this.utilidad
+				putilidad: this.utilidad,
+				razon: this.razon_social,
+				ruc: this.ruc,
+				fecha: formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500')
 		  	};
 	  
 		  	this.srv.generar_cotizacion(datos).subscribe(
@@ -629,12 +711,12 @@ export class AdminCotizadorComponent implements OnInit {
 	actualizar_cotizacion() {
 		if (this.validar_datos_actualizar()){
 			this.calcular_cotizacion()
-		 	this.jstoday = formatDate(this.today, 'yyyy-MM-dd', 'en-US', '-0500');
 			 let datos = {
 				 codCot: this.codCot,
 				 codemp: this.empresa,
 				 codart: this.codart,
-				 fecha: this.jstoday,
+				 nomart: this.nombre_producto,
+				 fecha: formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500'),
 				 cortador: this.cortador,
 				 cantidad_requerida: this.cantidad_requerida,
 				 cilindro: this.cilindro,
@@ -664,7 +746,9 @@ export class AdminCotizadorComponent implements OnInit {
 				 costo: this.costo,
 				 cantidad: this.cantidad,
 				 costomp: this.costomp,
-				 putilidad: this.utilidad
+				 putilidad: this.utilidad,
+				 razon: this.razon_social,
+				 ruc: this.ruc
 			   };
 	   
 			   this.srv.actualizar_cotizacion(datos).subscribe(
@@ -679,9 +763,8 @@ export class AdminCotizadorComponent implements OnInit {
 			}else{
 			 alert("Por favor llene todos los campos")
 		 }
-	 }//FIN GENERA ING PRODUCTOS
-	 
-	
+	}//FIN GENERA ING PRODUCTOS
+	 	
 	reset() {
 		this.cortador = null
 		this.cantidad_requerida = null
@@ -714,6 +797,9 @@ export class AdminCotizadorComponent implements OnInit {
 		this.costomp = null
 		this.utilidad = null
 		this.codart = null
+		this.nombre_producto = null
+		this.ruc = null
+		this.razon_social = null
 	}
 
 	ver_detalle(){
