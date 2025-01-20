@@ -4129,7 +4129,13 @@ def generar_cotizacion():
   putilidad = datos['putilidad']
   razon = datos['razon']
   ruc = datos['ruc']
+  calculocs = datos['calculocs']
   
+  if calculocs:
+    cs = 'X'
+  else:
+    cs = ''
+
   if s_i:
     si = 'X'
   else:
@@ -4159,14 +4165,14 @@ def generar_cotizacion():
     alto, ancho, gap_avance, gap_columnas, gap_extremos, recto, tq, filas, numero_bobinas,
     cantidad_rollos, pvp_impresion, pvp_kores, cold_stamping, relam_delam, costo_laminado_mate,
     costo_laminado_brillante, pvp_troquel, horas_produccion, transporte_combustible,
-    cyrel, gap_de_extremos, costo_cm2, cantidad_cyreles, costo_mp, putilidad, razon, ruc, nomart
+    cyrel, gap_de_extremos, costo_cm2, cantidad_cyreles, costo_mp, putilidad, razon, ruc, nomart, calculocs
     ) VALUES ('{codemp}','{fecha}',
                   '{codart}', '{cortador}', '{cilindro}', '{cantidad_requerida}', '{si}', '{colores}', 
                   '{num}', '{alto}', '{ancho}', '{gap_avance}', '{gap_columnas}', 
                   '{gap_extremos}', '{recto}', '{tq}', '{filas}', '{nBobinas}', '{cRollos}',
                   '{impresion}', '{kores}', '{cstamping}', '{relam}', '{mate}', 
                   '{brillante}', '{troquel}', '{horas}', '{combustible}', '{cyreles}', 
-                  '{gap_de_extremos}', '{costo}', '{cantidad}', '{costomp}', '{putilidad}', '{razon}', '{ruc}', '{nomart}'
+                  '{gap_de_extremos}', '{costo}', '{cantidad}', '{costomp}', '{putilidad}', '{razon}', '{ruc}', '{nomart}', '{cs}'
     );"""
   print (sql)
   curs.execute(sql)
@@ -4279,6 +4285,13 @@ def actualizar_cotizacion():
   costomp = datos['costomp']
   putilidad = datos['putilidad']
   codcot = datos['codCot']
+  calculocs = datos['calculocs']
+  
+  if calculocs:
+    cs = 'X'
+  else:
+    cs = ''
+
   if s_i:
     si = 'X'
   else:
@@ -4349,7 +4362,8 @@ def actualizar_cotizacion():
     putilidad = '{putilidad}',
     razon ='{razon}',
     ruc = '{ruc}',
-    nomart = '{nomart}'
+    nomart = '{nomart}',
+    calculocs = '{cs}'
     WHERE
     num_cotizacion = '{codcot}';
   """
@@ -4398,6 +4412,7 @@ def calcular_cotizacion():
   costomp = datos['costomp']
   costomp = round(costomp,3)
   putilidad = datos['utilidad']
+  calculocs = datos['calculoscs']
   
   print('#######CALCULOS###############')
   anchomp = (ancho*filas)+(gap_columnas+gap_extremos)
@@ -4410,8 +4425,11 @@ def calcular_cotizacion():
   print(totalRollos)
   cKores = totalRollos
   print(cKores)
-  cstampingCU = (anchomp*300)*0.065
-  print(cstampingCU)
+  if calculocs:
+    cstampingCU = (anchomp*300)*0.065
+    print(cstampingCU)
+  else:
+    cstampingCU = 0
   laminado_mate = (anchomp*100)*mate
   print(laminado_mate)
   laminado_brillante = (anchomp*100)*brillante
@@ -4512,9 +4530,9 @@ def lista_cotizacion():
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   curs = conn.cursor()
   
-  campos = ['CodCot','fecha','codart','cilindro']
+  campos = ['CodCot','fecha','codart','cilindro','razon']
 
-  sql = """ SELECT num_cotizacion, fecha, codart, cilindro 
+  sql = """ SELECT num_cotizacion, fecha, codart, cilindro ,razon
   FROM data_cotizaciones where codemp = '{}' and fecha between '{}' and '{}' order by fecha;
   """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'])
   curs.execute(sql)
@@ -4619,7 +4637,7 @@ def get_cotizador():
         SELECT cortador, cilindro, cantidad_requerida, s_i, color, numero, alto, ancho, gap_avance, gap_columnas,
         gap_extremos, recto, filas, numero_bobinas, cantidad_rollos, pvp_impresion, pvp_kores,
         cold_stamping, relam_delam, costo_laminado_mate, costo_laminado_brillante, pvp_troquel,
-        horas_produccion, transporte_combustible, cyrel, gap_de_extremos, costo_cm2, cantidad_cyreles, costo_mp, putilidad, codart, razon, ruc, fecha, nomart
+        horas_produccion, transporte_combustible, cyrel, gap_de_extremos, costo_cm2, cantidad_cyreles, costo_mp, putilidad, codart, razon, ruc, fecha, nomart, calculocs
         FROM data_cotizaciones WHERE num_cotizacion = '{}' and codemp = '{}'
 	      """.format(codCot,codemp)
   curs.execute(sql)
@@ -4631,7 +4649,7 @@ def get_cotizador():
         'gap_extremos', 'tipo', 'filas', 'numero_bobinas', 'cantidad_rollos', 'pvp_impresion', 'pvp_kores',
         'cold_stamping', 'relam_delam', 'costo_laminado_mate', 'costo_laminado_brillante', 'pvp_troquel',
         'horas_produccion', 'transporte_combustible', 'cyrel', 'gap_de_extremos', 'costo_cm2', 'cantidad_cyreles', 'costomp', 
-        'utilidad', 'codart', 'razon', 'ruc', 'fecha', 'nomart' 
+        'utilidad', 'codart', 'razon', 'ruc', 'fecha', 'nomart' , 'calculocs'
     ]
   
   if r[3] == '' or None:
@@ -4652,9 +4670,13 @@ def get_cotizador():
     cyrel = True
   else:
     cyrel = False
+  if r[35] == 'X':
+    cs = True
+  else:
+    cs = False
     
   art = (r[0], r[1], r[2], si, color, r[5], r[6], r[7], r[8], r[9], r[10], tipo, r[12], r[13], r[14], r[15], r[16],
-   r[17], r[18], r[19], r[20], r[21], r[22], r[23], cyrel, r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34])
+   r[17], r[18], r[19], r[20], r[21], r[22], r[23], cyrel, r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], cs)
   d = dict(zip(campos, art))
 
   response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))

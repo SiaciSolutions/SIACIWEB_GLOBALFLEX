@@ -117,6 +117,7 @@ export class AdminCotizadorComponent implements OnInit {
 	almacen
 	
 	///USADOS
+	calculocs: boolean = false;
 	bandera: boolean = false;
 	currentSection: string = 'ingreso';
 	estado: string;
@@ -334,6 +335,7 @@ export class AdminCotizadorComponent implements OnInit {
 			this.utilidad = data['utilidad']
 			this.codart = data['codart']
 			this.ruc = data['ruc']
+			this.calculocs = data['calculocs']
 			});
 	
 		}	
@@ -641,7 +643,8 @@ export class AdminCotizadorComponent implements OnInit {
 			costo: this.costo,
 			cantidad: this.cantidad,
 			costomp: this.costomp,
-			utilidad: this.utilidad
+			utilidad: this.utilidad,
+			calculoscs: this.calculocs
 		  };
   
 		  this.srv.calcular_cotizacion(datos).subscribe(
@@ -692,7 +695,8 @@ export class AdminCotizadorComponent implements OnInit {
 				putilidad: this.utilidad,
 				razon: this.razon_social,
 				ruc: this.ruc,
-				fecha: formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500')
+				fecha: formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500'),
+				calculocs:  this.calculocs
 		  	};
 	  
 		  	this.srv.generar_cotizacion(datos).subscribe(
@@ -701,6 +705,10 @@ export class AdminCotizadorComponent implements OnInit {
 					console.log(this.estado)
 					this.reset()
 					alert('Cotización generada con éxito')
+					let datos={}
+					datos['usuario'] = this.usuario
+					datos['empresa'] = this.empresa
+					this.router.navigate(['/admin/lista_cotizaciones', datos]);
 				}
 			)
    		}else{
@@ -748,7 +756,8 @@ export class AdminCotizadorComponent implements OnInit {
 				 costomp: this.costomp,
 				 putilidad: this.utilidad,
 				 razon: this.razon_social,
-				 ruc: this.ruc
+				 ruc: this.ruc,
+				 calculocs: this.calculocs
 			   };
 	   
 			   this.srv.actualizar_cotizacion(datos).subscribe(
@@ -757,6 +766,10 @@ export class AdminCotizadorComponent implements OnInit {
 					 console.log(this.estado)
 					 this.reset()
 					 alert('Cotización actualizada con éxito')
+					 let datos={}
+					 datos['usuario'] = this.usuario
+					 datos['empresa'] = this.empresa
+					 this.router.navigate(['/admin/lista_cotizaciones', datos]);
 				 }
 		   )
  
@@ -800,6 +813,7 @@ export class AdminCotizadorComponent implements OnInit {
 		this.nombre_producto = null
 		this.ruc = null
 		this.razon_social = null
+		this.calculocs = null
 	}
 
 	ver_detalle(){
