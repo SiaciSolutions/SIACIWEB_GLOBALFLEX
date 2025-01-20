@@ -79,7 +79,7 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	public patron_cliente
 	public razon_social_lista
 	public edit_iva_art
-	src = "../../assets/img_articulos/subir-imagen.png"
+	src = "../../assets/idfichaimg_articulos/subir-imagen.png"
 	exist_fecha_entrega = true
 	// fecha_entrega = undefined
 	fecha_entrega = new FormControl(new Date());
@@ -87,7 +87,6 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	condiciones_pago = null
 	tiempo_entrega = null
 	info_adicional = null
-
 
 	
 	
@@ -101,7 +100,7 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	patron_articulo = '';
 	cantidad_nueva = '';
 	ciudad
-	vendedor = '01'
+	vendedor : string = 'VENDEDOR GENERAL'
 
 	// editART: ARTICULO
 	editART: any = []
@@ -119,30 +118,37 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	public edit_articulos
 	
 	numtra
-	codIngProd
+	idficha
 	accion_actualizar = false
 	almacenes_lista
 	almacen
 	
 	// INGENIERIA PRODUCTO
 	nombre_comercial: string;
-	referencia: string;
-	medida_alto: number;
-	medida_ancho: number;
-	proveedor: string;
-	impresora: string;
-	bobinadora: string = null;
-	material_imprimir: string;
-	ancho_material: number;
-	cilindro: string;
-	cortador: string;
-	color_seleccionado: string;
-	rep_des: string;
-	filas: number;
-	columnas: number;
-	formato_seleccionado: string;
-	cilindro_cod: string = null;
-	troquel_plano_cod: string = null;
+	contacto: string = null;
+	producto: string = null;
+	buffer: string = null;
+	proveedor: string = null;
+	enviado_por: string = null;
+	nombre_vendedor: string = null;
+	nombre_etiqueta: string = null; 
+	orden_venta: string = null;
+	enviado_a: string = null;
+
+	
+	mat_prima1: string = null;
+	mat_prima2: string = null;
+	maquina: string = null;
+	ancho: number  = null;
+	troquel: string = null;
+	no_cilindro: number = null;
+	gap_ancho: number = null;
+	rep_ancho: number = null;
+	avance :number = null;
+	desarrollo_cilindro: number = null;
+	gap_avance: number = null;
+
+	//binarios
 	uv_total: boolean; 
 	uv_sobre_impr: boolean;
 	uv_select: boolean;
@@ -156,16 +162,19 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	primario_M: boolean;
 	primario_Y: boolean;
 	primario_K: boolean;
-	
-	pantone_1: string = null;
-	pantone_2: string = null;
-	pantone_3: string = null;
-	pantone_4: string = null;
-	pantone_5: string = null;
-	pantone_6: string = null;
-	pantone_7: string = null;
+	//fin binarios
 
-	anilox_vC: number = null;
+	rep_avance: number = null;
+	tipo: string = null;
+	forma: string = null;
+	tipo_impresion_ex: string = 'EXTERIOR';
+	muestra:string = 'NO';
+	corte_seg: string = null;
+	layflat: number = null;
+	ancho_rollo: number = null;
+
+	
+	//SECCION NUMERO
 	anilox_vM: number = null;
 	anilox_vY: number = null;
 	anilox_vK: number = null;
@@ -176,17 +185,22 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	anilox_5: number = null;
 	anilox_6: number = null;
 	anilox_7: number = null ;
-	prov_fabricante_vC: string = null;
-	prov_fabricante_vM: string = null;
-	prov_fabricante_vY: string = null;
-	prov_fabricante_vK: string = null;
-	prov_fabricante_1: string = null;
-	prov_fabricante_2: string = null;
-	prov_fabricante_3: string = null;
-	prov_fabricante_4: string = null;
-	prov_fabricante_5: string = null;
-	prov_fabricante_6: string = null;
-	prov_fabricante_7: string = null;
+
+
+	existe_cliche: string='SI'; 
+	etiq_fila_cliente: string = null;
+	etiq_fila_produccion: string = null;
+	tipo_tinta: string = null;
+	tipo_corte: string = null;
+	acabado1: string = null;
+	acabado2: string = null;
+	acabado3: string = null;
+	acabado4: string = null;
+	observacion: string = null;
+	
+
+	//SECCION SIN USO
+
 	tinta_sticky_vC: string = null;
 	tinta_sticky_vM: string = null;
 	tinta_sticky_vY: string = null;
@@ -198,13 +212,15 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	tinta_sticky_5: string = null;
 	tinta_sticky_6: string = null;
 	tinta_sticky_7: string = null;
-	tipo_dispensado: string;
+
+
 	diametro_rollo: number = null;
 	peso_rollo: number = null;
 	medida_dispensado: number = null;
 	taca: string;
-	embobinado_ext_seleccionado: string;
-	embobinado_interior_seleccionado: string;
+	//SECCION SIN USO
+	embon_ext: string = 'NO APLICA';
+	embon_int: string = 'NO APLICA';
 	
 	//VARIABLES PARA CARGAR LA IMAGEN
 	loading
@@ -223,9 +239,9 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	formData:any
 
 	///////////7
-	ejecutivo_ventas: string;
-	impreso_res: string;
-	supervisador_res: string;
+	requiere_cliche: string = 'NO';
+	solicitado_por: string = null;
+	autorizado_por: string = null;
 	jefe_prod: string;
 
     tiptra
@@ -240,6 +256,16 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		{"color_ls": "6", "nom_doc": "6"},
 		{"color_ls": "7", "nom_doc": "7"}
 	];
+
+	public impresion_ex_lista = [
+		{"tipo_impresion_ex": "EXTERIOR"},
+		{"tipo_impresion_ex": "INTERIOR"}
+	];
+	public lista_si_no = [
+		{"valor": "SI"},
+		{"valor": "NO"}
+	];
+
 	
 	
 	public formato_etiqueta = [
@@ -275,7 +301,8 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		{"emboext_ls": "R5", "nom_doc": "R5"},
 		{"emboext_ls": "R6", "nom_doc": "R6"},
 		{"emboext_ls": "R7", "nom_doc": "R7"},
-		{"emboext_ls": "R8", "nom_doc": "R8"}
+		{"emboext_ls": "R8", "nom_doc": "R8"},
+		{"emboext_ls": "NO APLICA", "nom_doc": "NO APLICA"}
 	];
 
 	public emboint_lista = [
@@ -287,11 +314,14 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		{"emboint_ls": "R106", "nom_doc": "R106"},
 		{"emboint_ls": "R107", "nom_doc": "R107"},
 		{"emboint_ls": "R108", "nom_doc": "R108"},
-		{"emboint_ls": "NO", "nom_doc": "NO APLICA"}
+		{"emboint_ls": "NO APLICA", "nom_doc": "NO APLICA"}
 	];
 
 
   tipo_doc
+  //tipo_impresion_ex:string = 'EXTERIOR'
+ // muestra:string = 'NO'
+  //existe_cliche:string='SI'
 
   constructor(
   private router: Router, 
@@ -331,11 +361,11 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			// this.ruc = +params['ruc'] || 0;
 			this.usuario = params['usuario'] || this.route.snapshot.paramMap.get('usuario') || 0;
 			this.empresa = params['empresa'] || this.route.snapshot.paramMap.get('empresa') || 0;
-			this.codIngProd = params['codIngProd'] || this.route.snapshot.paramMap.get('codIngProd') || 0;
+			this.idficha = params['idficha'] || this.route.snapshot.paramMap.get('idficha') || 0;
 			
 			console.log("LUEGO DE ENTRADA")
-		if (this.codIngProd == 0){
-			this.codIngProd = undefined
+		if (this.idficha == 0){
+			this.idficha = undefined
 			this.accion_actualizar = false
 			window.scrollTo(0,0);
 			this.ingProducto_nuevo()
@@ -350,7 +380,7 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		
 		console.log(this.usuario)
 		console.log(this.empresa)
-		console.log(this.codIngProd)
+		console.log(this.idficha)
 		
 		
 		
@@ -367,6 +397,8 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	AdminLTE.init();
 	
 	}
+
+/* 	vendedores_ficha_tecnica */
 	
 	//BUSQUEDA DE CLIENTE
 	busqueda_razon_social() { 
@@ -449,6 +481,8 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		this.iva_porcentaje = iva_defecto
 		});
 		
+
+
 		
 	////PARA RESPONSABLES FIRMAS
 		const datos = {};
@@ -467,6 +501,15 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			   console.log("RESPONSABLE IMPRESION LISTA")
 			   console.log(this.impresor_lista)
 			});
+
+	////PARA LISTAR LOS VENDEDORES 
+	this.srv.vendedores_ficha_tecnica(datos).subscribe(data => {
+		console.log ("**** VENDEDORES SIACI***")
+		console.log (data)
+		this.vendedores_lista = data
+
+
+	});
 			
 /* 		this.srv.supervisor(datos).subscribe(
 			data => {
@@ -521,6 +564,15 @@ export class AdminFichaPreprensaComponent implements OnInit {
 				console.log(this.impresor_lista)
 			 });
 
+		////PARA LISTAR LOS VENDEDORES 
+		this.srv.vendedores_ficha_tecnica(datos).subscribe(data => {
+			console.log ("**** VENDEDORES SIACI***")
+			console.log (data)
+			this.vendedores_lista = data
+
+
+		});
+
 
 /* 		this.srv.supervisor(datos).subscribe(
 			data => {
@@ -544,26 +596,26 @@ export class AdminFichaPreprensaComponent implements OnInit {
 					console.log(this.jefe_produccion_lista)
 				}); */
 
-		this.buscar_encabezado_ingProducto();
+		this.buscar_ficha_tecnica_preprensa();
 	}
 
 	
-	buscar_encabezado_ingProducto() {
+	buscar_ficha_tecnica_preprensa() {
 	const datos = {};
 	datos['codemp'] = this.empresa;	
 	datos['usuario'] = this.usuario;
-	datos['codIngProd'] = this.codIngProd;
+	datos['idficha'] = this.idficha;
 	
 	
-	this.srv.get_ing_producto(datos).subscribe(data => {
+	this.srv.get_ficha_tecnica_preprensa(datos).subscribe(data => {
 		console.log(data)
 		console.log ("EJECUTADA DATA CONSULTA ING_PROD")
 		
-		// usuario = data['num_pedido']
+		 // usuario = data['num_pedido']
 		this.clientes = true;
 
 		// this.fectra = data['fectra']
-		let fecha = new Date(data['fecIngProd'])
+		let fecha = new Date(data['fecha'])
 		//PARA COLOCAR LA FECHA CORRECTA Y NO LA FECHA -1
 		fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset())
 		console.log("***** FECHA DE BASE DE DATOS CORREGIDA *****")
@@ -579,103 +631,66 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		// this.fecult = data['fecult']
 		this.razon_social = data['razon_social']
 		this.ruc = data['ruc']
-		this.nombre_comercial= data['nombre_comercial']
-		this.referencia = data['referencia']
-		this.medida_alto= data['medida_alto']
-		this.medida_ancho = data['medida_ancho']
+	//	this.nombre_comercial= data['nombre_comercial']
+		this.contacto = data['contacto']
+		this.producto= data['producto']
+		this.buffer = data['buffer']
 		this.proveedor = data['proveedor']
-		this.impresora = data['impresora']
-		this.bobinadora = data['bobinadora']
-		this.material_imprimir = data['material_imprimir']
-		this.ancho_material = data['ancho_material']
+		this.enviado_por = data['enviado_por']
+		this.nombre_etiqueta = data['nombre_etiqueta']
+		this.orden_venta = data['orden_venta']
+		this.enviado_a = data['enviado_a']
 
-		this.cilindro = data['cilindro']
-		this.cortador = data['cortador']
-		this.color_seleccionado = data['color_seleccionado']
-		this.rep_des = data['rep_des']
-		this.filas = data['filas']
-		this.columnas = data['columnas']
-		this.formato_seleccionado = data['formato_seleccionado']
-		this.cilindro_cod = data['cilindro_cod']
-		this.troquel_plano_cod = data['troquel_plano_cod']
-		this.uv_total = data['uv_total'] === 'SI';
-		this.uv_sobre_impr = data['uv_sobre_impr'] === 'SI';
-		this.uv_select = data['uv_select'] === 'SI';
-		this.relam_delam = data['relam_delam'] === 'SI';
-		this.hot_stamping = data['hot_stamping_acabados'] === 'SI';
-		this.cold_foil = data['cold_foil'] === 'SI';
-		this.repujado_ing_prod = data['repujado'] === 'SI';
-		this.lami_mate = data['laminado_mate'] === 'SI';
-		this.laminado_brillan = data['laminado_brillan'] === 'SI';
+		this.mat_prima1 = data['mat_prima1']
+		this.mat_prima2 = data['mat_prima2']
+		this.maquina = data['maquina']
+		this.ancho = data['ancho']
+		this.no_cilindro = data['no_cilindro']
+		this.gap_ancho = data['gap_ancho']
+		this.avance = data['avance']
+		this.desarrollo_cilindro = data['desarrollo_cilindro']
+		this.gap_avance = data['gap_avance']
 
-		this.primario_C = data['primario_C'] === 'SI';
-		this.primario_M = data['primario_M'] === 'SI';
-		this.primario_K = data['primario_K'] === 'SI';
-		this.primario_Y = data['primario_Y'] === 'SI';
-		this.pantone_1 = data['pantone_1']
-		this.pantone_2 = data['pantone_2']
-		this.pantone_3 = data['pantone_3']
-		this.pantone_4 = data['pantone_4']
-		this.pantone_5 = data['pantone_5']
-		this.pantone_6 = data['pantone_6']
-		this.pantone_7 = data['pantone_7']
-
-		this.anilox_vC = data['anilox_vC'] === 0 ? '' : data['anilox_vC'];
-		this.anilox_vM = data['anilox_vM'] === 0 ? '' : data['anilox_vM'];
-		this.anilox_vY = data['anilox_vY'] === 0 ? '' : data['anilox_vY'];
-		this.anilox_vK = data['anilox_vK'] === 0 ? '' : data['anilox_vK'];
-		this.anilox_1 = data['anilox_1']
-		this.anilox_2 = data['anilox_2']
-		this.anilox_3 = data['anilox_3']
-		this.anilox_4 = data['anilox_4']
-		this.anilox_5 = data['anilox_5']
-		this.anilox_6 = data['anilox_6']
-		this.anilox_7 = data['anilox_7']
-			
-		this.prov_fabricante_vC = data['prov_fabricante_vC']
-		this.prov_fabricante_vM = data['prov_fabricante_vM']
-		this.prov_fabricante_vY = data['prov_fabricante_vY']
-		this.prov_fabricante_vK = data['prov_fabricante_vK']
-		this.prov_fabricante_1 = data['prov_fabricante_1']
-		this.prov_fabricante_2 = data['prov_fabricante_2']
-		this.prov_fabricante_3 = data['prov_fabricante_3']
-		this.prov_fabricante_4 = data['prov_fabricante_4']
-		this.prov_fabricante_5 = data['prov_fabricante_5']
-		this.prov_fabricante_6 = data['prov_fabricante_6']
-		this.prov_fabricante_7 = data['prov_fabricante_7']
-
-		this.tinta_sticky_vC = data['tinta_sticky_vC']
-		this.tinta_sticky_vM = data['tinta_sticky_vM']
-		this.tinta_sticky_vY = data['tinta_sticky_vY']
-		this.tinta_sticky_vK = data['tinta_sticky_vK']
-		this.tinta_sticky_1 = data['tinta_sticky_1']
-		this.tinta_sticky_2 = data['tinta_sticky_2']
-		this.tinta_sticky_3 = data['tinta_sticky_3']
-		this.tinta_sticky_4 = data['tinta_sticky_4']
-		this.tinta_sticky_5 = data['tinta_sticky_5']
-		this.tinta_sticky_6 = data['tinta_sticky_6']
-		this.tinta_sticky_7 = data['tinta_sticky_7']
-			
-		this.tipo_dispensado = data['tipo_dispensado']
-		this.diametro_rollo = data['diametro_rollo']
-		this.peso_rollo = data['peso_rollo']
-		this.medida_dispensado = data['medida_dispensado']
-		this.taca = data['taca']
-			
-		this.embobinado_ext_seleccionado = data['embobinado_ext_seleccionado']
-		this.embobinado_interior_seleccionado = data['embobinado_interior_seleccionado'];
 		
-		this.src = data['ruta_img']
+		///// fin candidato binarios
+		this.rep_avance = data['rep_avance']
+		this.tipo = data['tipo']
+		this.forma = data['forma']
+		this.tipo_impresion_ex = data['tipo_impresion_ex']
+		this.muestra = data['muestra']
+		this.corte_seg = data['corte_seg']
+		this.layflat = data['layflat']
 
-		this.ejecutivo_ventas = data['ejecutivo_ventas']
-		this.impreso_res = data['impreso_res']
-		this.supervisador_res = data['supervisador_res']
+		this.ancho_rollo = data['ancho_rollo'] === 0 ? '' : data['ancho_rollo'];
+		
+			
+		this.existe_cliche = data['existe_cliche']
+		this.etiq_fila_cliente = data['etiq_fila_cliente']
+		this.etiq_fila_produccion = data['etiq_fila_produccion']
+		this.tipo_tinta = data['tipo_tinta']
+		this.tipo_corte = data['tipo_corte']
+		this.acabado1 = data['acabado1']
+		this.acabado2 = data['acabado2']
+		this.acabado3 = data['acabado3']
+		this.acabado4 = data['acabado4']
+		this.observacion = data['observacion']
+		this.troquel = data['troquel']
+		this.embon_ext = data['embon_ext']
+		this.embon_int = data['embon_int'];
+		this.vendedor = data['vendedor'];
+		this.rep_ancho = data['rep_ancho']
+		
+		
+
+		this.requiere_cliche = data['requiere_cliche']
+		this.solicitado_por = data['solicitado_por']
+		this.autorizado_por = data['autorizado_por']
 		this.jefe_prod = data['jefe_prod']
 
-		this.dato_cliente= {"nomcli":this.razon_social,"CodIngProd":this.codIngProd}
-		console.log ("****** DATO CLIENTE *******")
-		console.log (this.dato_cliente)
-
+		this.dato_cliente= {"nomcli":this.razon_social,"idficha":this.idficha}
+	//	console.log ("****** DATO CLIENTE *******")
+	//	console.log (this.dato_cliente)
+ 
 		});
 
 	}//  FIN BUSCAR ING. DE PRODUCTO
@@ -684,18 +699,18 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	reset_valores_inferiores(valor){
 		console.log ("###### RESET VALORES #####")
 		console.log (valor)
-		console.log (this.pantone_1)
+		console.log (this.rep_avance)
 
 
-/* 		pantone_1: string = null;
-	pantone_2: string = null;
-	pantone_3: string = null;
-	pantone_4: string = null;
-	pantone_5: string = null;
-	pantone_6: string = null;
-	pantone_7: string = null;
+/* 		rep_avance: string = null;
+	tipo: string = null;
+	forma: string = null;
+	tipo_impresion_ex: string = null;
+	muestra: string = null;
+	corte_seg: string = null;
+	layflat: string = null;
 
-	anilox_vC: number = null;
+	ancho_rollo: number = null;
 	anilox_vM: number = null;
 	anilox_vY: number = null;
 	anilox_vK: number = null;
@@ -706,17 +721,17 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	anilox_5: number = null;
 	anilox_6: number = null;
 	anilox_7: number = null ;
-	prov_fabricante_vC: string = null;
-	prov_fabricante_vM: string = null;
-	prov_fabricante_vY: string = null;
-	prov_fabricante_vK: string = null;
-	prov_fabricante_1: string = null;
-	prov_fabricante_2: string = null;
-	prov_fabricante_3: string = null;
-	prov_fabricante_4: string = null;
-	prov_fabricante_5: string = null;
-	prov_fabricante_6: string = null;
-	prov_fabricante_7: string = null;
+	existe_cliche: string = null;
+	etiq_fila_cliente: string = null;
+	etiq_fila_produccion: string = null;
+	tipo_tinta: string = null;
+	tipo_corte: string = null;
+	acabado1: string = null;
+	acabado2: string = null;
+	acabado3: string = null;
+	acabado4: string = null;
+	observacion: string = null;
+	rep_ancho: string = null;
 	tinta_sticky_vC: string = null;
 	tinta_sticky_vM: string = null;
 	tinta_sticky_vY: string = null;
@@ -729,63 +744,26 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	tinta_sticky_6: string = null;
 	tinta_sticky_7: string = null;
  */
-		if (!this.primario_C && valor=='primario_C'){
-			this.anilox_vC = null
-			this.prov_fabricante_vC = null
+	/*	if (!this.primario_C && valor=='primario_C'){
+			this.ancho_rollo = null
+			this.existe_cliche = null
 			this.tinta_sticky_vC = null
 		}
 		if (!this.primario_M && valor=='primario_M'){
 			this.anilox_vM = null
-			this.prov_fabricante_vM = null
+			this.etiq_fila_cliente = null
 			this.tinta_sticky_vM = null
 		}
 		if (!this.primario_Y && valor=='primario_Y'){
 			this.anilox_vY = null
-			this.prov_fabricante_vY = null
+			this.etiq_fila_produccion = null
 			this.tinta_sticky_vY = null
 		}
 		if (!this.primario_K && valor=='primario_K'){
 			this.anilox_vK = null
-			this.prov_fabricante_vK = null
+			this.tipo_tinta = null
 			this.tinta_sticky_vK = null
-		}
-		if((!this.pantone_1 || this.pantone_1.trim() === '') && valor == 'pantone_1' ){
-			this.anilox_1 = null
-			this.prov_fabricante_1 = null
-			this.tinta_sticky_1 = null
-		}
-		if((!this.pantone_2 || this.pantone_2.trim() === '') && valor == 'pantone_2' ){
-			this.anilox_2 = null
-			this.prov_fabricante_2 = null
-			this.tinta_sticky_2 = null
-		}
-		if((!this.pantone_3 || this.pantone_3.trim() === '') && valor == 'pantone_3' ){
-			this.anilox_3 = null
-			this.prov_fabricante_3 = null
-			this.tinta_sticky_3 = null
-		}
-		if((!this.pantone_4 || this.pantone_4.trim() === '') && valor == 'pantone_4' ){
-			this.anilox_4 = null
-			this.prov_fabricante_4 = null
-			this.tinta_sticky_4 = null
-		}
-		if((!this.pantone_5 || this.pantone_5.trim() === '') && valor == 'pantone_5' ){
-			this.anilox_5 = null
-			this.prov_fabricante_5 = null
-			this.tinta_sticky_5 = null
-		}
-		if((!this.pantone_6|| this.pantone_6.trim() === '') && valor == 'pantone_6' ){
-			this.anilox_6 = null
-			this.prov_fabricante_6 = null
-			this.tinta_sticky_6 = null
-		}
-		if((!this.pantone_7|| this.pantone_7.trim() === '') && valor == 'pantone_7' ){
-			this.anilox_7 = null
-			this.prov_fabricante_7 = null
-			this.tinta_sticky_7 = null
-		}
-
-
+		}*/
 	}
 	
 	formato_fecha (fecha){
@@ -884,10 +862,10 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		this.formData.append("uploads", this.uploadedFiles, this.nombre_archivo);
 		// this.formData.append("dir",this.empresa+"_"+this.numtra);
 		this.formData.append("codemp",this.empresa);
-		this.formData.append("codIngProd",this.codIngProd);
+		this.formData.append("idficha",this.idficha);
 		
 		console.log ("##### COD ING PRODUCTO #######")
-		console.log(this.codIngProd);
+		console.log(this.idficha);
 		this.loading = true
 
 		
@@ -950,101 +928,101 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		//	alert("Por favor, ingresar el nombre comercial.")
 		//	return false;
 		//}
-		else if(!this.referencia){
-			alert("Por favor, ingresar la referencia.")
+/* 		else if(!this.contacto){
+			alert("Por favor, ingresar la contacto.")
+			return false;
+		} */
+		else if(!this.producto){
+			alert("Por favor, ingresar el PRODUCTO.")
 			return false;
 		}
-		else if(!this.medida_alto || this.medida_alto == 0){
-			alert("Por favor, ingresar la medida de alto.")
-			return false;
-		}
-		else if(!this.medida_ancho || this.medida_ancho == 0){
+/* 		else if(!this.buffer){
 			alert("Por favor, ingresar la medida de ancho.")
 			return false;
-		}
-		else if(!this.proveedor){
+		} */
+/* 		else if(!this.proveedor){
 			alert("Por favor, ingresar el proveedor.")
 			return false;
-		}
-		else if(!this.impresora){
-			alert("Por favor, ingresar la impresora.")
-			return false;
-		}
-/* 		else if(!this.bobinadora){
-			alert("Por favor, ingresar la bobinadora.")
+		} */
+/* 		else if(!this.enviado_por){
+			alert("Por favor, ingresar la enviado_por.")
 			return false;
 		} */
-		else if(!this.material_imprimir){
+/* 		else if(!this.orden_venta){
 			alert("Por favor, ingresar el material a imprmir.")
 			return false;
-		}
-		else if(!this.ancho_material || this.ancho_material == 0){
+		} */
+/* 		else if(!this.enviado_a){
 			alert("Por favor, ingresar el ancho del material.")
 			return false;
-		}
-		else if(!this.cilindro){
-			alert("Por favor, ingresar el cilindro.")
+		} */
+		else if(!this.vendedor){
+			alert("Por favor, ingresar el VENDEDOR.")
 			return false;
 		}
-		else if(!this.cortador){
-			alert("Por favor, ingresar el cortador.")
+ 		else if(!this.mat_prima1){
+			alert("Por favor, ingresar el MATERIA PRIMA 1")
 			return false;
 		}
-		else if(!this.color_seleccionado){
+/* 		else if(!this.mat_prima2){
+			alert("Por favor, ingresar el mat_prima2.")
+			return false;
+		}
+		else if(!this.maquina){
 			alert("Por favor, ingresar el color seleccionado.")
 			return false;
-		}
-		else if(!this.rep_des){
-			alert("Por favor, ingresar el REP. DES.")
-			return false;
-		}
-/* 		else if(!this.filas || this.filas == 0){
-			alert("Por favor, ingresar las filas.")
-			return false;
 		} */
-		else if(!this.columnas || this.columnas == 0){
-			alert("Por favor, ingresar las columnas.")
+		else if(!this.ancho){
+			alert("Por favor, ingresar el ANCHO")
 			return false;
 		}
-		else if(!this.formato_seleccionado){
-			alert("Por favor, ingresar el formato seleccionado.")
+		else if(!this.gap_ancho || this.gap_ancho == 0){
+			alert("Por favor, ingresar las GAP ANCHO")
 			return false;
 		}
-/* 		else if(!this.cilindro_cod){
+		else if(!this.avance){
+			alert("Por favor, ingresar el AVANCE")
+			return false;
+		}
+		else if(!this.rep_ancho){
+			alert("Por favor, ingresar REP ANCHO")
+			return false;
+		}
+/* 		else if(!this.desarrollo_cilindro){
 			alert("Por favor, ingresar el codigo del cilindro.")
 			return false;
 		} */
-/* 		else if(!this.troquel_plano_cod){
+/* 		else if(!this.gap_avance){
 			alert("Por favor, ingresar el codigo del troquel.")
 			return false;
 		} */
 		
 		
-	/* 	else if(!this.pantone_1){
+	/* 	else if(!this.rep_avance){
 			alert("Por favor, ingresar el Pantone 1.")
 			return false;
 		}
-		else if(!this.pantone_2){
+		else if(!this.tipo){
 			alert("Por favor, ingresar el Pantone 2.")
 			return false;
 		}
-		else if(!this.pantone_3){
+		else if(!this.forma){
 			alert("Por favor, ingresar el Pantone 3.")
 			return false;
 		}
-		else if(!this.pantone_4){
+		else if(!this.tipo_impresion_ex){
 			alert("Por favor, ingresar el Pantone 4.")
 			return false;
 		}
-		else if(!this.pantone_5){
+		else if(!this.muestra){
 			alert("Por favor, ingresar el Pantone 5.")
 			return false;
 		}
-		else if(!this.pantone_6){
+		else if(!this.corte_seg){
 			alert("Por favor, ingresar el Pantone 6.")
 			return false;
 		}
-		else if(!this.pantone_7){
+		else if(!this.layflat){
 			alert("Por favor, ingresar el Pantone 7.")
 			return false;
 		}
@@ -1078,67 +1056,34 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			return false;
 		}
 		
-		else if(!this.prov_fabricante_1){
+		else if(!this.tipo_corte){
 			alert("Por favor, ingresar el fabricante 1.")
 			return false;
 		}
-		else if(!this.prov_fabricante_2){
+		else if(!this.acabado1){
 			alert("Por favor, ingresar el fabricante 2.")
 			return false;
 		}
-		else if(!this.prov_fabricante_3){
+		else if(!this.acabado2){
 			alert("Por favor, ingresar el fabricante 3.")
 			return false;
 		}
-		else if(!this.prov_fabricante_4){
+		else if(!this.acabado3){
 			alert("Por favor, ingresar el fabricante 4.")
 			return false;
 		}
-		else if(!this.prov_fabricante_5){
+		else if(!this.acabado4){
 			alert("Por favor, ingresar el fabricante 5.")
 			return false;
 		}
-		else if(!this.prov_fabricante_6){
+		else if(!this.observacion){
 			alert("Por favor, ingresar el fabricante 6.")
 			return false;
 		}
-		else if(!this.prov_fabricante_7){
-			alert("Por favor, ingresar el fabricante 7.")
-			return false;
-		}
-		
-		else if(!this.tinta_sticky_1){
-			alert("Por favor, ingresar el tinta/sticky 1.")
-			return false;
-		}
-		else if(!this.tinta_sticky_2){
-			alert("Por favor, ingresar el tinta/sticky 2.")
-			return false;
-		}
-		else if(!this.tinta_sticky_3){
-			alert("Por favor, ingresar el tinta/sticky 3.")
-			return false;
-		}
-		else if(!this.tinta_sticky_4){
-			alert("Por favor, ingresar el tinta/sticky 4.")
-			return false;
-		}
-		else if(!this.tinta_sticky_5){
-			alert("Por favor, ingresar el tinta/sticky 5.")
-			return false;
-		}
-		else if(!this.tinta_sticky_6){
-			alert("Por favor, ingresar el tinta/sticky 6.")
-			return false;
-		}
-		else if(!this.tinta_sticky_7){
-			alert("Por favor, ingresar el tinta/sticky 7.")
-			return false;
-		} */
-		else if(!this.tipo_dispensado){
+/* 		else if(!this.troquel){
 			alert("Por favor, seleccionar el tipo de dispensado.")
 			return false;
-		}
+		} */
 /* 		else if(!this.diametro_rollo || this.diametro_rollo == 0){
 			alert("Por favor, ingresar el  diametro del rollo.")
 			return false;
@@ -1155,32 +1100,36 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			alert("Por favor, seleccionar Taca.")
 			return false;
 		} */
-		else if(!this.embobinado_ext_seleccionado){
-			alert("Por favor, ingresar el embobinado Exterior.")
+		else if(this.embon_ext == 'NO APLICA' && this.embon_int == 'NO APLICA'){
+			alert("Por favor, ingresar algún tipo de Embobinado")
+			return false;
+		}
+		else if(this.embon_ext != 'NO APLICA' && this.embon_int != 'NO APLICA'){
+			alert("Por favor, Solo debe seleccionar un tipo de Embobinado")
 			return false;
 		}
 		//COMPROBACION DE LA IMAGEN
-		else if (!this.localCompressedURl && !this.localUrl) {
+/* 		else if (!this.localCompressedURl && !this.localUrl) {
 			alert("Por favor, seleccione una imagen.");
 			return false;
-		}
+		} */
 		///
-		else if(!this.ejecutivo_ventas){
+/* 		else if(!this.requiere_cliche){
 			alert("Por favor, ingrese un ejecutivo de ventas.");
 			return false;
-		}
-		else if(!this.impreso_res){
-			alert("Por favor, seleccione un responsable de impresion.");
+		} */
+		else if(!this.solicitado_por){
+			alert("Por favor, seleccione SELECCIONADO POR");
 			return false;
 		}
-		else if(!this.supervisador_res){
-			alert("Por favor, seleccione supervisor responsable.");
+		else if(!this.autorizado_por){
+			alert("Por favor, seleccione AUTORIZADO POR");
 			return false;
 		}
-		else if(!this.jefe_prod){
+/* 		else if(!this.jefe_prod){
 			alert("Por favor, seleccione un jefe de producción.");
 			return false;
-		}
+		} */
 
 		return true
 	}
@@ -1202,15 +1151,15 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		//	alert("Por favor, ingresar el nombre comercial.")
 		//	return false;
 		//}
-		else if(!this.referencia){
-			alert("Por favor, ingresar la referencia.")
+		else if(!this.contacto){
+			alert("Por favor, ingresar la contacto.")
 			return false;
 		}
-		else if(!this.medida_alto || this.medida_alto == 0){
+		else if(!this.producto){
 			alert("Por favor, ingresar la medida de alto.")
 			return false;
 		}
-		else if(!this.medida_ancho || this.medida_ancho == 0){
+		else if(!this.buffer){
 			alert("Por favor, ingresar la medida de ancho.")
 			return false;
 		}
@@ -1218,85 +1167,85 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			alert("Por favor, ingresar el proveedor.")
 			return false;
 		}
-		else if(!this.impresora){
-			alert("Por favor, ingresar la impresora.")
+		else if(!this.enviado_por){
+			alert("Por favor, ingresar la enviado_por.")
 			return false;
 		}
-/* 		else if(!this.bobinadora){
-			alert("Por favor, ingresar la bobinadora.")
+/* 		else if(!this.nombre_etiqueta){
+			alert("Por favor, ingresar la nombre_etiqueta.")
 			return false;
 		} */
-		else if(!this.material_imprimir){
+		else if(!this.orden_venta){
 			alert("Por favor, ingresar el material a imprmir.")
 			return false;
 		}
-		else if(!this.ancho_material || this.ancho_material == 0){
+		else if(!this.enviado_a){
 			alert("Por favor, ingresar el ancho del material.")
 			return false;
 		}
-		else if(!this.cilindro){
-			alert("Por favor, ingresar el cilindro.")
+		else if(!this.mat_prima1){
+			alert("Por favor, ingresar el mat_prima1.")
 			return false;
 		}
-		else if(!this.cortador){
-			alert("Por favor, ingresar el cortador.")
+		else if(!this.mat_prima2){
+			alert("Por favor, ingresar el mat_prima2.")
 			return false;
 		}
-		else if(!this.color_seleccionado){
+		else if(!this.maquina){
 			alert("Por favor, ingresar el color seleccionado.")
 			return false;
 		}
-		else if(!this.rep_des){
+		else if(!this.ancho){
 			alert("Por favor, ingresar el REP. DES.")
 			return false;
 		}
-/* 		else if(!this.filas || this.filas == 0){
-			alert("Por favor, ingresar las filas.")
+/* 		else if(!this.no_cilindro || this.no_cilindro == 0){
+			alert("Por favor, ingresar las no_cilindro.")
 			return false;
 		} */
-		else if(!this.columnas || this.columnas == 0){
-			alert("Por favor, ingresar las columnas.")
+		else if(!this.gap_ancho || this.gap_ancho == 0){
+			alert("Por favor, ingresar las gap_ancho.")
 			return false;
 		}
-		else if(!this.formato_seleccionado){
+		else if(!this.avance){
 			alert("Por favor, ingresar el formato seleccionado.")
 			return false;
 		}
-/* 		else if(!this.cilindro_cod){
+/* 		else if(!this.desarrollo_cilindro){
 			alert("Por favor, ingresar el codigo del cilindro.")
 			return false;
 		} */
-/* 		else if(!this.troquel_plano_cod){
+/* 		else if(!this.gap_avance){
 			alert("Por favor, ingresar el codigo del troquel.")
 			return false;
 		} */
 		
 		
-	/* 	else if(!this.pantone_1){
+	/* 	else if(!this.rep_avance){
 			alert("Por favor, ingresar el Pantone 1.")
 			return false;
 		}
-		else if(!this.pantone_2){
+		else if(!this.tipo){
 			alert("Por favor, ingresar el Pantone 2.")
 			return false;
 		}
-		else if(!this.pantone_3){
+		else if(!this.forma){
 			alert("Por favor, ingresar el Pantone 3.")
 			return false;
 		}
-		else if(!this.pantone_4){
+		else if(!this.tipo_impresion_ex){
 			alert("Por favor, ingresar el Pantone 4.")
 			return false;
 		}
-		else if(!this.pantone_5){
+		else if(!this.muestra){
 			alert("Por favor, ingresar el Pantone 5.")
 			return false;
 		}
-		else if(!this.pantone_6){
+		else if(!this.corte_seg){
 			alert("Por favor, ingresar el Pantone 6.")
 			return false;
 		}
-		else if(!this.pantone_7){
+		else if(!this.layflat){
 			alert("Por favor, ingresar el Pantone 7.")
 			return false;
 		}
@@ -1330,31 +1279,31 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			return false;
 		}
 		
-		else if(!this.prov_fabricante_1){
+		else if(!this.tipo_corte){
 			alert("Por favor, ingresar el fabricante 1.")
 			return false;
 		}
-		else if(!this.prov_fabricante_2){
+		else if(!this.acabado1){
 			alert("Por favor, ingresar el fabricante 2.")
 			return false;
 		}
-		else if(!this.prov_fabricante_3){
+		else if(!this.acabado2){
 			alert("Por favor, ingresar el fabricante 3.")
 			return false;
 		}
-		else if(!this.prov_fabricante_4){
+		else if(!this.acabado3){
 			alert("Por favor, ingresar el fabricante 4.")
 			return false;
 		}
-		else if(!this.prov_fabricante_5){
+		else if(!this.acabado4){
 			alert("Por favor, ingresar el fabricante 5.")
 			return false;
 		}
-		else if(!this.prov_fabricante_6){
+		else if(!this.observacion){
 			alert("Por favor, ingresar el fabricante 6.")
 			return false;
 		}
-		else if(!this.prov_fabricante_7){
+		else if(!this.rep_ancho){
 			alert("Por favor, ingresar el fabricante 7.")
 			return false;
 		}
@@ -1387,7 +1336,7 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			alert("Por favor, ingresar el tinta/sticky 7.")
 			return false;
 		} */
-		else if(!this.tipo_dispensado){
+		else if(!this.troquel){
 			alert("Por favor, seleccionar el tipo de dispensado.")
 			return false;
 		}
@@ -1407,7 +1356,7 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			alert("Por favor, seleccionar Taca.")
 			return false;
 		}
-		else if(!this.embobinado_ext_seleccionado){
+		else if(!this.embon_ext){
 			alert("Por favor, ingresar el embobinado Exterior.")
 			return false;
 		}
@@ -1417,15 +1366,15 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			//return false;
 		//}
 		///
-		else if(!this.ejecutivo_ventas){
+		else if(!this.requiere_cliche){
 			alert("Por favor, ingrese un ejecutivo de ventas.");
 			return false;
 		}
-		else if(!this.impreso_res){
+		else if(!this.solicitado_por){
 			alert("Por favor, seleccione un responsable de impresion.");
 			return false;
 		}
-		else if(!this.supervisador_res){
+		else if(!this.autorizado_por){
 			alert("Por favor, seleccione supervisor responsable.");
 			return false;
 		}
@@ -1437,225 +1386,149 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		return true
 	}
 
-   	generar_ing_producto() {
+	generar_ficha_tecnica_preprensa() {
+		
 	   if (this.validar_datos()){   
 		
-			let encabezado_ing_prod= this.dato_cliente
+			let encabezado_ficha_tec_preprensa= {}
 			//********PRIMER CUADRO */
-			encabezado_ing_prod['codemp'] = this.empresa;
-			encabezado_ing_prod['fecIngProd'] = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500');
-			encabezado_ing_prod['razon_social'] = this.razon_social;
-			encabezado_ing_prod['ruc'] = this.ruc;
-			//encabezado_ing_prod['nombre_comercial'] = this.nombre_comercial;
-			encabezado_ing_prod['nombre_comercial'] = this.razon_social;
-			encabezado_ing_prod['referencia'] = this.referencia;
-			encabezado_ing_prod['medida_alto'] = this.medida_alto;
-			encabezado_ing_prod['medida_ancho'] = this.medida_ancho;
-			encabezado_ing_prod['proveedor'] = this.proveedor;
-			encabezado_ing_prod['impresora'] = this.impresora;
-			encabezado_ing_prod['bobinadora'] = this.bobinadora;
-			encabezado_ing_prod['material_imprimir'] = this.material_imprimir;
-			encabezado_ing_prod['ancho_material'] = this.ancho_material;
+			encabezado_ficha_tec_preprensa['codemp'] = this.empresa;
+			encabezado_ficha_tec_preprensa['fecIngProd'] = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500');
+			encabezado_ficha_tec_preprensa['razon_social'] = this.razon_social;
+			encabezado_ficha_tec_preprensa['ruc'] = this.ruc;
+			//encabezado_ficha_tec_preprensa['nombre_comercial'] = this.nombre_comercial;
+			encabezado_ficha_tec_preprensa['contacto'] = this.contacto;
+			encabezado_ficha_tec_preprensa['producto'] = this.producto;
+			encabezado_ficha_tec_preprensa['buffer'] = this.buffer;
+			encabezado_ficha_tec_preprensa['proveedor'] = this.proveedor;
+			encabezado_ficha_tec_preprensa['enviado_por'] = this.enviado_por;
+			encabezado_ficha_tec_preprensa['nombre_etiqueta'] = this.nombre_etiqueta;
+			encabezado_ficha_tec_preprensa['orden_venta'] = this.orden_venta;
+			encabezado_ficha_tec_preprensa['enviado_a'] = this.enviado_a;
 
 			//**********SEGUNDO CUADRO */
-			encabezado_ing_prod['cilindro'] = this.cilindro;
-			encabezado_ing_prod['cortador'] = this.cortador;
-			encabezado_ing_prod['color_seleccionado'] = this.color_seleccionado;
-			encabezado_ing_prod['rep_des'] = this.rep_des;
-			encabezado_ing_prod['filas'] = this.filas;
-			encabezado_ing_prod['columnas'] = this.columnas;
-			encabezado_ing_prod['formato_seleccionado'] = this.formato_seleccionado;
-			encabezado_ing_prod['cilindro_cod'] = this.cilindro_cod;
-			encabezado_ing_prod['troquel_plano_cod'] = this.troquel_plano_cod;
-			//encabezado_ing_prod['uv_total'] = this.uv_total
-			encabezado_ing_prod['uv_total'] = this.uv_total ? 'SI' : 'NO';
-			encabezado_ing_prod['uv_sobre_impr'] = this.uv_sobre_impr ? 'SI' : 'NO';
-			encabezado_ing_prod['uv_select'] = this.uv_select ? 'SI' : 'NO';
-			encabezado_ing_prod['relam_delam'] = this.relam_delam ? 'SI' : 'NO';
-			encabezado_ing_prod['hot_stamping_acabados'] = this.hot_stamping ? 'SI' : 'NO';
-			encabezado_ing_prod['cold_foil'] = this.cold_foil ? 'SI' : 'NO';
-			encabezado_ing_prod['repujado'] = this.repujado_ing_prod ? 'SI' : 'NO';
-			encabezado_ing_prod['laminado_mate'] = this.lami_mate ? 'SI' : 'NO';
-			encabezado_ing_prod['laminado_brillan'] = this.laminado_brillan ? 'SI' : 'NO';
+ 			encabezado_ficha_tec_preprensa['mat_prima1'] = this.mat_prima1;
+			encabezado_ficha_tec_preprensa['mat_prima2'] = this.mat_prima2;
+			encabezado_ficha_tec_preprensa['maquina'] = this.maquina;
+			encabezado_ficha_tec_preprensa['ancho'] = this.ancho;
+			encabezado_ficha_tec_preprensa['no_cilindro'] = this.no_cilindro;
+			encabezado_ficha_tec_preprensa['troquel'] = this.troquel;
+			encabezado_ficha_tec_preprensa['gap_ancho'] = this.gap_ancho;
+			encabezado_ficha_tec_preprensa['rep_ancho'] = this.rep_ancho;
+			encabezado_ficha_tec_preprensa['avance'] = this.avance;
+			encabezado_ficha_tec_preprensa['desarrollo_cilindro'] = this.desarrollo_cilindro;
+			encabezado_ficha_tec_preprensa['gap_avance'] = this.gap_avance;
+			encabezado_ficha_tec_preprensa['rep_avance'] = this.rep_avance;
+			encabezado_ficha_tec_preprensa['layflat'] = this.layflat;
+			encabezado_ficha_tec_preprensa['ancho_rollo'] = this.ancho_rollo;
+
+			encabezado_ficha_tec_preprensa['tipo'] = this.tipo;
+			encabezado_ficha_tec_preprensa['forma'] = this.forma;
+			encabezado_ficha_tec_preprensa['tipo_impresion_ex'] = this.tipo_impresion_ex;
+			encabezado_ficha_tec_preprensa['muestra'] = this.muestra;
+			encabezado_ficha_tec_preprensa['corte_seg'] = this.corte_seg;
+
+
 			
-			//*****TABLA PRIMARIOS Y COLORES PLANOS**********
-			encabezado_ing_prod['primario_C'] = this.primario_C ? 'SI' : 'NO';
-			encabezado_ing_prod['primario_M'] = this.primario_M ? 'SI' : 'NO';
-			encabezado_ing_prod['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
-			encabezado_ing_prod['primario_K'] = this.primario_K ? 'SI' : 'NO';
-			encabezado_ing_prod['pantone_1'] = this.pantone_1;
-			encabezado_ing_prod['pantone_2'] = this.pantone_2;
-			encabezado_ing_prod['pantone_3'] = this.pantone_3;
-			encabezado_ing_prod['pantone_4'] = this.pantone_4;
-			encabezado_ing_prod['pantone_5'] = this.pantone_5;
-			encabezado_ing_prod['pantone_6'] = this.pantone_6;
-			encabezado_ing_prod['pantone_7'] = this.pantone_7;
+/* 			if(this.desarrollo_cilindro){
+				encabezado_ficha_tec_preprensa['desarrollo_cilindro'] = this.desarrollo_cilindro;
+			}else{
+				encabezado_ficha_tec_preprensa['desarrollo_cilindro'] = 0;
+			} */
+			
+			
+						
+			/* if(this.layflat){
+				encabezado_ficha_tec_preprensa['layflat'] = this.layflat; 
+			}else{
+				encabezado_ficha_tec_preprensa['layflat']  = 0;
+			}
+
+			if(this.ancho_rollo){
+				encabezado_ficha_tec_preprensa['ancho'] = this.ancho; 
+			}else{
+				encabezado_ficha_tec_preprensa['ancho']  = 0;
+			}
 			//SEGUNDA FILA
-			if(this.anilox_vC){
-				encabezado_ing_prod['anilox_vC'] = this.anilox_vC;
+			if(this.ancho_rollo){
+				encabezado_ficha_tec_preprensa['ancho_rollo'] = this.ancho_rollo;
 			}else{
-				encabezado_ing_prod['anilox_vC'] = 0;
-			}
-			if(this.anilox_vM){
-				encabezado_ing_prod['anilox_vM'] = this.anilox_vM;
-			}else{
-				encabezado_ing_prod['anilox_vM'] = 0;
-			}
-			if(this.anilox_vY){
-				encabezado_ing_prod['anilox_vY'] = this.anilox_vY;
-			}else{
-				encabezado_ing_prod['anilox_vY'] = 0;
-			}
-			if(this.anilox_vK){
-				encabezado_ing_prod['anilox_vK'] = this.anilox_vK;
-			}else{
-				encabezado_ing_prod['anilox_vK'] = 0;
-			}
-			encabezado_ing_prod['anilox_1'] = this.anilox_1;
-			encabezado_ing_prod['anilox_2'] = this.anilox_2;
-			encabezado_ing_prod['anilox_3'] = this.anilox_3;
-			encabezado_ing_prod['anilox_4'] = this.anilox_4;
-			encabezado_ing_prod['anilox_5'] = this.anilox_5;
-			encabezado_ing_prod['anilox_6'] = this.anilox_6;
-			encabezado_ing_prod['anilox_7'] = this.anilox_7;
-			//TERCERA FILA
-			if(this.prov_fabricante_vC){
-				encabezado_ing_prod['prov_fabricante_vC'] = this.prov_fabricante_vC;
+				encabezado_ficha_tec_preprensa['ancho_rollo'] = 0;
+			} */
+	
+			if(this.existe_cliche){
+				encabezado_ficha_tec_preprensa['existe_cliche'] = this.existe_cliche;
 				
 			}else{
-				encabezado_ing_prod['prov_fabricante_vC'] = null;
+				encabezado_ficha_tec_preprensa['existe_cliche'] = null;
 			}
 
-			if(this.prov_fabricante_vM){
-				encabezado_ing_prod['prov_fabricante_vM'] = this.prov_fabricante_vM;
+			if(this.etiq_fila_cliente){
+				encabezado_ficha_tec_preprensa['etiq_fila_cliente'] = this.etiq_fila_cliente;
 				
 			}else{
-				encabezado_ing_prod['prov_fabricante_vM'] = null;
+				encabezado_ficha_tec_preprensa['etiq_fila_cliente'] = null;
 			}
 
-			if(this.prov_fabricante_vY){
-				encabezado_ing_prod['prov_fabricante_vY'] = this.prov_fabricante_vY;
+			if(this.etiq_fila_produccion){
+				encabezado_ficha_tec_preprensa['etiq_fila_produccion'] = this.etiq_fila_produccion;
 			}else{
-				encabezado_ing_prod['prov_fabricante_vY'] = null;	
+				encabezado_ficha_tec_preprensa['etiq_fila_produccion'] = null;	
 			}
 
-			if(this.prov_fabricante_vK){
-				encabezado_ing_prod['prov_fabricante_vK'] = this.prov_fabricante_vK;
+			if(this.tipo_tinta){
+				encabezado_ficha_tec_preprensa['tipo_tinta'] = this.tipo_tinta;
 			}else{
-				encabezado_ing_prod['prov_fabricante_vK'] = null;
+				encabezado_ficha_tec_preprensa['tipo_tinta'] = null;
 
 			}
-			encabezado_ing_prod['prov_fabricante_1'] = this.prov_fabricante_1;
-			encabezado_ing_prod['prov_fabricante_2'] = this.prov_fabricante_2;
-			encabezado_ing_prod['prov_fabricante_3'] = this.prov_fabricante_3;
-			encabezado_ing_prod['prov_fabricante_4'] = this.prov_fabricante_4;
-			encabezado_ing_prod['prov_fabricante_5'] = this.prov_fabricante_5;
-			encabezado_ing_prod['prov_fabricante_6'] = this.prov_fabricante_6;
-			encabezado_ing_prod['prov_fabricante_7'] = this.prov_fabricante_7;
-			//CUARTA FILA
-			if(this.tinta_sticky_vC){
-				encabezado_ing_prod['tinta_sticky_vC'] = this.tinta_sticky_vC;
-			}else{
-				encabezado_ing_prod['tinta_sticky_vC'] = null;
-			}
-			
-			if(this.tinta_sticky_vM){
-				encabezado_ing_prod['tinta_sticky_vM'] = this.tinta_sticky_vM;
-			}else{
-				encabezado_ing_prod['tinta_sticky_vM'] = null;
-			}
-			
-			if(this.tinta_sticky_vY){
-				encabezado_ing_prod['tinta_sticky_vY'] = this.tinta_sticky_vY;
-			}else{
-				encabezado_ing_prod['tinta_sticky_vY'] = null;
-			}
-			
-			if(this.tinta_sticky_vK){
-				encabezado_ing_prod['tinta_sticky_vK'] = this.tinta_sticky_vK;
-			}else{
-				encabezado_ing_prod['tinta_sticky_vK'] = null;
-			}
-			
-			encabezado_ing_prod['tinta_sticky_1'] = this.tinta_sticky_1;
-			encabezado_ing_prod['tinta_sticky_2'] = this.tinta_sticky_2;
-			encabezado_ing_prod['tinta_sticky_3'] = this.tinta_sticky_3;
-			encabezado_ing_prod['tinta_sticky_4'] = this.tinta_sticky_4;
-			encabezado_ing_prod['tinta_sticky_5'] = this.tinta_sticky_5;
-			encabezado_ing_prod['tinta_sticky_6'] = this.tinta_sticky_6;
-			encabezado_ing_prod['tinta_sticky_7'] = this.tinta_sticky_7;
-			
-			//********DISPENSADO***********
-			if (this.tipo_dispensado == 'Manual' ){
-				encabezado_ing_prod['tipo_dispensado'] = 'Manual';
-			}else {
-				encabezado_ing_prod['tipo_dispensado'] = 'Automatico';
-			}
-			encabezado_ing_prod['diametro_rollo'] = this.diametro_rollo;
-			encabezado_ing_prod['peso_rollo'] = this.peso_rollo;
-			encabezado_ing_prod['medida_dispensado'] = this.medida_dispensado;
-			if (this.taca == 'SI' ){
-				encabezado_ing_prod['taca'] = 'SI';
-			}else{
-				encabezado_ing_prod['taca'] = 'NO';
-			}
+			encabezado_ficha_tec_preprensa['tipo_corte'] = this.tipo_corte;
+			encabezado_ficha_tec_preprensa['acabado1'] = this.acabado1;
+			encabezado_ficha_tec_preprensa['acabado2'] = this.acabado2;
+			encabezado_ficha_tec_preprensa['acabado3'] = this.acabado3;
+			encabezado_ficha_tec_preprensa['acabado4'] = this.acabado4;
+			encabezado_ficha_tec_preprensa['observacion'] = this.observacion;
 			
 			//********SENTIDO SALIDA**********
-			encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
-			if(this.embobinado_interior_seleccionado && this.embobinado_interior_seleccionado !== 'NO'){
-				encabezado_ing_prod['embobinado_interior_seleccionado'] = this.embobinado_interior_seleccionado;
+			encabezado_ficha_tec_preprensa['embon_ext'] = this.embon_ext;
+			if(this.embon_int && this.embon_int !== 'NO'){
+				encabezado_ficha_tec_preprensa['embon_int'] = this.embon_int;
 			}
 			else{
-				encabezado_ing_prod['embobinado_interior_seleccionado'] = null;
+				encabezado_ficha_tec_preprensa['embon_int'] = null;
 			}
+			encabezado_ficha_tec_preprensa['vendedor'] = this.vendedor;
 			
-			//********IMAGEN************
-			//encabezado_ing_prod['img_etiqueta'] = this.img_etiqueta;
-			if (this.localCompressedURl) {
-				encabezado_ing_prod['imagen_comprimida'] = this.localCompressedURl;
-			} else if (this.localUrl) {
-				encabezado_ing_prod['imagen_original'] = this.localUrl;
-			} else {
-				encabezado_ing_prod['imagen'] = null;  // No hay imagen disponible
-			}
+			
+
 			
 			//********FIRMAS***********
-			encabezado_ing_prod['ejecutivo_ventas'] = this.ejecutivo_ventas;
-			encabezado_ing_prod['impreso_res'] = this.impreso_res;
-			encabezado_ing_prod['supervisador_res'] = this.supervisador_res;
-			encabezado_ing_prod['jefe_prod'] = this.jefe_prod;
+			encabezado_ficha_tec_preprensa['requiere_cliche'] = this.requiere_cliche;
+			encabezado_ficha_tec_preprensa['solicitado_por'] = this.solicitado_por;
+			encabezado_ficha_tec_preprensa['autorizado_por'] = this.autorizado_por;
+/* 			encabezado_ficha_tec_preprensa['jefe_prod'] = this.jefe_prod; */
 
 			let status_encabezado
 			let numtra
-			console.log (encabezado_ing_prod)
+			console.log (encabezado_ficha_tec_preprensa)
 			console.log ("DATO CLIENTE")
 			console.log (this.dato_cliente)
 			
 			
-			if(encabezado_ing_prod){
-				console.log("ENTRO A GENERAR LA ING. DE PRODUCTO")
+			if(encabezado_ficha_tec_preprensa){
+				console.log("ENTRO A GENERAR LA FICHA TECNICA")
 
-				this.srv.generar_ing_producto(encabezado_ing_prod).subscribe(
+				this.srv.generar_ficha_tecnica_preprensa(encabezado_ficha_tec_preprensa).subscribe(
 					data => {
-							status_encabezado= data['status']
-							this.codIngProd= data['CodIngProd']
-							console.log(data)
-							if (status_encabezado == 'INSERTADO CON EXITO')
-								{
-									let datos={}
-									datos['usuario'] = this.usuario
-									datos['empresa'] = this.empresa
-									console.log('ING. DE PRODUCTO CREADA CON EXITO')
-									if (this.uploadedFiles){
-										if (this.upload()){
-											alert ("Ing. de Producto creado con exito..!!")
-											this.router.navigate(['/admin/lista_ing_productos', datos]);
-										}else{
-											alert ("Ing. de Producto creado con exito..!!")
-											this.router.navigate(['/admin/lista_ing_productos', datos]);
-										}
-									}
-								}
+								alert("**** FICHA TÉCNICA PRE PRENSA REGISTRADA CON EXITO *****")
+								status_encabezado= data['status']
+								this.idficha= data['idficha']
+								console.log(data)
+								let datos= {}
+								datos['usuario'] = this.usuario
+								datos['empresa'] = this.empresa
+								this.router.navigate(['/admin/lista_fichapreprensa', datos])
+
 							}
 						);
 			}else{
@@ -1667,229 +1540,203 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	
 	
 	
-	actualizar_IngProducto() {
-		if (this.validar_datos_actualizar()){ 
+	actualizar_FichaTecnicaPreprensa() {
+		if (this.validar_datos()){ 
 			if(this.dato_cliente){
 
-				let encabezado_ing_prod= this.dato_cliente
+				//let encabezado_ficha_tec_preprensa= this.dato_cliente
+				let encabezado_ficha_tec_preprensa= {}
 				//console.log(this.dato_cliente)
 				//********PRIMER CUADRO */
-				encabezado_ing_prod['codemp'] = this.empresa;
-				encabezado_ing_prod['CodIngProd'] = this.codIngProd;
+				encabezado_ficha_tec_preprensa['codemp'] = this.empresa;
+				encabezado_ficha_tec_preprensa['idficha'] = this.idficha;
 				console.log (this.fectra)
-				encabezado_ing_prod['fecIngProd'] = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500');
-				encabezado_ing_prod['razon_social'] = this.razon_social;
-				encabezado_ing_prod['ruc'] = this.ruc;
-				//encabezado_ing_prod['nombre_comercial'] = this.nombre_comercial;
-				encabezado_ing_prod['nombre_comercial'] = this.razon_social;
-				encabezado_ing_prod['referencia'] = this.referencia;
-				encabezado_ing_prod['medida_alto'] = this.medida_alto;
-				encabezado_ing_prod['medida_ancho'] = this.medida_ancho;
-				encabezado_ing_prod['proveedor'] = this.proveedor;
-				encabezado_ing_prod['impresora'] = this.impresora;
-				encabezado_ing_prod['bobinadora'] = this.bobinadora;
-				encabezado_ing_prod['material_imprimir'] = this.material_imprimir;
-				encabezado_ing_prod['ancho_material'] = this.ancho_material;
+				encabezado_ficha_tec_preprensa['fecIngProd'] = formatDate(this.fectra['value'], 'yyyy-MM-dd', 'en-US', '-0500');
+				encabezado_ficha_tec_preprensa['razon_social'] = this.razon_social;
+				encabezado_ficha_tec_preprensa['ruc'] = this.ruc;
+				//encabezado_ficha_tec_preprensa['nombre_comercial'] = this.nombre_comercial;
+				//encabezado_ficha_tec_preprensa['nombre_comercial'] = this.razon_social;
+				encabezado_ficha_tec_preprensa['contacto'] = this.contacto;
+				encabezado_ficha_tec_preprensa['producto'] = this.producto;
+				encabezado_ficha_tec_preprensa['buffer'] = this.buffer;
+				encabezado_ficha_tec_preprensa['proveedor'] = this.proveedor;
+				encabezado_ficha_tec_preprensa['enviado_por'] = this.enviado_por;
+				encabezado_ficha_tec_preprensa['nombre_etiqueta'] = this.nombre_etiqueta;
+				encabezado_ficha_tec_preprensa['orden_venta'] = this.orden_venta;
+				encabezado_ficha_tec_preprensa['enviado_a'] = this.enviado_a;
 
 				//**********SEGUNDO CUADRO */
-				encabezado_ing_prod['cilindro'] = this.cilindro;
-				encabezado_ing_prod['cortador'] = this.cortador;
-				encabezado_ing_prod['color_seleccionado'] = this.color_seleccionado;
-				encabezado_ing_prod['rep_des'] = this.rep_des;
-				encabezado_ing_prod['filas'] = this.filas;
-				encabezado_ing_prod['columnas'] = this.columnas;
-				encabezado_ing_prod['formato_seleccionado'] = this.formato_seleccionado;
-				encabezado_ing_prod['cilindro_cod'] = this.cilindro_cod;
-				encabezado_ing_prod['troquel_plano_cod'] = this.troquel_plano_cod;
-				//encabezado_ing_prod['uv_total'] = this.uv_total
-				encabezado_ing_prod['uv_total'] = this.uv_total ? 'SI' : 'NO';
-				encabezado_ing_prod['uv_sobre_impr'] = this.uv_sobre_impr ? 'SI' : 'NO';
-				encabezado_ing_prod['uv_select'] = this.uv_select ? 'SI' : 'NO';
-				encabezado_ing_prod['relam_delam'] = this.relam_delam ? 'SI' : 'NO';
-				encabezado_ing_prod['hot_stamping_acabados'] = this.hot_stamping ? 'SI' : 'NO';
-				encabezado_ing_prod['cold_foil'] = this.cold_foil ? 'SI' : 'NO';
-				encabezado_ing_prod['repujado'] = this.repujado_ing_prod ? 'SI' : 'NO';
-				encabezado_ing_prod['laminado_mate'] = this.lami_mate ? 'SI' : 'NO';
-				encabezado_ing_prod['laminado_brillan'] = this.laminado_brillan ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['mat_prima1'] = this.mat_prima1;
+				encabezado_ficha_tec_preprensa['mat_prima2'] = this.mat_prima2;
+				encabezado_ficha_tec_preprensa['maquina'] = this.maquina;
+				encabezado_ficha_tec_preprensa['ancho'] = this.ancho;
+				encabezado_ficha_tec_preprensa['no_cilindro'] = this.no_cilindro;
+				encabezado_ficha_tec_preprensa['gap_ancho'] = this.gap_ancho;
+				encabezado_ficha_tec_preprensa['troquel'] = this.troquel;
+				encabezado_ficha_tec_preprensa['avance'] = this.avance;
+				encabezado_ficha_tec_preprensa['desarrollo_cilindro'] = this.desarrollo_cilindro;
+				encabezado_ficha_tec_preprensa['gap_avance'] = this.gap_avance;
+				//encabezado_ficha_tec_preprensa['uv_total'] = this.uv_total
+				/*encabezado_ficha_tec_preprensa['uv_total'] = this.uv_total ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['uv_sobre_impr'] = this.uv_sobre_impr ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['uv_select'] = this.uv_select ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['relam_delam'] = this.relam_delam ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['hot_stamping_acabados'] = this.hot_stamping ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['cold_foil'] = this.cold_foil ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['repujado'] = this.repujado_ing_prod ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['laminado_mate'] = this.lami_mate ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['laminado_brillan'] = this.laminado_brillan ? 'SI' : 'NO';
 				
 				//*****TABLA PRIMARIOS Y COLORES PLANOS**********
-				encabezado_ing_prod['primario_C'] = this.primario_C ? 'SI' : 'NO';
-				encabezado_ing_prod['primario_M'] = this.primario_M ? 'SI' : 'NO';
-				encabezado_ing_prod['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
-				encabezado_ing_prod['primario_K'] = this.primario_K ? 'SI' : 'NO';
-				encabezado_ing_prod['pantone_1'] = this.pantone_1;
-				encabezado_ing_prod['pantone_2'] = this.pantone_2;
-				encabezado_ing_prod['pantone_3'] = this.pantone_3;
-				encabezado_ing_prod['pantone_4'] = this.pantone_4;
-				encabezado_ing_prod['pantone_5'] = this.pantone_5;
-				encabezado_ing_prod['pantone_6'] = this.pantone_6;
-				encabezado_ing_prod['pantone_7'] = this.pantone_7;
-				//SEGUNDA FILA
-				if(this.anilox_vC){
-					encabezado_ing_prod['anilox_vC'] = this.anilox_vC;
+				encabezado_ficha_tec_preprensa['primario_C'] = this.primario_C ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_M'] = this.primario_M ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_K'] = this.primario_K ? 'SI' : 'NO';
+				*/
+
+				encabezado_ficha_tec_preprensa['rep_avance'] = this.rep_avance;
+				encabezado_ficha_tec_preprensa['tipo'] = this.tipo;
+				encabezado_ficha_tec_preprensa['forma'] = this.forma;
+				encabezado_ficha_tec_preprensa['tipo_impresion_ex'] = this.tipo_impresion_ex;
+				encabezado_ficha_tec_preprensa['muestra'] = this.muestra;
+				encabezado_ficha_tec_preprensa['corte_seg'] = this.corte_seg;
+				encabezado_ficha_tec_preprensa['layflat'] = this.layflat;
+				 if(this.ancho_rollo){
+					encabezado_ficha_tec_preprensa['ancho_rollo'] = this.ancho_rollo;
 				}else{
-					encabezado_ing_prod['anilox_vC'] = 0;
+					encabezado_ficha_tec_preprensa['ancho_rollo'] = 0;
 				}
-				if(this.anilox_vM){
-					encabezado_ing_prod['anilox_vM'] = this.anilox_vM;
-				}else{
-					encabezado_ing_prod['anilox_vM'] = 0;
-				}
-				if(this.anilox_vY){
-					encabezado_ing_prod['anilox_vY'] = this.anilox_vY;
-				}else{
-					encabezado_ing_prod['anilox_vY'] = 0;
-				}
-				if(this.anilox_vK){
-					encabezado_ing_prod['anilox_vK'] = this.anilox_vK;
-				}else{
-					encabezado_ing_prod['anilox_vK'] = 0;
-				}
-				encabezado_ing_prod['anilox_1'] = this.anilox_1;
-				encabezado_ing_prod['anilox_2'] = this.anilox_2;
-				encabezado_ing_prod['anilox_3'] = this.anilox_3;
-				encabezado_ing_prod['anilox_4'] = this.anilox_4;
-				encabezado_ing_prod['anilox_5'] = this.anilox_5;
-				encabezado_ing_prod['anilox_6'] = this.anilox_6;
-				encabezado_ing_prod['anilox_7'] = this.anilox_7;
+
+
 				//TERCERA FILA
-				if(this.prov_fabricante_vC){
-					encabezado_ing_prod['prov_fabricante_vC'] = this.prov_fabricante_vC;
+				if(this.existe_cliche){
+					encabezado_ficha_tec_preprensa['existe_cliche'] = this.existe_cliche;
 					
 				}else{
-					encabezado_ing_prod['prov_fabricante_vC'] = null;
+					encabezado_ficha_tec_preprensa['existe_cliche'] = null;
 				}
 
-				if(this.prov_fabricante_vM){
-					encabezado_ing_prod['prov_fabricante_vM'] = this.prov_fabricante_vM;
+				if(this.etiq_fila_cliente){
+					encabezado_ficha_tec_preprensa['etiq_fila_cliente'] = this.etiq_fila_cliente;
 					
 				}else{
-					encabezado_ing_prod['prov_fabricante_vM'] = null;
+					encabezado_ficha_tec_preprensa['etiq_fila_cliente'] = null;
 				}
 
-				if(this.prov_fabricante_vY){
-					encabezado_ing_prod['prov_fabricante_vY'] = this.prov_fabricante_vY;
+				if(this.etiq_fila_produccion){
+					encabezado_ficha_tec_preprensa['etiq_fila_produccion'] = this.etiq_fila_produccion;
 				}else{
-					encabezado_ing_prod['prov_fabricante_vY'] = null;	
+					encabezado_ficha_tec_preprensa['etiq_fila_produccion'] = null;	
 				}
 				
-				if(this.prov_fabricante_vK){
-					encabezado_ing_prod['prov_fabricante_vK'] = this.prov_fabricante_vK;
+				if(this.tipo_tinta){
+					encabezado_ficha_tec_preprensa['tipo_tinta'] = this.tipo_tinta;
 				}else{
-					encabezado_ing_prod['prov_fabricante_vK'] = null;
+					encabezado_ficha_tec_preprensa['tipo_tinta'] = null;
 					
 				}
-				encabezado_ing_prod['prov_fabricante_1'] = this.prov_fabricante_1;
-				encabezado_ing_prod['prov_fabricante_2'] = this.prov_fabricante_2;
-				encabezado_ing_prod['prov_fabricante_3'] = this.prov_fabricante_3;
-				encabezado_ing_prod['prov_fabricante_4'] = this.prov_fabricante_4;
-				encabezado_ing_prod['prov_fabricante_5'] = this.prov_fabricante_5;
-				encabezado_ing_prod['prov_fabricante_6'] = this.prov_fabricante_6;
-				encabezado_ing_prod['prov_fabricante_7'] = this.prov_fabricante_7;
+				encabezado_ficha_tec_preprensa['tipo_corte'] = this.tipo_corte;
+				encabezado_ficha_tec_preprensa['acabado1'] = this.acabado1;
+				encabezado_ficha_tec_preprensa['acabado2'] = this.acabado2;
+
+				encabezado_ficha_tec_preprensa['acabado3'] = this.acabado3;
+				encabezado_ficha_tec_preprensa['acabado4'] = this.acabado4;
+				encabezado_ficha_tec_preprensa['observacion'] = this.observacion;
+
+				encabezado_ficha_tec_preprensa['rep_ancho'] = this.rep_ancho;
 				//CUARTA FILA
-				if(this.tinta_sticky_vC){
-					encabezado_ing_prod['tinta_sticky_vC'] = this.tinta_sticky_vC;
+/* 				if(this.tinta_sticky_vC){
+					encabezado_ficha_tec_preprensa['tinta_sticky_vC'] = this.tinta_sticky_vC;
 				}else{
-					encabezado_ing_prod['tinta_sticky_vC'] = null;
+					encabezado_ficha_tec_preprensa['tinta_sticky_vC'] = null;
 				}
 				
 				if(this.tinta_sticky_vM){
-					encabezado_ing_prod['tinta_sticky_vM'] = this.tinta_sticky_vM;
+					encabezado_ficha_tec_preprensa['tinta_sticky_vM'] = this.tinta_sticky_vM;
 				}else{
-					encabezado_ing_prod['tinta_sticky_vM'] = null;
+					encabezado_ficha_tec_preprensa['tinta_sticky_vM'] = null;
 				}
 				
 				if(this.tinta_sticky_vY){
-					encabezado_ing_prod['tinta_sticky_vY'] = this.tinta_sticky_vY;
+					encabezado_ficha_tec_preprensa['tinta_sticky_vY'] = this.tinta_sticky_vY;
 				}else{
-					encabezado_ing_prod['tinta_sticky_vY'] = null;
+					encabezado_ficha_tec_preprensa['tinta_sticky_vY'] = null;
 				}
 				
 				if(this.tinta_sticky_vK){
-					encabezado_ing_prod['tinta_sticky_vK'] = this.tinta_sticky_vK;
+					encabezado_ficha_tec_preprensa['tinta_sticky_vK'] = this.tinta_sticky_vK;
 				}else{
-					encabezado_ing_prod['tinta_sticky_vK'] = null;
+					encabezado_ficha_tec_preprensa['tinta_sticky_vK'] = null;
 				}
 				
-				encabezado_ing_prod['tinta_sticky_1'] = this.tinta_sticky_1;
-				encabezado_ing_prod['tinta_sticky_2'] = this.tinta_sticky_2;
-				encabezado_ing_prod['tinta_sticky_3'] = this.tinta_sticky_3;
-				encabezado_ing_prod['tinta_sticky_4'] = this.tinta_sticky_4;
-				encabezado_ing_prod['tinta_sticky_5'] = this.tinta_sticky_5;
-				encabezado_ing_prod['tinta_sticky_6'] = this.tinta_sticky_6;
-				encabezado_ing_prod['tinta_sticky_7'] = this.tinta_sticky_7;
+				encabezado_ficha_tec_preprensa['tinta_sticky_1'] = this.tinta_sticky_1;
+				encabezado_ficha_tec_preprensa['tinta_sticky_2'] = this.tinta_sticky_2;
+				encabezado_ficha_tec_preprensa['tinta_sticky_3'] = this.tinta_sticky_3;
+				encabezado_ficha_tec_preprensa['tinta_sticky_4'] = this.tinta_sticky_4;
+				encabezado_ficha_tec_preprensa['tinta_sticky_5'] = this.tinta_sticky_5;
+				encabezado_ficha_tec_preprensa['tinta_sticky_6'] = this.tinta_sticky_6;
+				encabezado_ficha_tec_preprensa['tinta_sticky_7'] = this.tinta_sticky_7;
 				
-				//********DISPENSADO***********
-				if (this.tipo_dispensado == 'Manual' ){
-					encabezado_ing_prod['tipo_dispensado'] = 'Manual';
-				}else {
-					encabezado_ing_prod['tipo_dispensado'] = 'Automatico';
-				}
-				encabezado_ing_prod['diametro_rollo'] = this.diametro_rollo;
-				encabezado_ing_prod['peso_rollo'] = this.peso_rollo;
-				encabezado_ing_prod['medida_dispensado'] = this.medida_dispensado;
+
+				
+
+
+				encabezado_ficha_tec_preprensa['diametro_rollo'] = this.diametro_rollo;
+				encabezado_ficha_tec_preprensa['peso_rollo'] = this.peso_rollo;
+				encabezado_ficha_tec_preprensa['medida_dispensado'] = this.medida_dispensado;
 				if (this.taca == 'SI' ){
-					encabezado_ing_prod['taca'] = 'SI';
+					encabezado_ficha_tec_preprensa['taca'] = 'SI';
 				}else{
-					encabezado_ing_prod['taca'] = 'NO';
-				}
+					encabezado_ficha_tec_preprensa['taca'] = 'NO';
+				} */
 				
 				//********SENTIDO SALIDA**********
-				encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
-				if(this.embobinado_interior_seleccionado && this.embobinado_interior_seleccionado !== 'NO'){
-					encabezado_ing_prod['embobinado_interior_seleccionado'] = this.embobinado_interior_seleccionado;
+				encabezado_ficha_tec_preprensa['embon_ext'] = this.embon_ext;
+				if(this.embon_int && this.embon_int !== 'NO'){
+					encabezado_ficha_tec_preprensa['embon_int'] = this.embon_int;
 				}
 				else{
-					encabezado_ing_prod['embobinado_interior_seleccionado'] = null;
+					encabezado_ficha_tec_preprensa['embon_int'] = null;
 				}
+				encabezado_ficha_tec_preprensa['vendedor'] = this.vendedor;
 				
 				//********IMAGEN************
-				//encabezado_ing_prod['img_etiqueta'] = this.img_etiqueta;
-				if (this.localCompressedURl) {
-					encabezado_ing_prod['imagen_comprimida'] = this.localCompressedURl;
+				//encabezado_ficha_tec_preprensa['img_etiqueta'] = this.img_etiqueta;
+			/* 	if (this.localCompressedURl) {
+					encabezado_ficha_tec_preprensa['imagen_comprimida'] = this.localCompressedURl;
 				} else if (this.localUrl) {
-					encabezado_ing_prod['imagen_original'] = this.localUrl;
+					encabezado_ficha_tec_preprensa['imagen_original'] = this.localUrl;
 				} else {
-					encabezado_ing_prod['imagen'] = null;  // No hay imagen disponible
-				}
+					encabezado_ficha_tec_preprensa['imagen'] = null;  // No hay imagen disponible
+				} */
 				
 				//********FIRMAS***********
-				encabezado_ing_prod['ejecutivo_ventas'] = this.ejecutivo_ventas;
-				encabezado_ing_prod['impreso_res'] = this.impreso_res;
-				encabezado_ing_prod['supervisador_res'] = this.supervisador_res;
-				encabezado_ing_prod['jefe_prod'] = this.jefe_prod;
+				encabezado_ficha_tec_preprensa['requiere_cliche'] = this.requiere_cliche;
+				encabezado_ficha_tec_preprensa['solicitado_por'] = this.solicitado_por;
+				encabezado_ficha_tec_preprensa['autorizado_por'] = this.autorizado_por;
+/* 				encabezado_ficha_tec_preprensa['jefe_prod'] = this.jefe_prod; */
 
 				let status_encabezado
 				let numtra
 				console.log ("DATO CLIENTE")
-				console.log (encabezado_ing_prod)
-				if(encabezado_ing_prod){
+				console.log (encabezado_ficha_tec_preprensa)
+				if(encabezado_ficha_tec_preprensa){
 					console.log("ENTRO A ACTUALIZAR LA ING. DE PRODUCTO")
 
-					this.srv.actualizar_ing_producto(encabezado_ing_prod).subscribe(
+					this.srv.actualizar_ficha_tecnica_preprensa(encabezado_ficha_tec_preprensa).subscribe(
 					data => {
 						status_encabezado= data['status']
-						//this.codIngProd= data['codIngProd']
+						//this.idficha= data['idficha']
 						console.log(data)
 						if (status_encabezado == 'ACTUALIZADO CON EXITO')
 							{
-								console.log('SE ACTUALIZO LA ING. DE PRODUCTO')
+								console.log('SE ACTUALIZO LA FICHA TECNICA CON EXITO')
 
 								let datos={}
 								datos['usuario'] = this.usuario
 								datos['empresa'] = this.empresa
-								if (this.uploadedFiles){
-									if (this.upload()){
-										alert ("Ing. de Producto actualizada con exito..!!")
-										this.router.navigate(['/admin/lista_ing_productos', datos]);
-									}else{
-										alert ("Ing. de Producto actualizada con exito..!!")
-										this.router.navigate(['/admin/lista_ing_productos', datos]);
-									}
-								}else{
-									alert ("Ing. de Producto actualizada con exito..!!")
-									this.router.navigate(['/admin/lista_ing_productos', datos]);
-								}
+								this.router.navigate(['/admin/lista_fichapreprensa', datos]);
+
 							}
 						}
 							
@@ -1903,6 +1750,58 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			}
 			
 		}//FIN GENERA ING PRODUCTO
+	}
+
+
+	busca_articulo() { 
+		if (this.patron_articulo ){
+			this.searching_articulo = true
+			let datos = {};
+			datos['nomart']  = this.patron_articulo;
+			datos['codemp']  = this.empresa;
+			datos['codcli']  = 'CONFIN';
+			datos['codalm']  = '01';
+				this.srv.buscar_articulos_pedido(datos).subscribe(data => {
+					// console.log(data)
+					// console.log (data[1]['nomart'])
+					
+				let longitud_data = data.length
+	
+				if (longitud_data > 0 ) {
+					console.log(data)
+					// console.log(data['nomart'])
+					
+					// console.log (data[1]['nomart'])
+					this.articulo = data;
+					this.exist_articulo = true;
+					this.searching_articulo = false
+					
+					// this.filteredarticulo = this.myControl2.valueChanges.pipe(
+					// startWith(''),
+					// map(value => this._filter2(value))
+					// ); 
+		  
+					
+					
+					
+				}else {
+					alert("Antículo no encontrado con la palabra clave ingresada <<"+this.patron_articulo+">>");
+					this.searching_articulo = false
+					this.exist_articulo = false;
+				}
+				}); 
+			}else  { 
+				alert("Por favor llene el artículo / datos del cliente / almacen");
+			}
+	}
+
+	select_producto(codart,nomart) {
+		console.log ("Seleccion de cliente")
+	   
+	  
+	   this.exist_articulo = false;
+	   this.patron_articulo = undefined;
+	   this.nombre_etiqueta = codart+' ---> '+nomart
 	}
 	
 	reset() {
@@ -1921,7 +1820,7 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	  this.iva_porcentaje = 0
 	  this.iva_cant = 0
 	  this.total = 0
-	  this.vendedor = '01'
+	  this.vendedor = 'VENDEDOR GENERAL'
 	  this.tiptra = '1'
 	  this.observacion_pedido= null
 	  this.condiciones_pago = null

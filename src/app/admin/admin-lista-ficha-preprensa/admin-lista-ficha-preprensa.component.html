@@ -120,7 +120,7 @@
 	    <div class="col-xs-12">
             <div class="box box-primary">
 				<div class="box-header">
-					<label for="reference">SELECCIONE RANGO DE FECHA DE ING. PRODUCTOS EMITIDOS</label>
+					<label for="reference">SELECCIONE RANGO DE FECHA DE FICHA TECNICA PRE-PRENSA</label>
                 </div>
 				 <div class="box-header text-left">
 
@@ -186,13 +186,11 @@
 				<!-- <table *ngIf="!loading" datatable [dtOptions]="dtOptions" class="dataTable">  -->
 						<thead>
 						<tr>
+						  <th>IdFicha</th>
 						  <th>Fecha</th>
-						  <th>No. Doc</th>
 						  <th>Razon Social</th>
-						  <th>Ejecutivo de Ventas</th>
-						  <th>Impreso Por</th>
-						  <th>Supervisado Por</th>
-						  <th>Jefe de Prouccion</th>
+						  <th>Solicitado por</th>
+						  <th>Autorizado por</th>
 						  <!-- <th>Fecha/hora entrega</th> -->
 						  <!-- <th>Direcc entrega</th> -->
 						  <!-- <th>Ruta asignada</th> -->
@@ -203,52 +201,27 @@
 					  
 					<tbody *ngIf="(lista_ing_producto?.length != 0) && (!loading) ">
 					  <tr *ngFor="let el of lista_ing_producto;">
-						  <td>{{el.fecIngProd}}</td>
-						  <td>{{el.CodIngProd}}</td>
-						  <td *ngIf="el.tiptra==1">
-						  ING. PRODUCTO
-						  </td>
-						  <td *ngIf="el.tiptra==2">
-						  PROFORMA
-						  </td>
-						  <td>{{el.razon_social_ing_prod}}</td>
-						  <td>{{el.ejecutivo_ventas}}</td>
-						  <td>{{el.impreso_responsable}}</td>
-						  <td>{{el.supervisado_responsable}}</td>
-						  <td>{{el.jefe_produccion}}</td>
-						  <!-- <td *ngIf="el.fecha_entrega">{{el.fecha_entrega}} / {{el.hora_entrega}}</td> -->
-						  <!-- <td *ngIf="!el.fecha_entrega" class="text-center" style="color:red">POR PLANIFICAR</td> -->
-						  <!-- <td>{{el.direccion_entrega}} -->
-						  <!-- </td> -->
-						  <!-- <td> -->
-						  <!-- <div *ngIf="el!== edit_ruta" class="text-center">{{el.ruta}} -->
-						  	<!-- <a *ngIf="el!== edit_ruta" (click)="edit_ruta_pedido(el)"  class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="Editar ruta"></i></a>  -->
-							<!-- </div> -->
-							
-							<!-- <!-- EL QUE SIRVE -->
-							<!-- <select *ngIf="el===edit_ruta" #ruta  name="change_iva" class="form-control" (change)="update_ruta(el.numtra,el.id_agencia,ruta.value)"> -->
-							<!-- <option [ngValue]="undefined" disabled  selected>Seleccione ruta</option> -->
-							<!-- <option  *ngFor="let e of lista_rutas; let i = index;"  [value]="e.idruta" >{{e.nombre_ruta}}</option> -->
-							<!-- </select> -->
-							
-							
-						  <!-- </td> -->
+						  <td>{{el.idficha}}</td>
+						  <td>{{el.fecha}}</td>
+						  <td>{{el.razon_social}}</td>
+						  <td>{{el.solicitado_por}}</td>
+						  <td>{{el.autorizado_por}}</td>
 						  <td class="">
 						    <div class="text-center">
                                 <div class="btn-group">
 
 									<!-- <a routerLink="/admin/ver_pedidos" [queryParams]="{usuario:usuario,empresa: empresa,pedido:el.numtra,sucursal:el.direccion_entrega}"  class="tip btn btn-primary btn-xs"><i class="fa fa-file-text-o" title="Ver pedido"></i></a>  -->
 									
-									<a *ngIf="srv.getConfEditPedido() != 'NO'" routerLink="/admin/agregar_ing_productos" [queryParams]="{usuario:usuario,empresa: empresa,codIngProd:el.CodIngProd}" class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="Editar ing de Producto"></i></a> 
+									<a routerLink="/admin/registro_fichapreprensa" [queryParams]="{usuario:usuario,empresa: empresa,idficha:el.idficha}" class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="Editar Ficha Técnica"></i></a>
 									
 									<!-- <a href="http://amort.lavisita360.com/purchases/delete/6" onclick="return confirm('Usted va a eliminar la compra, por favor haga clic en Aceptar para eliminar.')" title="" class="tip btn btn-danger btn-xs" data-original-title="Eliminar Compra"><i class="fa fa-trash-o"></i></a> -->
 									
-									<a *ngIf="srv.getConfCorreoFact() != 'NO'" (click)="correo_facturacion(el.numtra,el.nomcli)" class="tip btn btn-danger btn-xs" ><i class="fa fa-envelope" title="Enviar correo facturar pedido" ></i></a>
+<!-- 									<a *ngIf="srv.getConfCorreoFact() != 'NO'" (click)="correo_facturacion(el.numtra,el.nomcli)" class="tip btn btn-danger btn-xs" ><i class="fa fa-envelope" title="Enviar correo facturar pedido" ></i></a> -->
 									<!-- <a (click)="confirm_delete()"   class="tip btn btn-danger btn-xs" ><i class="fa fa-envelope" title="Enviar correo facturar pedido" ></i></a> -->
 <!-- 									<a (click)="eliminar_ingproducto(el.CodIngProd)"   class="tip btn btn-danger btn-xs" ><i class="fa fa-times" title="Eliminar" ></i></a> -->
 									
 									<a *ngIf="srv.getConfCorreoPedCli() != 'NO'" (click)="correo_pedido(el.numtra,el.nomcli,el.email)"  class="tip btn btn-success btn-xs" ><i class="fa fa-envelope" title="Reenviar correo pedido" ></i></a>
-									<a  (click)="generar_pdf_ingProd(el.CodIngProd)"  class="tip btn btn-success btn-xs" ><i class="fa fa-search" title="Ver/Imprimir" ></i></a>
+									<a  (click)="generar_pdf_ingProd(el.idficha)"  class="tip btn btn-success btn-xs" ><i class="fa fa-search" title="Ver/Imprimir" ></i></a>
 									<a *ngIf="srv.getTipacc() == 'T'" (click)="eliminar_ingproducto(el.CodIngProd)"   class="tip btn btn-danger btn-xs" ><i class="fa fa-times" title="Eliminar" ></i> Eliminar</a>
 								
 								</div>

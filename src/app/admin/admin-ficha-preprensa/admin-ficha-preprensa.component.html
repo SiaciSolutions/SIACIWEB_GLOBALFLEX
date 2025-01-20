@@ -2,12 +2,12 @@
 	<!-- Content Header (Page header) -->
 	<section class="content-header">
 	  <h1 *ngIf="!accion_actualizar">
-		 Ficha técnica pre-prensa
+		 Ficha Técnica Pre-Prensa
 		<small>Creación ficha técnica pre-prensa</small>
 	  </h1>
 	  
 	  <h1 *ngIf="accion_actualizar">
-		 Actualizar ficha técnica pre-prensa{{numtra}}
+		Ficha Técnica Pre-prensa id {{idficha}}
 		<!-- <small>Actualizacion de los pedidos</small> -->
 	  </h1>
 	  <ol *ngIf="!accion_actualizar" class="breadcrumb">
@@ -28,8 +28,8 @@
 			  <div class="col-xs-12">
 				  <form class="validation fv-form fv-form-bootstrap" enctype="multipart/form-data" method="post" accept-charset="utf-8" novalidate="novalidate">
 					  <div class="box box-primary">
-						  <div class="box-header">
-							  <h3 class="box-title">Por favor, rellene la siguiente información</h3>
+						  <div class="box-header text-center">
+							  <h2 style="font-weight:bold;color:red" class="box-title text-center">DATOS GENERALES</h2>
 						  </div>
 						  <div class="box-body">
 							  <div class="col-lg-12">
@@ -103,70 +103,66 @@
 											  <input *ngIf="clientes" type="text" name="razon_social" id="razon_social"   [(ngModel)]="razon_social"  class="form-control ui-autocomplete-input" placeholder="RAZON SOCIAL" autocomplete="off" disabled>
 										  </div>
 									  </div>
-									  <div class="col-md-4">
+									  <div class="col-md-2">
 										  <div class="form-group">
 											  <label >RUC</label>
 											  <input type="text" name="ruc" id="ruc"   [(ngModel)]="ruc"  class="form-control ui-autocomplete-input" placeholder="RUC" autocomplete="off" disabled>
 										  </div>
 									  </div>
 									  <div class="col-md-4">
-										  <!-- 
-											  <div class="form-group">
-												  <label >NOMBRE COMERCIAL</label>
-												  <input type="text" name="nombre_comercial" id="nombre_comercial"   [(ngModel)]="nombre_comercial"  class="form-control ui-autocomplete-input" placeholder="NOMBRE COMERCIAL" autocomplete="off" disabled>
-											  </div>
-										  -->
-									  </div>
+										<div class="form-group">
+											<label >CONTACTO</label>
+											<input type="text" name="contacto" id="contacto"   [(ngModel)]="contacto"  class="form-control ui-autocomplete-input" placeholder="CONTACTO" autocomplete="off">
+										</div>
+									</div>
 								  </div>
 								  <div class="row">
 									  <div class="col-md-4">
 										  <div class="form-group">
-											  <label >REFERENCIA</label>
-											  <input type="text" name="referencia" id="referencia"   [(ngModel)]="referencia"  class="form-control ui-autocomplete-input" placeholder="REFERENCIA" autocomplete="off">
+											  <label >PRODUCTO <span style="font-weight:bold;color:red">(*)</span></label>
+											  <input type="text" name="producto" id="producto"   [(ngModel)]="producto"  class="form-control ui-autocomplete-input"  placeholder="PRODUCTO" autocomplete="off">
 										  </div>
 									  </div>
+									  <div class="col-md-3">
+										<div class="form-group">
+											<label >PROVEEDOR</label>
+											<input type="text" name="proveedor" id="proveedor"   [(ngModel)]="proveedor"  class="form-control ui-autocomplete-input" placeholder="PROVEEDOR" autocomplete="off">
+										</div>
+									</div>
 									  <div class="col-md-2">
 										  <div class="form-group">
-											  <label >MEDIDAS (ALTO)</label>
-											  <input type="number" name="medida_alto" id="medida_alto"   [(ngModel)]="medida_alto"  class="form-control ui-autocomplete-input" step="0.01" placeholder="ALTO" autocomplete="off" [min]="0.01">
+											  <label >BUFFER</label>
+											  <input type="text" name="buffer" id="buffer"   [(ngModel)]="buffer"  class="form-control ui-autocomplete-input"  placeholder="BUFFER" autocomplete="off" >
 										  </div>
 									  </div>
-									  <div class="col-md-2">
-										  <div class="form-group">
-											  <label >MEDIDAS (ANCHO)</label>
-											  <input type="number" name="medida_ancho" id="medida_ancho"   [(ngModel)]="medida_ancho"  class="form-control ui-autocomplete-input" step="0.01" placeholder="ANCHO" autocomplete="off" [min]="0.01">
-										  </div>
-									  </div>
-									  <div class="col-md-4">
-										  <div class="form-group">
-											  <label >PROVEEDOR</label>
-											  <input type="text" name="proveedor" id="proveedor"   [(ngModel)]="proveedor"  class="form-control ui-autocomplete-input" placeholder="PROVEEDOR" autocomplete="off">
-										  </div>
-									  </div>
+
 								  </div>
 								  <div class="row">
 									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >IMPRESORA</label>
-											  <input type="text" name="impresora" id="impresora"   [(ngModel)]="impresora"  class="form-control ui-autocomplete-input" placeholder="IMPRESORA" autocomplete="off">
+											  <label >ENVIADO POR</label>
+											  <input type="text" name="enviado_por" id="enviado_por"   [(ngModel)]="enviado_por"  class="form-control ui-autocomplete-input" placeholder="ENVIADO POR" autocomplete="off">
 										  </div>
 									  </div>
 									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >BOBINADORA</label>
-											  <input type="text" name="bobinadora" id="bobinadora"   [(ngModel)]="bobinadora"  class="form-control ui-autocomplete-input" placeholder="BOBINADORA" autocomplete="off">
+											  <label >VENDEDOR <span style="font-weight:bold;color:red">(*)</span></label>
+											  <select name="vendedor" [(ngModel)]="vendedor" class="form-control select2 tip" style="width:100%;">
+<!-- 												<option [ngValue]="undefined" disabled  selected>Seleccione</option> -->
+												<option *ngFor="let e of vendedores_lista; let i = index;" [value]="e.nomven">{{e.nomven}}</option>
+											</select>
 										  </div>
 									  </div>
 									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >MATERIAL A IMPRIMIR</label>
-											  <input type="text" name="material_imprimir" id="material_imprimir"   [(ngModel)]="material_imprimir"  class="form-control ui-autocomplete-input" placeholder="MATERIAL" autocomplete="off">
+											  <label >ORDEN VENTA</label>
+											  <input type="text" name="orden_venta" id="orden_venta"   [(ngModel)]="orden_venta"  class="form-control ui-autocomplete-input" placeholder="ORDEN VENTA" autocomplete="off">
 										  </div>
 									  </div>
 									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >ANCHO DE MATERIAL</label>
-											  <input type="number" name="ancho_material" id="ancho_material"   [(ngModel)]="ancho_material"  class="form-control ui-autocomplete-input" step="0.01" placeholder="ANCHO MATERIAL" autocomplete="off" [min]="0.01">
+											  <label >ENVIADO A</label>
+											  <input type="text" name="enviado_a" id="enviado_a"   [(ngModel)]="enviado_a"  class="form-control ui-autocomplete-input"  placeholder="ENVIADO A" autocomplete="off" >
 										  </div>
 									  </div>
 								  </div>
@@ -174,17 +170,69 @@
 						  </div>
 					  </div>
 					  <div class="box box-primary">
+						<div class="box-header text-center">
+							<h2 style="font-weight:bold;color:red" class="box-title text-center">ESPECIFICACIONES GENERALES ARTE</h2>
+						</div>
 						  <div class="box-body">
-							  <div class="row">
-								  <div class="col-md-2">
-									  <label >CILINDRO</label>
-									  <input type="text" name="cilindro" id="cilindro"   [(ngModel)]="cilindro" class="form-control ui-autocomplete-input" autocomplete="off">
+							  <div class="row form-group">
+								  <div class="col-md-4">
+									<label >BUSQUEDA DE PRODUCTO</label>
+									<div class="input-group">
+										<input 	  type="text" name="buscart" id="buscart"  value="" placeholder="FAVOR INGRESAR CÓDIGO O NOMBRE DEL ARTÍCULO Y PRESIONAR LA TECLA ENTER" (keyup.enter)="busca_articulo()" [(ngModel)]="patron_articulo" class="form-control ui-autocomplete-input text-center " autocomplete="off">
+										<div   (click)="busca_articulo()" class="input-group-addon no-print" style="padding: 2px 5px;" >
+											<a id="add-customer" class="external"><i class="fa fa-2x fa-search" id="searchIcon"></i></a>
+										</div>
+									</div>
+<!-- 							      <label >CODIGO ETIQUETA</label>
+									  <input type="text" name="codart" id="codart"   [(ngModel)]="codart" class="form-control ui-autocomplete-input" autocomplete="off"> -->
+								  </div>
+								  <div class="col-md-8">
+									<label >ETIQUETA <span style="font-weight:bold;color:red">(*)</span></label>
+									<input  type="text" name="nombre_etiqueta" id="nombre_etiqueta"   [(ngModel)]="nombre_etiqueta"  class="form-control ui-autocomplete-input" placeholder="PRODUCTO DE LA FICHA TECNICA" autocomplete="off" disabled>
+								  </div>
+								</div>
+<!-- 								<div class="form-group"  *ngIf="this.exist_razon_social"> -->
+								<div class="form-group" *ngIf="this.exist_articulo">
+									<p>Resultado de la busqueda por <<{{this.patron_articulo}}>></p>
+									<div class="table-responsive-pedidos">
+										<table class="table table-striped table-bordered table-condensed table-hover dataTable">
+										<thead>
+											<tr class="active" role="row">
+												<th>Codigo</th>
+												<th class="text-center">Producto</th>
+												<th style="width:25px; padding-right:5px;" rowspan="1" colspan="1" >Selec</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr  *ngFor="let rz of articulo;">
+												<td>{{rz.codart}}</td>
+												<td class="text-center">{{rz.nomart}}</td>
+												<td class="text-center"> 
+												<input  type="radio"  name="radio_cliente" (change)="select_producto(rz.codart,rz.nomart)"  />
+												
+												<!-- <input type="radio" name="optionsRadios" id="optionsRadios1" [(ngModel)]="check_agencia" (change)="validar_exist_agencia('P')"  value="principal"> -->
+												</td>
+											</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+
+								<div class="row form-group">
+								  <div class="col-md-4">
+									  <label >MATERIA PRIMA 1 <span style="font-weight:bold;color:red">(*)</span></label>
+									  <input type="text" name="mat_prima1" id="mat_prima1"   [(ngModel)]="mat_prima1"  class="form-control ui-autocomplete-input" placeholder="MAT PRIMA 1" autocomplete="off">
+								  </div>
+								  <div class="col-md-4">
+									<label >MATERIA PRIMA 2</label>
+									<input type="text" name="mat_prima2" id="mat_prima2"   [(ngModel)]="mat_prima2"  class="form-control ui-autocomplete-input" placeholder="MAT PRIMA 2" autocomplete="off">
 								  </div>
 								  <div class="col-md-2">
-									  <label >CORTADOR</label>
-									  <input type="number" name="cortador" id="cortador"   [(ngModel)]="cortador"  class="form-control ui-autocomplete-input" placeholder="CORTADOR" autocomplete="off" [min]="1">
+									<label >MAQUINA</label>
+									<input type="text" name="maquina" id="maquina"   [(ngModel)]="maquina"  class="form-control ui-autocomplete-input" placeholder="maquina" autocomplete="off">
 								  </div>
-								  <div class="col-md-1">
+<!-- 								  <div class="col-md-1">
 									  <label >COLORES</label>
 									  <select *ngIf="accion_actualizar"  name="color_ls" [(ngModel)]="color_seleccionado" class="form-control select2 tip" style="width:100%;font-weight:bold;">
 										  <option *ngFor="let e of color_lista; let i = index;" [value]="e.color_ls">{{e.nom_doc}}</option>
@@ -192,20 +240,122 @@
 									  <select *ngIf="!accion_actualizar"  name="color_ls" [(ngModel)]="color_seleccionado" class="form-control select2 tip" style="width:100%;font-weight:bold;">
 										  <option *ngFor="let e of color_lista; let i = index;" [value]="e.color_ls">{{e.nom_doc}}</option>
 									  </select>
-								  </div>
-								  <div class="col-md-2">
+								  </div> -->
+<!-- 								  <div class="col-md-2">
 									  <label >REP. DES</label>					
 									  <input type="number" name="rep_des" id="rep_des"   [(ngModel)]="rep_des"  class="form-control ui-autocomplete-input" placeholder="##" autocomplete="off" [min]="1">
-								  </div>
+								  </div> -->
   <!-- 								<div class="col-md-1">
 									  <label >FILAS</label>
 									  <input type="number" name="filas" id="filas"   [(ngModel)]="filas"  class="form-control ui-autocomplete-input" placeholder="cm" autocomplete="off" [min]="1">
 								  </div> -->
-								  <div class="col-md-1">
-									  <label >COLUMNAS</label>
-									  <input type="number" name="columnas" id="columnas"   [(ngModel)]="columnas"  class="form-control ui-autocomplete-input" placeholder="cm" autocomplete="off" [min]="1">
+								  <div class="col-md-2">
+									  <label >ANCHO (MM) <span style="font-weight:bold;color:red">(*)</span></label>
+									  <input type="number" name="ancho" id="ancho"   [(ngModel)]="ancho"  class="form-control ui-autocomplete-input" placeholder="mm" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >No CILINDRO</label>
+									<input type="number" name="no_cilindro" id="no_cilindro"   [(ngModel)]="no_cilindro"  class="form-control ui-autocomplete-input" placeholder="No Cilindro" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >GAP ANCHO <span style="font-weight:bold;color:red">(*)</span></label>
+									<input type="number" name="gap_ancho" id="gap_ancho" [(ngModel)]="gap_ancho"  class="form-control ui-autocomplete-input" placeholder="Gap Ancho" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >REP ANCHO<span style="font-weight:bold;color:red">(*)</span></label>
+									<input type="number" name="rep_ancho" id="rep_ancho"   [(ngModel)]="rep_ancho"  class="form-control ui-autocomplete-input" placeholder="Rep ancho" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >TROQUEL</label>
+									<input type="text" name="troquel" id="troquel"   [(ngModel)]="troquel"  class="form-control ui-autocomplete-input" placeholder="Troquel" autocomplete="off">
+								  </div>
+								  <div class="col-md-2">
+									<label >AVANCE (MM) <span style="font-weight:bold;color:red">(*)</span></label>
+									<input type="number" name="avance" id="avance"   [(ngModel)]="avance"  class="form-control ui-autocomplete-input" placeholder="Avance" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >DESARROLLO CILINDRO</label>
+									<input type="number" name="desarrollo_cilindro" id="desarrollo_cilindro"   [(ngModel)]="desarrollo_cilindro"  class="form-control ui-autocomplete-input" placeholder="Desarrollo cilindro" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >GAP AVANCE</label>
+									<input type="number" name="gap_avance" id="gap_avance"   [(ngModel)]="gap_avance"  class="form-control ui-autocomplete-input" placeholder="Gap avance" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >REPETICIONES AVANCE</label>
+									<input type="number" name="rep_avance" id="rep_avance"   [(ngModel)]="rep_avance"  class="form-control ui-autocomplete-input" placeholder="Repeticiones avance" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >TIPO</label>
+									<input type="text" name="tipo" id="tipo"   [(ngModel)]="tipo"  class="form-control ui-autocomplete-input" placeholder="Tipo" autocomplete="off">
+								  </div>
+								  <div class="col-md-2">
+									<label >FORMA</label>
+									<input type="text" name="forma" id="forma"   [(ngModel)]="forma"  class="form-control ui-autocomplete-input" placeholder="Forma" autocomplete="off">
+								  </div>
+								  <div class="col-md-2">
+									<label >TIPO IMPRESION EX</label>
+									<select  name="tipo_impresion_ex" [(ngModel)]="tipo_impresion_ex" class="form-control select2 tip" style="width:100%;font-weight:bold;">
+										<option *ngFor="let e of impresion_ex_lista; let i = index;" [value]="e.tipo_impresion_ex">{{e.tipo_impresion_ex}}</option>
+									</select>
+								  </div>
+								  <div class="col-md-2">
+									<label >MUESTRA</label>
+									<select  name="muestra" [(ngModel)]="muestra" class="form-control select2 tip" style="width:100%;font-weight:bold;">
+										<option *ngFor="let e of lista_si_no; let i = index;" [value]="e.valor">{{e.valor}}</option>
+									</select>
+								  </div>
+								  <div class="col-md-2">
+									<label >CORTE SEGURIDAD</label>
+									<input type="text" name="corte_seg" id="corte_seg"   [(ngModel)]="corte_seg"  class="form-control ui-autocomplete-input" placeholder="Corte seguridad" autocomplete="off">
+								  </div>
+								  <div class="col-md-2">
+									<label >LAYFLAT (MM)</label>
+									<input type="number" name="layflat" id="layflat"   [(ngModel)]="layflat"  class="form-control ui-autocomplete-input" placeholder="LAYFLAT" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >ANCHO DEL ROLLO</label>
+									<input type="number" name="ancho_rollo" id="ancho_rollo"   [(ngModel)]="ancho_rollo"  class="form-control ui-autocomplete-input" placeholder="ancho_rollo" autocomplete="off" [min]="1">
+								  </div>
+								  <div class="col-md-2">
+									<label >EXISTE CLICHE</label>
+									<select  name="existe_cliche" [(ngModel)]="existe_cliche" class="form-control select2 tip" style="width:100%;font-weight:bold;">
+										<option *ngFor="let e of lista_si_no; let i = index;" [value]="e.valor">{{e.valor}}</option>
+									</select>
+								  </div>
+								  <div class="col-md-2">
+									<label >ETIQUETA FILA CLIENTE</label>
+									<input type="text" name="etiq_fila_cliente" id="etiq_fila_cliente"   [(ngModel)]="etiq_fila_cliente"  class="form-control ui-autocomplete-input" placeholder="Etiq fila cliente" autocomplete="off">
 								  </div>
 								  <div class="col-md-3">
+									<label >ETIQUETA FILA PRODUCCION</label>
+									<input type="text" name="etiq_fila_produccion" id="etiq_fila_produccion"   [(ngModel)]="etiq_fila_produccion"  class="form-control ui-autocomplete-input" placeholder="Etiq fila produccion" autocomplete="off">
+								  </div>
+								  <div class="col-md-3">
+									<label >TIPO DE TINTA</label>
+									<input type="text" name="tipo_tinta" id="tipo_tinta"   [(ngModel)]="tipo_tinta"  class="form-control ui-autocomplete-input" placeholder="Tipo de tinta" autocomplete="off">
+								  </div>
+								  <div class="col-md-3">
+									<label >TIPO DE CORTE</label>
+									<input type="text" name="tipo_corte" id="tipo_corte"   [(ngModel)]="tipo_corte"  class="form-control ui-autocomplete-input" placeholder="Tipo de corte" autocomplete="off">
+								  </div>
+								  <div class="col-md-3">
+									<label >ACABADO 1</label>
+									<input type="text" name="acabado1" id="acabado1"   [(ngModel)]="acabado1"  class="form-control ui-autocomplete-input" placeholder="Acabado 1" autocomplete="off">
+								  </div>
+								  <div class="col-md-3">
+									<label >ACABADO 2</label>
+									<input type="text" name="acabado2" id="acabado2"   [(ngModel)]="acabado2"  class="form-control ui-autocomplete-input" placeholder="Acabado 2" autocomplete="off">
+								  </div>
+								  <div class="col-md-3">
+									<label >ACABADO 3</label>
+									<input type="text" name="acabado3" id="acabado3"   [(ngModel)]="acabado3"  class="form-control ui-autocomplete-input" placeholder="Acabado 3" autocomplete="off">
+								  </div>
+								  <div class="col-md-3">
+									<label >ACABADO 4</label>
+									<input type="text" name="acabado4" id="acabado4"   [(ngModel)]="acabado4"  class="form-control ui-autocomplete-input" placeholder="Acabado 4" autocomplete="off">
+								  </div>
+<!-- 								  <div class="col-md-3">
 									  <label >FORMATO ETIQUETA</label>
 									  <select *ngIf="accion_actualizar" name="formato_etiqueta" [(ngModel)]="formato_seleccionado" class="form-control select2 tip" style="width:100%;font-weight:bold;">
 										  <option *ngFor="let e of formato_etiqueta; let i = index;" [value]="e.tipo_etiqueta">{{e.nom_doc}}</option>
@@ -214,558 +364,53 @@
 									  <select *ngIf="!accion_actualizar"  name="formato_etiqueta" [(ngModel)]="formato_seleccionado" class="form-control select2 tip" style="width:100%;font-weight:bold;">
 										  <option *ngFor="let e of formato_etiqueta; let i = index;" [value]="e.tipo_etiqueta">{{e.nom_doc}}</option>
 									  </select>
-								  </div>
-							  </div>
-							  <div class="table-responsive-ing">
-								  <table class="table table-hover">
-									  <tr>
-										  <th colspan="2" class="text-center">TROQUEL</th>
-										  <th colspan="2" class="text-center">ACABADOS</th>
-										  <th colspan="4" class="text-center">ACABADOS 2</th>
-										  <th colspan="2" class="text-center">ACABADOS LAMINADO</th>
-									  </tr>
-									  <tbody>
-										  <tr class="text-center">
-											  <td class="col-md-2" >
-												  <label >CILINDRO CÓDIGO</label>
-											  </td>
-											  <td class="col-md-2">
-												  <label >PLANO CÓDIGO</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >UV SOBRE IMPR</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >UV TOTAL</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >UV SELECT</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >RELAM DELAM</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >HOT STAMPING</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >COLD FOIL</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >REPUJADO</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >MATE</label>
-											  </td>
-											  <td class="col-md-1">
-												  <label >BRILLAN</label>
-											  </td>
-										  </tr>
-										  <tr>
-											  <td class="col-md-2">
-												  <input type="text" name="cilindro_cod" id="cilindro_cod"   [(ngModel)]="cilindro_cod"  class="form-control ui-autocomplete-input" placeholder="Cod. Cilindro" autocomplete="off">
-											  </td>
-											  <td class="col-md-2">
-												  <input type="text" name="troquel_plano_cod" id="troquel_plano_cod"   [(ngModel)]="troquel_plano_cod"  class="form-control ui-autocomplete-input" placeholder="Cod. Plano" autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="uv_sobre_impr" id="uv_sobre_impr" [(ngModel)]="uv_sobre_impr" autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="uv_total" id="uv_total" [(ngModel)]="uv_total" autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="uv_select" id="uv_select"   [(ngModel)]="uv_select" autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="relam_delam" id="relam_delam"   [(ngModel)]="relam_delam" autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="hot_stamping_acabados" id="hot_stamping_acabados"   [(ngModel)]="hot_stamping" autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="cold_foil" id="cold_foil"   [(ngModel)]="cold_foil"  autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="repujado" id="repujado"   [(ngModel)]="repujado_ing_prod"  autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="laminado_mate" id="laminado_mate"   [(ngModel)]="lami_mate" autocomplete="off">
-											  </td>
-											  <td [ngStyle]="{ 'text-align': 'center' }">
-												  <input type="checkbox" name="laminado_brillan" id="laminado_brillan"   [(ngModel)]="laminado_brillan" autocomplete="off">
-											  </td>
-										  </tr>
-									  </tbody>
-								  </table>
-							  </div>
-							  
-									  <!-- 
-										  <div class="col-md-3">
-											  <div class="form-group">
-												  <label for="date">FORMATO ETIQUETA</label>
-												  
-											  -->
-												  <!-- <select *ngIf="!numtra" name="bodega" [(ngModel)]="almacen" class="form-control select2 tip" style="width:100%;"> -->
-												  <!-- style="width:100%;color:blue;" 
-												  
-												  
-											  </div>
-										  </div>
-									  </div>
-									  -->
-								  <!-- 
-									  <div class="row">
-										  <div class="col-md-2">
-											  <div class="form-group">
-												  <label for="category">CIUDAD</label>                              
-												  
-												  <select name="ciudad" [(ngModel)]="ciudad" class="form-control select2 tip" style="width:100%;">
-													  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-													  <option *ngFor="let e of ciudad_lista; let i = index;" [value]="e.nomgeo">{{e.nomgeo}}</option>
-												  </select>
-											  </div>
-										  </div>
-									  </div>
-								  -->
-  
+								  </div> -->
+							  </div>  
 						  </div>
 					  </div>
-					  <!-- 
-						  <div class="box box-primary">
-							  <div class="box-body">
-							  <div class="col-lg-12">
-								  <div class="row">
-									  <div class="col-md-3">
-										  <label >TROQUEL</label>
-									  </div>
-									  <div class="col-md-3">
-										  <label >ACABADOS</label>
-									  </div>
-									  <div class="col-md-6">
-										  <label >ACABADOS 2</label>
-									  </div>
-								  </div>
-								  <div class="row">
-									  <div class="col-md-3">
-										  <div class="form-group">
-											  <div>
-												  <label >CILINDRO CÓDIGO:</label>
-											  </div>
-											  <div>
-												  <label >PLANO CÓDIGO:</label>
-											  </div>
-										  </div>
-									  </div>
-									  <div class="col-md-3">
-										  <div class="form-group">
-											  <div>
-												  <label >UV TOTAL:</label><br>
-												  
-											  </div>
-											  <div>
-												  <label >UV SELECT:</label><br>
-												  
-											  </div>
-										  </div>
-									  </div>
-									  <div class="col-md-3">
-										  <div class="form-group">
-											  <div>
-												  <label >RELAM DELAM:</label><br>
-												  
-											  </div>
-											  <div>	
-												  <label >HOT STAMPING:</label><br>
-												  
-											  </div>
-										  </div>							
-									  </div>
-									  <div class="col-md-3">
-										  <div class="form-group">
-											  <div>
-												  <label >COLD FOILD:</label><br>
-												  
-											  </div>
-											  <div>
-												  <label >REPUJADO:</label><br>
-												  
-											  </div>
-										  </div>
-									  </div>
-								  </div>
-								  <div class="row">
-									  <div class="col-md-12">
-										  <label >LAMINADO</label>
-									  </div>
-								  </div>
-								  <div class="row">
-									  <div class="col-md-3">
-										  <div class="form-group">
-											  <div>
-												  <label >MATE:</label><br>
-												  
-											  </div>
-										  </div>
-									  </div>
-									  <div class="col-md-3">
-										  <div class="form-group">
-											  <div>
-												  <label >BRILLAN:</label><br>
-												  
-											  </div>
-										  </div>
-									  </div>
-								  </div>
-							  </div>
-						  </div>
-					  </div>
-					  -->
-					  <div class="box box-primary">
-						  <div class="box-body table-responsive no-padding">
-							  <div class="col-lg-12">
-								  <div class="table-responsive-ing">
-									  <table class="table table-hover">
-										  <tr>
-											  <th colspan="4" class="text-center">PRIMARIOS</th>
-											  <th colspan="7" class="text-center">COLORES PLANOS O PANTONE</th>
-										  </tr>
-										  <tbody>
-											  <tr [ngStyle]="{ 'text-align': 'center' }">
-												  <td>
-													  <label >C</label>
-												  </td>
-												  <td>
-													  <label >M</label>
-												  </td>
-												  <td>
-													  <label >Y</label>
-												  </td>
-												  <td>
-													  <label >K</label>
-												  </td>
-												  <td><label>PANTONE</label></td>
-												  <td><label>PANTONE</label></td>
-												  <td><label>PANTONE</label></td>
-												  <td><label>PANTONE</label></td>
-												  <td><label>PANTONE</label></td>
-												  <td><label>PANTONE</label></td>
-												  <td><label>PANTONE</label></td>
-											  </tr>
-											  <tr>
-												  <td class="col-md-1" [ngStyle]="{ 'text-align': 'center' }">
-													  <input type="checkbox" name="primario_C" id="primario_C" [(ngModel)]="primario_C" autocomplete="off"  (change)="reset_valores_inferiores('primario_C')">
-												  </td>
-												  <td class="col-md-1" [ngStyle]="{ 'text-align': 'center' }">
-													  <input type="checkbox" name="primario_M" id="primario_M" [(ngModel)]="primario_M" autocomplete="off" (change)="reset_valores_inferiores('primario_M')">
-												  </td>
-												  <td class="col-md-1" [ngStyle]="{ 'text-align': 'center' }">
-													  <input type="checkbox" name="primario_Y" id="primario_Y" [(ngModel)]="primario_Y" autocomplete="off" (change)="reset_valores_inferiores('primario_Y')">
-												  </td>
-												  <td class="col-md-1" [ngStyle]="{ 'text-align': 'center' }">
-													  <input type="checkbox" name="primario_K" id="primario_K" [(ngModel)]="primario_K" autocomplete="off"(change)="reset_valores_inferiores('primario_K')">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="text" name="pantone_1" id="pantone_1"   [(ngModel)]="pantone_1"  class="form-control ui-autocomplete-input" autocomplete="off" (change)="reset_valores_inferiores('pantone_1')">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="text" name="pantone_2" id="pantone_2"   [(ngModel)]="pantone_2"  class="form-control ui-autocomplete-input" autocomplete="off" (change)="reset_valores_inferiores('pantone_2')">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="text" name="pantone_3" id="pantone_3"   [(ngModel)]="pantone_3"  class="form-control ui-autocomplete-input" autocomplete="off" (change)="reset_valores_inferiores('pantone_3')">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="text" name="pantone_4" id="pantone_4"   [(ngModel)]="pantone_4"  class="form-control ui-autocomplete-input" autocomplete="off" (change)="reset_valores_inferiores('pantone_4')">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="text" name="pantone_5" id="pantone_5"   [(ngModel)]="pantone_5"  class="form-control ui-autocomplete-input" autocomplete="off" (change)="reset_valores_inferiores('pantone_5')">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="text" name="pantone_6" id="pantone_6"   [(ngModel)]="pantone_6"  class="form-control ui-autocomplete-input" autocomplete="off" (change)="reset_valores_inferiores('pantone_6')">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="text" name="pantone_7" id="pantone_7"   [(ngModel)]="pantone_7"  class="form-control ui-autocomplete-input" autocomplete="off" (change)="reset_valores_inferiores('pantone_7')">
-												  </td>
-											  </tr>
-											  <tr>
-												  <th colspan="11" class="text-center">
-													  ANILOX
-												  </th>
-											  </tr>
-											  <tr>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_vC" id="anilox_vC"   [(ngModel)]="anilox_vC"  class="form-control ui-autocomplete-input" placeholder="(#)" autocomplete="off" [disabled]="!primario_C" [min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_vM" id="anilox_vM"   [(ngModel)]="anilox_vM"  class="form-control ui-autocomplete-input" placeholder="(#)" autocomplete="off" [disabled]="!primario_M" [min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_vY" id="anilox_vY"   [(ngModel)]="anilox_vY"  class="form-control ui-autocomplete-input" placeholder="(#)" autocomplete="off" [disabled]="!primario_Y" [min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_vK" id="anilox_vK"   [(ngModel)]="anilox_vK"  class="form-control ui-autocomplete-input" placeholder="(#)" autocomplete="off" [disabled]="!primario_K" [min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_1" id="anilox_1"   [(ngModel)]="anilox_1"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_1 || pantone_1.trim() === ''" [min]="1" [min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_2" id="anilox_2"   [(ngModel)]="anilox_2"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_2 || pantone_2.trim() === ''" [min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_3" id="anilox_3"   [(ngModel)]="anilox_3"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_3 || pantone_3.trim() === ''" [min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_4" id="anilox_4"   [(ngModel)]="anilox_4"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_4 || pantone_4.trim() === ''"[min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_5" id="anilox_5"   [(ngModel)]="anilox_5"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_5 || pantone_5.trim() === ''"[min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_6" id="anilox_6"   [(ngModel)]="anilox_6"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_6 || pantone_6.trim() === ''"[min]="1">
-												  </td>
-												  <td class="col-md-1">
-													  <input type="number" name="anilox_7" id="anilox_7"   [(ngModel)]="anilox_7"  class="form-control ui-autocomplete-input" placeholder="ANILOX" autocomplete="off" [disabled]="!pantone_7 || pantone_7.trim() === ''"[min]="1">
-												  </td>
-											  </tr>
-											  <tr>
-												  <th colspan="11" class="text-center">
-													  PROVEEDOR / FABRICANTE
-												  </th>
-											  </tr>
-											  <tr>
-												  <td class="col-md-1">
-													  <!--<input type="text" name="prov_fabricante_vC" id="prov_fabricante_vC"   [(ngModel)]="prov_fabricante_vC"  class="form-control ui-autocomplete-input" placeholder="H/W" autocomplete="off" [disabled]="!primario_C">-->
-													  <select name="prov_fabricante_vC" [(ngModel)]="prov_fabricante_vC" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_C">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_vM" [(ngModel)]="prov_fabricante_vM" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_M">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_vY" [(ngModel)]="prov_fabricante_vY" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_Y">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_vK" [(ngModel)]="prov_fabricante_vK" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_K">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_1" [(ngModel)]="prov_fabricante_1" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_1 || pantone_1.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_2" [(ngModel)]="prov_fabricante_2" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_2 || pantone_2.trim() === ''" >
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_3" [(ngModel)]="prov_fabricante_3" class="form-control select2 tip" style="width:100%;"[disabled]="!pantone_3 || pantone_3.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_4" [(ngModel)]="prov_fabricante_4" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_4 || pantone_4.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_5" [(ngModel)]="prov_fabricante_5" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_5 || pantone_5.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_6" [(ngModel)]="prov_fabricante_6" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_6 || pantone_6.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="prov_fabricante_7" [(ngModel)]="prov_fabricante_7" class="form-control select2 tip" style="width:100%;"[disabled]="!pantone_7 || pantone_7.trim() === ''" >
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of h_w_lista; let i = index;" [value]="e.hw_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-											  </tr>
-											  <tr>
-												  <th colspan="11" class="text-center">
-													  TINTA Y STICKY
-												  </th>
-											  </tr>
-											  <tr>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_vC" [(ngModel)]="tinta_sticky_vC" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_C">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <!--<input type="text" name="tinta_sticky_vM" id="tinta_sticky_vM"   [(ngModel)]="tinta_sticky_vM"  class="form-control ui-autocomplete-input" placeholder="T/S" autocomplete="off" [disabled]="!primario_M">-->
-													  <select name="tinta_sticky_vM" [(ngModel)]="tinta_sticky_vM" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_M">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_vY" [(ngModel)]="tinta_sticky_vY" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_Y">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_vK" [(ngModel)]="tinta_sticky_vK" class="form-control select2 tip" style="width:100%;" [disabled]="!primario_K">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_1" [(ngModel)]="tinta_sticky_1" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_1 || pantone_1.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_2" [(ngModel)]="tinta_sticky_2" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_2 || pantone_2.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_3" [(ngModel)]="tinta_sticky_3" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_3 || pantone_3.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_4" [(ngModel)]="tinta_sticky_4" class="form-control select2 tip" style="width:100%;"[disabled]="!pantone_4 || pantone_4.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_5" [(ngModel)]="tinta_sticky_5" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_5 || pantone_5.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_6" [(ngModel)]="tinta_sticky_6" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_6 || pantone_6.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-												  <td class="col-md-1">
-													  <select name="tinta_sticky_7" [(ngModel)]="tinta_sticky_7" class="form-control select2 tip" style="width:100%;" [disabled]="!pantone_7 || pantone_7.trim() === ''">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-														  <option *ngFor="let e of tinta_sticky_lista; let i = index;" [value]="e.ts_lista">{{e.nom_doc}}</option>
-													  </select>
-												  </td>
-											  </tr>
-										  </tbody>
-									  </table>
-								  </div>
-								  
-							  </div>
-						  </div>
-					  </div>
-					  <div class="box box-primary">
-						  <div class="box-header with-border">
-							  <h3 class="box-title">
-								  DISPENSADO
-							  </h3>
-						  </div>
-						  <div class="box-body">
-							  <div class="col-lg-12">
-								  <div class="row">
-									  <div class="col-md-3">
-										  <div class="form-group">
-											  <label>TIPO DE DISPENSADO:</label>
-											  <div>
-												  <label >MANUAL</label>
-												  <input type="radio" name="tipo_dispensado" id="manual"   [(ngModel)]="tipo_dispensado" [ngStyle]="{'margin-left': '10px', 'margin-right': '20px'}" value="Manual" autocomplete="off">
-												  <label >AUTOMATICO</label>
-												  <input type="radio" name="tipo_dispensado" id="automatico"   [(ngModel)]="tipo_dispensado" [ngStyle]="{'margin-left': '10px'}" value="Automatico" autocomplete="off">
-											  </div>
-										  </div>
-									  </div>
-									  <div class="col-md-2">
-										  <div class="form-group">
-											  <label >DIAMETRO ROLLO:</label>
-											  <input type="number" name="diametro_rollo" id="diametro_rollo"   [(ngModel)]="diametro_rollo"  class="form-control ui-autocomplete-input" placeholder="Diametro (cm)" autocomplete="off" [min]="1">
-										  </div>
-									  </div>
-									  <div class="col-md-2">
-										  <div class="form-group">
-											  <label >PESO DEL ROLLO:</label>
-											  <input type="number" name="peso_rollo" id="peso_rollo"   [(ngModel)]="peso_rollo"  class="form-control ui-autocomplete-input" placeholder="Peso (Kg)" autocomplete="off" [min]="1">
-										  </div>
-									  </div>
-									  <div class="col-md-2">
-										  <div class="form-group">
-											  <label >MEDIDA:</label>
-											  <input type="number" name="medida_dispensado" id="medida_dispensado"   [(ngModel)]="medida_dispensado"  class="form-control ui-autocomplete-input" placeholder="Medida (cm)" autocomplete="off" [min]="1">
-										  </div>
-									  </div>
-									  <div class="col-md-2">
-										  <div class="form-group">
-											  <label >TACA:</label><br>
-											  <label >SI</label>
-											  <input type="radio" name="taca" id="taca"   [(ngModel)]="taca" [ngStyle]="{'margin-left': '10px', 'margin-right': '15px'}" value="SI" autocomplete="off">
-											  <label >NO</label>
-											  <input type="radio" name="taca" id="taca"   [(ngModel)]="taca" [ngStyle]="{'margin-left': '10px'}" value="NO" autocomplete="off">
-										  </div>
-									  </div>
-								  </div>
-							  </div>
-						  </div>
-					  </div>
+	
+
 					  <div class="row">
-						  <div class="col-md-6">
-							  <div class="box box-primary">
-								  <div class="box-body">
-									  <div class="col-lg-12">
-										  <div class="row text-center">
-											  <!--<div class="col-md-12">
-												  <div class="form-group">
-													  <input type="file" name="img_etiqueta" id="img_etiqueta" [(ngModel)]="img_etiqueta" accept="image/*">
-												  </div>
-											  </div>-->
-											  <div class="centered-container d-flex justify-content-center align-items-center">
-												  <div *ngIf="(!imageFile)" class="image-upload">
-														<label for="file-input">
-														  <img src="{{src}}"  name="img_etiqueta" id="img_etiqueta" width="150" height="150" alt="subir foto" accept="image/*">
-														</label>
-			  
-														<input (change)="fileChange($event)" id="file-input" type="file" />
-												  </div>
-												  
-												  <div  class="text-center image-upload" *ngIf="(imageFile && !loading)" >
-													  <label for="file-input">
-														  <img [src]="localCompressedURl" name="img_etiqueta" id="img_etiqueta" width="150" height="150" alt="subir foto" accept="image/*" >
-														</label>
-			  
-														<input (change)="fileChange($event)" id="file-input" type="file" />
-												  
-												  </div>	
-											  </div>
-										  </div>
-									  </div>
-								  </div>
-							  </div>
-						  </div>
+						<div class="col-md-6">
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<h3 class="box-title">
+										OBSERVACIONES
+									</h3>
+								</div>
+								<div class="box-body">
+									<div class="col-lg-12">
+										<div class="row">
+											<div class="col-md-12">
+												<div class="form-group">
+													<textarea [(ngModel)]="observacion"  name="observacion"  rows="5" cols="5" placeholder="Puede escribir observaciones del la ficha tecnica"  value="" class="pa form-control kb-text"></textarea>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="box-header with-border">
+									<h3 class="box-title">
+										GENERACION DE OP
+									</h3>
+								   </div>
+								   <div class="box-body">
+										<div class="col-lg-12">
+											<div class="row">
+												<div class="col-md-6">
+													<div class="form-group">
+														<label for="category">REQUIERE CLICHE</label>                              
+														<select name="requiere_cliche" [(ngModel)]="requiere_cliche" class="form-control select2 tip" style="width:100%;">
+															<option *ngFor="let e of lista_si_no; let i = index;" [value]="e.valor">{{e.valor}}</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+							</div>
+						</div>
+
 						  <div class="col-md-6">
 							  <div class="box box-primary">
 								  <div class="box-header with-border">
@@ -778,9 +423,9 @@
 										  <div class="row">
 											  <div class="col-md-6">
 												  <div class="form-group">
-													  <label for="category">EMBOBINADO EXTERIOR</label>                              
-													  <select name="emboext_ls" [(ngModel)]="embobinado_ext_seleccionado" class="form-control select2 tip" style="width:100%;">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
+													  <label for="category">EMBOBINADO EXTERIOR</label>                             
+													  <select name="emboext_ls" [(ngModel)]="embon_ext" class="form-control select2 tip" style="width:100%;">
+<!-- 														  <option [ngValue]="undefined" disabled  selected>Seleccione</option> -->
 														  <option *ngFor="let e of emboext_lista; let i = index;" [value]="e.emboext_ls">{{e.nom_doc}}</option>
 													  </select>
 												  </div>
@@ -789,8 +434,8 @@
 												  <div class="form-group">
 													  <label for="category">EMBOBINADO INTERIOR</label>                              
 													  
-													  <select name="emboint_ls" [(ngModel)]="embobinado_interior_seleccionado" class="form-control select2 tip" style="width:100%;">
-														  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
+													  <select name="emboint_ls" [(ngModel)]="embon_int" class="form-control select2 tip" style="width:100%;">
+<!-- 														  <option [ngValue]="undefined" disabled  selected>Seleccione</option> -->
 														  <option *ngFor="let e of emboint_lista; let i = index;" [value]="e.emboint_ls">{{e.nom_doc}}</option>
 													  </select>
 												  </div>
@@ -798,6 +443,8 @@
 										  </div>
 									  </div>
 								  </div>
+
+
 							  </div>
 						  </div>
 					  </div>
@@ -816,7 +463,7 @@
 									  </div>
 								  </div>
 								  <div class="row">
-									  <div class="col-md-3">
+<!-- 									  <div class="col-md-3">
 										  <div class="form-group">
 											  <label >EJECUTIVO DE VENTAS</label>
 											  <input *ngIf="isOtroResponsableSeleccionado" type="text" name="ejecutivo_ventas" id="ejecutivo_ventas"   [(ngModel)]="ejecutivo_ventas"  class="form-control ui-autocomplete-input" placeholder="DISPENSADO" autocomplete="off">
@@ -825,44 +472,43 @@
 												  <option *ngFor="let e of impresor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>
 											  </select>
 										  </div>
-									  </div>
-									  <div class="col-md-3">
+									  </div> -->
+									  <div class="col-md-6">
 										  <div class="form-group">
-											  <label >IMPRESO POR</label>
-											  <select name="impreso_res" [(ngModel)]="impreso_res" class="form-control select2 tip" style="width:100%;">
+											  <label >SOLICITADO POR <span style="font-weight:bold;color:red">(*)</span></label>
+											  <select name="solicitado_por" [(ngModel)]="solicitado_por" class="form-control select2 tip" style="width:100%;">
 												  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
 												  <option *ngFor="let e of impresor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>
 											  </select>
 										  </div>
 									  </div>
-									  <div class="col-md-3">
+									  <div class="col-md-6">
 										  <div class="form-group">
-											  <label >SUPERVISADO POR</label>
-											  <select name="supervisador_res" [(ngModel)]="supervisador_res" class="form-control select2 tip" style="width:100%;">
+											  <label >AUTORIZADO POR <span style="font-weight:bold;color:red">(*)</span></label>
+											  <select name="autorizado_por" [(ngModel)]="autorizado_por" class="form-control select2 tip" style="width:100%;">
 												  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
 												  <!--<option *ngFor="let e of supervisor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>-->
 												  <option *ngFor="let e of impresor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>
 											  </select>
 										  </div>
 									  </div>
-									  <div class="col-md-3">
+<!-- 									  <div class="col-md-3">
 										  <div class="form-group">
 											  <label >JEFE DE PRODUCCION</label>
 											  <select name="jefe_prod" [(ngModel)]="jefe_prod" class="form-control select2 tip" style="width:100%;">
 												  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
-												  <!--<option *ngFor="let e of jefe_produccion_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>-->
 												  <option *ngFor="let e of impresor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>
 											  </select>
 										  </div>
-									  </div>
+									  </div> -->
 								  </div>
 								  <div class="form-group">
 									  <!-- <input *ngIf=""  #generar_pe type="submit" (click)="generar_pedido()" disabled name="add_purchase" value="Generar pedido" class="btn btn-primary"> -->
 									  <!-- *ngIf="!accion_actualizar" -->
 									  <!--<input *ngIf="articulos_pedido.length > 0 && !accion_actualizar" #generar_pe type="submit" (click)="generar_pedido()"  name="add_purchase" value="Generar pedido" class="btn btn-primary">-->
-									  <input *ngIf="!accion_actualizar" #generar_pe type="submit" (click)="generar_ing_producto()"  name="add_purchase" value="Generar Ing. Producto" class="btn btn-primary">
-									  <input *ngIf="accion_actualizar" #actualizar_pe type="submit" (click)="actualizar_IngProducto()"  name="add_purchase" value="Actualizar Ing. Producto" class="btn btn-primary">
-									  <input  #regresar_lista  routerLink="/admin/lista_ing_productos" [queryParams]="{usuario:usuario,empresa:empresa}" type="submit"  name="add_purchase" value="Ir a lista de pedidos" class="btn btn-danger">
+									  <input *ngIf="!accion_actualizar" #generar_pe type="submit" (click)="generar_ficha_tecnica_preprensa()"  name="add_purchase" value="Generar Ficha Tecnica" class="btn btn-primary">
+									  <input *ngIf="accion_actualizar" #actualizar_pe type="submit" (click)="actualizar_FichaTecnicaPreprensa()"  name="add_purchase" value="Actualizar Ficha Tecnica" class="btn btn-primary">
+									  <input  #regresar_lista  routerLink="/admin/lista_fichapreprensa" [queryParams]="{usuario:usuario,empresa:empresa}" type="submit"  name="add_purchase" value="Ir a lista fichas" class="btn btn-danger">
 									  <!-- <input routerLink="/admin/lista_recibos" [queryParams]="{usuario:usuario}" type="submit"  name="add_purchase" value="Ir a lista de recibos" class="btn btn-danger"> -->
 								  </div>
 								  <div class="clearfix"></div>

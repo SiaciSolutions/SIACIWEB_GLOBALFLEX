@@ -1155,21 +1155,48 @@ public getConfCambioVendedorPed(): string {
     return this.http.post(this.apiUrl + ':' + this.port + '/get_datos_vehiculo_placa', param);
   }
   
-     generar_pdf_orden(param): Observable<any> {
+  generar_pdf_orden(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/generar_pdf_orden', param);
   }
   
-        busqueda_pedido_razonsocial(param): Observable<any> {
+  busqueda_pedido_razonsocial(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/busqueda_pedido_razonsocial', param);
   }
   
-          almacen_origen_destino(param): Observable<any> {
+  almacen_origen_destino(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/almacen_origen_destino', param);
   }
   
   busqueda_razon_social_placa(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/busqueda_razon_social_placa', param);
   }
+  
+  vendedores_ficha_tecnica(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/vendedores_ficha_tecnica', param);
+  }
+  generar_ficha_tecnica_preprensa(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/generar_ficha_tecnica_preprensa', param);
+  }
+  lista_ficha_preprensa(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/lista_ficha_preprensa', param);
+  }
+  get_ficha_tecnica_preprensa(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/get_ficha_tecnica_preprensa', param);
+  }
+  actualizar_ficha_tecnica_preprensa(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_ficha_tecnica_preprensa', param);
+  }
+  generar_pdf_ficha_tecnica_preprensa(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/generar_pdf_ficha_tecnica_preprensa', param);
+  }
+
+
+
+  
+  
+  
+
+  
   
   
 

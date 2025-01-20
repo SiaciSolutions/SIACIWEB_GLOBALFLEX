@@ -603,6 +603,33 @@ def vendedores():
   response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
   response.headers['content-type'] = 'application/json'
   return(response)
+
+
+@app.route('/vendedores_ficha_tecnica', methods=['POST'])
+def vendedores_ficha_tecnica():
+  datos = request.json
+  print ('ENTRADAAAAA')
+  print (datos)
+  
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  campos = ['codven','nomven']
+  sql = """SELECT codven,nomven FROM vendedorescob where codemp='{}'""".format(datos['codemp'])
+  curs.execute(sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    d = dict(zip(campos, r))
+    arrresp.append(d)
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
   
 @app.route('/get_prec_product', methods=['POST'])
 def get_prec_product():
@@ -4279,6 +4306,27 @@ def generar_pdf_ing_producto():
 	
     # return send_from_directory(PATH_PDF, arr_image[1])
     return jsonify(d)
+    
+@app.route('/generar_pdf_ficha_tecnica_preprensa', methods=['POST'])
+def generar_pdf_ficha_tecnica_preprensa():
+    print("GENERAR FICHA TECNICA PRE-PRENSA")
+    datos = request.json
+    print(datos)
+    idficha = str(datos['idficha'])
+    file= 'FICHA_TECNICA_PREPRENSA_'+datos['codemp']+'_'+idficha+'.pdf'
+    ##FICHA_TECNICA_PREPRENSA_01_6.pdf
+   
+    DESTINO='C:\\SISTEMA\\temporales\\'+file
+    ORIGEN = APP_PATH+'\\PLANTILLA_PEDIDOS\\'+file
+    
+    generar_pdf = pdf.GEN_PDF()
+    resp_pdf = generar_pdf.gen_ficha_preprensa_pdf(datos['codemp'],datos['idficha'])
+    shutil.move(ORIGEN, DESTINO)
+
+    d = {'STATUS':'EXITOSO','PDF':file}
+	
+    # return send_from_directory(PATH_PDF, arr_image[1])
+    return jsonify(d)
 
 @app.route('/ver_pdf_ing_producto/<ticketname>')
 def ver_pdf_ing_producto(ticketname):
@@ -4295,6 +4343,273 @@ def ver_pdf_ing_producto(ticketname):
     PATH_PDF='C:\\SISTEMA\\temporales'
     # return send_from_directory(PATH_PDF, arr_image[1])
     return send_from_directory(PATH_PDF, ticketname)
+    
+
+@app.route('/ver_pdf_ficha_preprensa/<ticketname>')
+def ver_pdf_ficha_preprensa(ticketname):
+    print ("VER TICKET")
+    print (ticketname)
+
+    # arr_image= ticketname.split('_')
+    # arr_image= ticketname.split('_')
+	
+    # codemp = arr_image[1]
+    # numfac = arr_image[2]
+
+
+    PATH_PDF='C:\\SISTEMA\\temporales'
+    # return send_from_directory(PATH_PDF, arr_image[1])
+    return send_from_directory(PATH_PDF, ticketname)
+
+###########BLOQUE GENERACION DE FICHA TECNICA PREPRENSA #######
+
+@app.route('/generar_ficha_tecnica_preprensa', methods=['POST']) 
+def generar_ficha_tecnica_preprensa():
+  datos = request.json
+  print ("##########  ENTRADA GENERAR FICHA TECNICA PREPRENSA ######")
+  print (datos)
+  
+
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+
+  
+  # sql_codIngMax = "Select MAX(codIngProd) AS codMax from ing_de_producto"
+  # curs.execute(sql_codIngMax)
+  # codMax = curs.fetchone()[0]
+  # cod_IngMax = codMax + 1 if codMax is not None else 1
+  # print(cod_IngMax)
+  
+  # img_etiqueta = datos.get('imagen_comprimida') or datos.get('imagen_original') or None
+  
+  def replace_none_values(data_dict):
+    return {key: '' if value is None else value for key, value in data_dict.items()}
+  
+  datos_limpios = replace_none_values(datos)
+  #print(tinta_sticky_vC)
+  
+    # sql = """INSERT INTO ing_de_producto (CodEmpresa, fecIngProd,
+    # razon_social_ing_prod, ruc_ing_prod, nombre_comercial_ing_prod, referencia, alto, ancho, proveedor, impresora, bobinadora, material_imprimir, ancho_material, 
+    # cilindro, cortador, colores, rep_des, columnas, forma_etq, cod_cilindro, cod_plano, uv_total, uv_select, relam_delam, hot_stamping, cold_folid, repujado, lami_mate, lami_brillan, 
+    # primario_c, primario_m, primario_k,primario_y, 
+    # pantone_1, pantone_2, pantone_3, pantone_4, pantone_5, pantone_6, pantone_7, 
+    # anilox_vC, anilox_vM, anilox_vY, anilox_vK, 
+    # anilox_1, anilox_2, anilox_3, anilox_4, anilox_5, anilox_6, anilox_7, 
+    # prov_fabricante_vC, prov_fabricante_vM, prov_fabricante_vY, prov_fabricante_vK,
+    # prov_fabricante_1, prov_fabricante_2, prov_fabricante_3, prov_fabricante_4, prov_fabricante_5, prov_fabricante_6, prov_fabricante_7, 
+    # tinta_sticky_vC, tinta_sticky_vM, tinta_sticky_vY, tinta_sticky_vK, 
+    # tinta_sticky_1, tinta_sticky_2, tinta_sticky_3, tinta_sticky_4, tinta_sticky_5, tinta_sticky_6, tinta_sticky_7, 
+    # tipo_dispensado, diametro_rollo, peso_rollo, medida, dispensado_taca,
+    # embobinado_exterior, embobinado_interior, 
+    # img_etiqueta,
+    # ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion, uv_sobre_impr
+          # )  VALUES ('{}','{}',
+                  # '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
+                  # '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
+                  # '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
+                  # '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}' ,'{}'
+              # )"""\
+    # .format(datos_limpios['codemp'],datos_limpios['fecIngProd'],
+            # datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['nombre_comercial'],datos_limpios['referencia'],datos_limpios['medida_alto'],datos_limpios['medida_ancho'],datos_limpios['proveedor'],datos_limpios['impresora'],datos_limpios['bobinadora'],datos_limpios['material_imprimir'],datos_limpios['ancho_material'],
+            # datos_limpios['cilindro'],datos_limpios['cortador'],datos_limpios['color_seleccionado'],datos_limpios['rep_des'],datos_limpios['columnas'],datos_limpios['formato_seleccionado'],datos_limpios['cilindro_cod'],datos_limpios['troquel_plano_cod'],datos_limpios['uv_total'],datos_limpios['uv_select'],datos_limpios['relam_delam'],datos_limpios['hot_stamping_acabados'], datos_limpios['cold_foil'], datos_limpios['repujado'],datos_limpios['laminado_mate'],datos_limpios['laminado_brillan'],
+            # datos_limpios['primario_C'],datos_limpios['primario_M'],datos_limpios['primario_K'],datos_limpios['primario_Y'],
+            # datos_limpios['pantone_1'],datos_limpios['pantone_2'],datos_limpios['pantone_3'],datos_limpios['pantone_4'],datos_limpios['pantone_5'],datos_limpios['pantone_6'],datos_limpios['pantone_7'],
+            # datos_limpios['anilox_vC'],datos_limpios['anilox_vM'],datos_limpios['anilox_vY'],datos_limpios['anilox_vK'],
+            # datos_limpios['anilox_1'],datos_limpios['anilox_2'],datos_limpios['anilox_3'],datos_limpios['anilox_4'],datos_limpios['anilox_5'],datos_limpios['anilox_6'],datos_limpios['anilox_7'],
+            # datos_limpios['prov_fabricante_vC'],datos_limpios['prov_fabricante_vM'],datos_limpios['prov_fabricante_vY'],datos_limpios['prov_fabricante_vK'],
+            # datos_limpios['prov_fabricante_1'],datos_limpios['prov_fabricante_2'],datos_limpios['prov_fabricante_3'],datos_limpios['prov_fabricante_4'],datos_limpios['prov_fabricante_5'],datos_limpios['prov_fabricante_6'],datos_limpios['prov_fabricante_7'],
+            # datos_limpios['tinta_sticky_vC'],datos_limpios['tinta_sticky_vM'],datos_limpios['tinta_sticky_vY'],datos_limpios['tinta_sticky_vK'],
+            # datos_limpios['tinta_sticky_1'],datos_limpios['tinta_sticky_2'],datos_limpios['tinta_sticky_3'],datos_limpios['tinta_sticky_4'],datos_limpios['tinta_sticky_5'],datos_limpios['tinta_sticky_6'],datos_limpios['tinta_sticky_7'],
+            # datos_limpios['tipo_dispensado'],datos_limpios['diametro_rollo'], datos_limpios['peso_rollo'], datos_limpios['medida_dispensado'], datos_limpios['taca'], 
+            # datos_limpios['embobinado_ext_seleccionado'], datos_limpios['embobinado_interior_seleccionado'],
+            # img_etiqueta,
+            # datos_limpios['ejecutivo_ventas'], datos_limpios['impreso_res'], datos_limpios['supervisador_res'], datos_limpios['jefe_prod'],datos_limpios['uv_sobre_impr'],datos_limpios['codemp'])
+ 
+               #16,17,19,20,29,30
+               
+            # {"codemp": "01", "fecIngProd": "2025-01-13",
+            # "razon_social": "BANCO DE LA PRODUCCION S.A. PRODUBANCO", "ruc": "1790368718001", "contacto": "wdwdw",
+            # "producto": "dwdwed", "buffer": "qwdqd", "proveedor": "qdqwdq", "enviado_por": "qwdqd", 
+            # "nombre_etiqueta": "MTR-TQ-T2315-1C ---> ETQ.MED.1.5X3.2CM.R2000.K1.2F.REF AZUL", 
+            # "orden_venta": "dqwdq", "enviado_a": "qwdqwd", "mat_prima1": "qwdqwd", "mat_prima2": "dwqdqw",
+            # "maquina": "dqwdq", "ancho": 12, "no_cilindro": 12, "troquel": "sasad", "gap_ancho": 0, "avance": 12,
+            # "desarrollo_cilindro": "1222", "gap_avance": "1212", "rep_avance": "ddddd21", "tipo": "2121",
+            # "forma": "121", "tipo_impresion_ex": "EXTERIOR", "muestra": "NO", "corte_seg": "21e21", 
+            # "layflat": 1212, "ancho_rollo": 122, "existe_cliche": "NO", "etiq_fila_cliente": "dqdqd", 
+            # "etiq_fila_produccion": "wdwd", "tipo_tinta": "wdew", "tipo_corte": "wedw", "acabado1": "edw", 
+            # "acabado2": "ewdwe", "acabado3": "dwded", "acabado4": "dwedw", "observacion": "observaocwkcmweklmlfm",
+            # "embon_ext": "R2", "embon_int": "R101", "vendedor": "MARIA JOSE VIVANCO", 
+            # "ejecutivo_ventas": "Jorge Vladimir Fares A.", "impreso_res": "Yuberth Lizandro Ordoñez M.", 
+            # "supervisador_res": "Yuberth Lizandro Ordoñez M.", "jefe_prod": "Kevin David Cardenas S."} 47 entradas
+  
+  sql = """INSERT INTO ficha_tecnica_preprensa (codemp,fecha,razon_social,ruc,contacto,producto,buffer,proveedor,enviado_por,nombre_etiqueta,orden_venta,enviado_a,
+  mat_prima1,mat_prima2,maquina,ancho,no_cilindro,troquel,gap_ancho,avance,desarrollo_cilindro,gap_avance,rep_avance,tipo,forma,tipo_impresion_ex,muestra,corte_seg,layflat,
+  ancho_rollo,existe_cliche,etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,observacion,embon_ext,embon_int,vendedor,
+  requiere_cliche,solicitado_por,autorizado_por,rep_ancho
+  )  VALUES ('{}','{}',
+          '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}', {}, {}, '{}', '{}', '{}', '{}',
+          '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'
+      )"""\
+  .format(datos_limpios['codemp'],datos_limpios['fecIngProd'],
+            datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['contacto'],datos_limpios['producto'],datos_limpios['buffer'],datos_limpios['proveedor'],datos_limpios['enviado_por'],
+            datos_limpios['nombre_etiqueta'],datos_limpios['orden_venta'],datos_limpios['enviado_a'],datos_limpios['mat_prima1'],
+            datos_limpios['mat_prima2'],datos_limpios['maquina'],datos_limpios['ancho'],datos_limpios['no_cilindro'],datos_limpios['troquel'],datos_limpios['gap_ancho'],datos_limpios['avance'],
+            datos_limpios['desarrollo_cilindro'],datos_limpios['gap_avance'],datos_limpios['rep_avance'],
+            datos_limpios['tipo'],datos_limpios['forma'], datos_limpios['tipo_impresion_ex'], datos_limpios['muestra'],datos_limpios['corte_seg'],datos_limpios['layflat'],
+            datos_limpios['ancho_rollo'],datos_limpios['existe_cliche'],datos_limpios['etiq_fila_cliente'],datos_limpios['etiq_fila_produccion'],
+            datos_limpios['tipo_tinta'],datos_limpios['tipo_corte'],datos_limpios['acabado1'],datos_limpios['acabado2'],datos_limpios['acabado3'],datos_limpios['acabado4'],datos_limpios['observacion'],
+            datos_limpios['embon_ext'],datos_limpios['embon_int'],datos_limpios['vendedor'],datos_limpios['requiere_cliche'],datos_limpios['solicitado_por'],datos_limpios['autorizado_por'],datos_limpios['rep_ancho'])
+  print (sql)
+  curs.execute(sql)
+  conn.commit()
+  
+ 
+  d = {'status': 'INSERTADO CON EXITO'}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+  
+@app.route('/lista_ficha_preprensa', methods=['POST'])
+def lista_ficha_preprensa():
+  datos = request.json
+  print(datos)
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  campos = ['idficha','razon_social','fecha','solicitado_por','autorizado_por']
+  
+  sql = """ SELECT idficha, razon_social, fecha, solicitado_por, autorizado_por
+  FROM ficha_tecnica_preprensa where codemp = '{}' and fecha between '{}' and '{}' order by fecha
+  """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'])
+  print (sql)
+  curs.execute(sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    d = dict(zip(campos, r))
+    print(arrresp)
+    arrresp.append(d)
+
+  #print(arrresp)
+  print("CERRANDO SESION SIACI")
+  # print(arrresp)
+  curs.close()
+  conn.close()
+
+  return (jsonify(arrresp))
+  
+@app.route('/get_ficha_tecnica_preprensa', methods=['POST'])
+def get_ficha_tecnica_preprensa():
+  datos = request.json
+  print (datos)
+  codemp=datos['codemp']
+  idficha=datos['idficha']
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  # SELECT p.numtra,DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra , DATEFORMAT(p.fecult, 'DD-MM-YYYY') as fecult ,c.rucced,c.nombres,c.dircli,c.codcli,c.telcli,c.email,p.observ,p.totnet,p.iva_cantidad,p.codusu,p.ciucli,
+  sql = """
+        SELECT codemp, idficha,fecha,razon_social,ruc,contacto,producto,buffer,proveedor,enviado_por,enviado_a,vendedor,orden_venta,nombre_etiqueta,mat_prima1,mat_prima2,maquina,ancho,
+        no_cilindro,gap_ancho,rep_ancho,troquel,avance,desarrollo_cilindro,gap_avance,rep_avance,tipo,forma,tipo_impresion_ex,muestra,corte_seg,layflat,ancho_rollo,existe_cliche,
+        etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,observacion,embon_ext,embon_int,requiere_cliche,solicitado_por,autorizado_por
+        FROM ficha_tecnica_preprensa WHERE idficha = '{}' and codemp = '{}'
+	      """.format(idficha,codemp)
+  curs.execute(sql)
+  print (sql)
+  r = curs.fetchone()
+  campos = [
+  'codemp','idficha','fecha','razon_social','ruc','contacto','producto','buffer','proveedor','enviado_por','enviado_a','vendedor','orden_venta','nombre_etiqueta','mat_prima1','mat_prima2','maquina','ancho',
+  'no_cilindro','gap_ancho','rep_ancho','troquel','avance','desarrollo_cilindro','gap_avance','rep_avance','tipo','forma','tipo_impresion_ex','muestra','corte_seg','layflat','ancho_rollo','existe_cliche',
+  'etiq_fila_cliente','etiq_fila_produccion','tipo_tinta','tipo_corte','acabado1','acabado2','acabado3','acabado4','observacion','embon_ext','embon_int','requiere_cliche','solicitado_por','autorizado_por'
+   ]
+  print(r)
+  
+  if r:
+    d = dict(zip(campos, r))
+    # if r[81]:
+      # print("hay imagen")
+      # arr_path_img = r[81].split('\\')
+      # img_name = arr_path_img[-1]
+      # art = (r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], r[35], r[36], r[37], r[38], r[39], r[40], r[41], r[42], r[43], r[44], r[45], r[46], r[47], r[48], r[49], r[50], r[51], r[52], r[53], r[54], r[55], r[56], r[57], r[58], r[59], r[60], r[61], r[62], r[63], r[64], r[65], r[66], r[67], r[68], r[69], r[70], r[71], r[72], r[73], r[74], r[75], r[76], r[77], r[78], r[79], r[80], '../../assets/img_ing_productos/'+img_name, r[82], r[83], r[84], r[85], r[86])
+      # d = dict(zip(campos, art))
+    # else:
+      # print("NO HAY IMAGEN")
+      # art = (r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19], r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28], r[29], r[30], r[31], r[32], r[33], r[34], r[35], r[36], r[37], r[38], r[39], r[40], r[41], r[42], r[43], r[44], r[45], r[46], r[47], r[48], r[49], r[50], r[51], r[52], r[53], r[54], r[55], r[56], r[57], r[58], r[59], r[60], r[61], r[62], r[63], r[64], r[65], r[66], r[67], r[68], r[69], r[70], r[71], r[72], r[73], r[74], r[75], r[76], r[77], r[78], r[79], r[80], '../../assets/img_ing_productos/subir-imagen.png', r[82], r[83], r[84], r[86])
+      # d = dict(zip(campos, art))
+  else:
+    d = {'codus1': False}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  print (d)
+  
+	#return(response)
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  
+  return(response)
+  
+@app.route('/actualizar_ficha_tecnica_preprensa', methods=['POST'])
+def actualizar_ficha_tecnica_preprensa():
+  datos = request.json
+  print(datos)
+  print("INGRESANDO AL UPDATE FICHA")
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  # img_etiqueta = datos.get('imagen_comprimida') or datos.get('imagen_original') or None
+  def replace_none_values(data_dict):
+    return {key: '' if value in [None, 'None'] else value for key, value in data_dict.items()}
+  
+  datos_limpios = replace_none_values(datos)
+  
+  
+  # {'codemp': '01', 'idficha': '5', 'fecIngProd': '2025-01-14', 'razon_social': 'CATUCUAGO CATUCUAGO JOSE RAUL', 
+  # 'ruc': '1717177545001', 'contacto': 'dwedwdw', 'producto': 'wededd', 'buffer': 'dwdewdwe', 'proveedor': 'dwdewd', 
+  # 'enviado_por': 'dwdeceve', 'nombre_etiqueta': 'MTR-TQ-T952-1C-AMA ---> ETQ.M.ED.2.5X6.5CM.R1000.K1.1F.BC.AMARILLO', 
+  # 'orden_venta': 'erfef', 'enviado_a': 'erfef', 'mat_prima1': 'ffffff', 'mat_prima2': 'ffeeee', 'maquina': 'eeer', 
+  # 'ancho': 23, 'no_cilindro': 223, 'gap_ancho': '232', 'troquel': 'wfrfef', 'avance': '23', 'desarrollo_cilindro': 
+  # 'ccee', 'gap_avance': 'veve', 'rep_avance': 'veve', 'tipo': '34', 'forma': 'rrreee', 'tipo_impresion_ex': 'INTERIOR', 
+  # 'muestra': 'SI', 'corte_seg': 'eferfr', 'layflat': 23, 'ancho_rollo': 34, 'existe_cliche': 'NO', 'etiq_fila_cliente': 'ffefe', 
+  # 'etiq_fila_produccion': 'hthth', 'tipo_tinta': 'tujyujt', 'tipo_corte': 'tjutujt', 'acabado1': 'ikukk', 'acabado2': 'ufyr', 
+  # 'acabado3': 'egee', 'acabado4': 'trgre', 'observacion': 'REP ANCHO VALIDACION', 'rep_ancho': '12', 'embon_ext': 'R7', 
+  # 'embon_int': 'R106', 'vendedor': 'MARIA JOSE VIVANCO', 'ejecutivo_ventas': 'Carlos Alberto Daquilema C.', 
+  # 'impreso_res': 'Carlos Alberto Daquilema C.', 'supervisador_res': 'Carlos Alberto Daquilema C.', 
+  # 'jefe_prod': 'Patricio Andres Padilla M.'}
+  
+  sql= """UPDATE ficha_tecnica_preprensa set 
+    fecha='{}',
+    razon_social='{}', ruc='{}', contacto='{}', producto='{}', buffer='{}', proveedor='{}', enviado_por='{}', nombre_etiqueta='{}', orden_venta='{}', 
+    enviado_a='{}', mat_prima1='{}', mat_prima2='{}', maquina='{}', ancho='{}', no_cilindro='{}', gap_ancho='{}', troquel='{}', avance='{}', desarrollo_cilindro='{}', 
+    gap_avance='{}', rep_avance='{}',tipo='{}', forma='{}', tipo_impresion_ex='{}', muestra='{}', corte_seg='{}', layflat='{}', ancho_rollo='{}', 
+    existe_cliche='{}', etiq_fila_cliente='{}', etiq_fila_produccion='{}',tipo_tinta='{}', 
+    tipo_corte='{}', acabado1='{}', acabado2='{}', acabado3='{}', acabado4='{}', observacion='{}', rep_ancho='{}', 
+    embon_ext='{}', embon_int='{}', vendedor='{}', requiere_cliche='{}', 
+    solicitado_por='{}', autorizado_por='{}'
+    where codemp = '{}' and idficha ='{}'
+  """.format(datos_limpios['fecIngProd'],
+            datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['contacto'],datos_limpios['producto'],datos_limpios['buffer'],datos_limpios['proveedor'],
+            datos_limpios['enviado_por'],datos_limpios['nombre_etiqueta'],datos_limpios['orden_venta'],datos_limpios['enviado_a'],datos_limpios['mat_prima1'],
+            datos_limpios['mat_prima2'],datos_limpios['maquina'],datos_limpios['ancho'],datos_limpios['no_cilindro'],datos_limpios['gap_ancho'],datos_limpios['troquel'],
+            datos_limpios['avance'],datos_limpios['desarrollo_cilindro'],datos_limpios['gap_avance'],datos_limpios['rep_avance'],datos_limpios['tipo'],datos_limpios['forma'],
+            datos_limpios['tipo_impresion_ex'], datos_limpios['muestra'], datos_limpios['corte_seg'],datos_limpios['layflat'],datos_limpios['ancho_rollo'],
+            datos_limpios['existe_cliche'],datos_limpios['etiq_fila_cliente'],datos_limpios['etiq_fila_produccion'],datos_limpios['tipo_tinta'],
+            datos_limpios['tipo_corte'],datos_limpios['acabado1'],datos_limpios['acabado2'],datos_limpios['acabado3'],datos_limpios['acabado4'],datos_limpios['observacion'],
+            datos_limpios['rep_ancho'],
+            datos_limpios['embon_ext'],datos_limpios['embon_int'],datos_limpios['vendedor'],datos_limpios['requiere_cliche'],
+            datos_limpios['solicitado_por'],datos_limpios['autorizado_por'],
+            datos_limpios['codemp'], datos_limpios['idficha'])
+  print(sql)
+  curs.execute(sql)
+  conn.commit()
+  
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  
+  d = {'status': 'ACTUALIZADO CON EXITO'}
+  response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
     
 ##################################################### GENERAR PEDIDO GUADAPRODUCT 
 # @app.route('/generar_pedido', methods=['POST'])

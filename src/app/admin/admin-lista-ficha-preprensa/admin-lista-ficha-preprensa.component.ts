@@ -132,7 +132,7 @@ export class AdminListaFichasPreprensaComponent implements OnInit {
 	// localStorage.removeItem('listado_original')
 	
 	
-	this.srv.lista_ing_productos(datos).subscribe(
+	this.srv.lista_ficha_preprensa(datos).subscribe(
 	   data => {
 		   // if (data){
 			   // this.loading = false;
@@ -247,7 +247,7 @@ export class AdminListaFichasPreprensaComponent implements OnInit {
 		datos['api_url'] = this.srv.apiUrl+':'+this.srv.port;
 	
 	
-	this.srv.lista_ing_productos(datos).subscribe(
+	this.srv.lista_ficha_preprensa(datos).subscribe(
 	   data => {
 		   // if (data){
 			   // this.loading = false;
@@ -302,13 +302,13 @@ export class AdminListaFichasPreprensaComponent implements OnInit {
   
   
    ver_listado_completo(): void {
-	   
+	
 	   const datos = {};
 	datos['codemp'] = this.empresa;	
 	datos['usuario'] = this.usuario;
 	datos['tipacc'] = this.srv.getTipacc()
 
-	this.srv.lista_ing_productos(datos).subscribe(
+	this.srv.lista_ficha_preprensa(datos).subscribe(
 	   data => {
 		   // if (data){
 			   // this.loading = false;
@@ -562,14 +562,14 @@ export class AdminListaFichasPreprensaComponent implements OnInit {
 				
 				let datos = {};
 				datos['codemp'] = this.empresa;
-				datos['codIngProd'] = codIngProd;
+				datos['idficha'] = codIngProd;
 				
 				// datos['asunto'] = 'pedido'
 				// datos['email'] = email
 				
 				// this.espera_correo_pedido = true;
 				// this.espera_exitoso_pedido = false;
-				this.srv.generar_pdf_ing_producto(datos).subscribe(
+				this.srv.generar_pdf_ficha_tecnica_preprensa(datos).subscribe(
 					data => {
 						
 						this.espera_generar_pdf = false;

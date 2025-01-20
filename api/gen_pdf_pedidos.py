@@ -1074,6 +1074,186 @@ class GEN_PDF():
 		
 		comtypes.CoUninitialize()
 		return 'PDF GENERADO CON EXITO'
+
+	def gen_ficha_preprensa_pdf(self, codemp, idficha):
+		APP_PATH = os.getcwd()
+		print(APP_PATH)
+    
+		codemp = codemp
+		idficha = idficha
+		conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+		curs = conn.cursor()
+		# sql = """SELECT
+          # razon_social_ing_prod, ruc_ing_prod, nombre_comercial_ing_prod, referencia, alto, ancho, proveedor, impresora, bobinadora, material_imprimir, ancho_material, 
+          # cilindro, cortador, colores, rep_des, filas, columnas, forma_etq, cod_cilindro, cod_plano, uv_total, uv_select, relam_delam, hot_stamping, cold_folid, repujado, lami_mate, lami_brillan, 
+          # primario_c, primario_m, primario_k,primario_y, 
+          # pantone_1, pantone_2, pantone_3, pantone_4, pantone_5, pantone_6, pantone_7, 
+          # anilox_vC, anilox_vM, anilox_vY, anilox_vK, 
+          # anilox_1, anilox_2, anilox_3, anilox_4, anilox_5, anilox_6, anilox_7, 
+          # prov_fabricante_vC, prov_fabricante_vM, prov_fabricante_vY, prov_fabricante_vK,
+          # prov_fabricante_1, prov_fabricante_2, prov_fabricante_3, prov_fabricante_4, prov_fabricante_5, prov_fabricante_6, prov_fabricante_7, 
+          # tinta_sticky_vC, tinta_sticky_vM, tinta_sticky_vY, tinta_sticky_vK, 
+          # tinta_sticky_1, tinta_sticky_2, tinta_sticky_3, tinta_sticky_4, tinta_sticky_5, tinta_sticky_6, tinta_sticky_7, 
+          # tipo_dispensado, diametro_rollo, peso_rollo, medida, dispensado_taca,
+          # embobinado_exterior, embobinado_interior, 
+          # ruta_img,
+          # ejecutivo_ventas, impreso_responsable, supervisado_responsable, jefe_produccion ,uv_sobre_impr
+        # FROM ing_de_producto WHERE codIngProd = '{}' and codEmpresa = '{}'
+	      # """.format(idficha,codemp)
+          
+		sql = """ SELECT codemp, idficha,fecha,razon_social,ruc,contacto,producto,buffer,proveedor,enviado_por,enviado_a,vendedor,orden_venta,nombre_etiqueta,mat_prima1,mat_prima2,maquina,ancho,
+        no_cilindro,gap_ancho,rep_ancho,troquel,avance,desarrollo_cilindro,gap_avance,rep_avance,tipo,forma,tipo_impresion_ex,muestra,corte_seg,layflat,ancho_rollo,existe_cliche,
+        etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,observacion,embon_ext,embon_int,requiere_cliche,solicitado_por,autorizado_por
+        FROM ficha_tecnica_preprensa WHERE idficha = '{}' and codemp = '{}'
+	      """.format(idficha,codemp)
+		print (sql)
+		curs.execute(sql)
+		r = curs.fetchone()
+		print (r)
+
+
+		#PRIMER RENGLON
+		codemp = r[0]
+		idficha = r[1]
+		fecha = r[2]
+		razon_social = r[3]
+		ruc = r[4]
+		contacto = r[5]
+		producto = r[6]
+		buffer = r[7]
+		proveedor = r[8]
+		enviado_por = r[9]
+		enviado_a = r[10]
+		vendedor = r[11]
+		orden_venta = r[12]
+		nombre_etiqueta = r[13]
+		mat_prima1= r[14]
+		mat_prima2 = r[15]
+		maquina = r[16]
+		ancho = r[17]
+		no_cilindro = r[18]
+		gap_ancho = r[19]
+		rep_ancho = r[20]
+		troquel = r[21]
+		avance = r[22]
+		desarrollo_cilindro = r[23]
+		gap_avance = r[24]
+		rep_avance = r[25]
+		tipo = r[26]
+		forma = r[27]
+		tipo_impresion_ex = r[28]
+		muestra = r[29]
+		corte_seg = r[30]
+		layflat = r[31]
+		ancho_rollo = r[32]
+		existe_cliche = r[33]
+		etiq_fila_cliente = r[34]
+		etiq_fila_produccion = r[35]
+		tipo_tinta = r[36]
+		tipo_corte = r[37]
+		acabado1 = r[38]
+		acabado2 = r[39]
+		acabado3 = r[40]
+		acabado4 = r[41]
+		observacion= r[42]
+		embon_ext = r[43]
+		embon_int = r[44]
+		requiere_cliche = r[45]
+		solicitado_por = r[46]
+		autorizado_por = r[47]
+		
+        
+        
+		sql = """SELECT VALOR FROM "DBA"."parametros_siaciweb" where parametro='FORMATO_FICHAPREPRENSA' AND CODEMP='{}'""".format(codemp)
+		curs.execute(sql)
+		r = curs.fetchone()
+		print (r)
+        
+		ruta_plantilla_pedidos=r[0]
+        
+		# ruta_plantilla_pedidos="\\PLANTILLA_PEDIDOS\\INGENIERIA_DE_PRODUCTO.docx"
+		conn.close()
+
+		tpl=DocxTemplate(APP_PATH+ruta_plantilla_pedidos)
+		# logo = InlineImage(tpl,ruta_img , width=Cm(5), height=Cm(8))
+		# logo = InlineImage(tpl,ruta_img , width=Cm(4) )
+        
+        
+		context = { 
+        'codemp' : codemp,
+		'idficha' : idficha,
+		'fecha' : fecha,
+		'razon_social' : razon_social,
+		'ruc' : ruc,
+		'contacto' : contacto,
+		'producto' : producto,
+		'buffer' : buffer,
+		'proveedor' : proveedor,
+		'enviado_por' : enviado_por,
+		'enviado_a' : enviado_a,
+		'vendedor' : vendedor,
+		'orden_venta' :  orden_venta,
+		'nombre_etiqueta' : nombre_etiqueta,
+		'mat_prima1' : mat_prima1,
+		'mat_prima2' : mat_prima2,
+		'maquina' : maquina,
+		'ancho' : ancho,
+		'no_cilindro' : no_cilindro,
+		'gap_ancho' : gap_ancho,
+		'rep_ancho' : rep_ancho,
+		'troquel' : troquel,
+		'avance' : avance,
+		'desarrollo_cilindro' : desarrollo_cilindro,
+		'gap_avance' : gap_avance,
+		'rep_avance' : rep_avance,
+		'tipo' : tipo,
+		'forma' : forma,
+		'tipo_impresion_ex' : tipo_impresion_ex,
+		'muestra' : muestra,
+		'corte_seg' :  corte_seg,
+		'layflat' : layflat,
+		'ancho_rollo' : ancho_rollo,
+		'existe_cliche' : existe_cliche,
+		'etiq_fila_cliente' : etiq_fila_cliente,
+		'etiq_fila_produccion' : etiq_fila_produccion,
+		'tipo_tinta' : tipo_tinta,
+		'tipo_corte' : tipo_corte,
+		'acabado1' : acabado1,
+		'acabado2' : acabado2,
+		'acabado3' : acabado3,
+		'acabado4' : acabado4,
+		'observacion' :  observacion,
+		'embon_ext' : embon_ext,
+		'embon_int' : embon_int,
+		'requiere_cliche' : requiere_cliche,
+		'solicitado_por' : solicitado_por,
+		'autorizado_por' : autorizado_por
+		}
+  
+
+		
+		tpl.render(context)
+		idficha_str = str(idficha)
+		word_out = APP_PATH+'\\PLANTILLA_PEDIDOS\\FICHA_TECNICA_PREPRENSA_'+codemp+'_'+idficha_str+'.docx'
+		tpl.save(word_out)
+
+		###CONVERTIR A PDF EL PEDIDO PEDIDO_10000221_WEB.pdf
+		print ("########### CONVIRTIENDO A PDF aa ###########")
+		comtypes.CoInitialize()
+		c = win32com.client.DispatchEx("Word.Application")
+		print ("###########  "+word_out+"  ###########")
+		f = word_out
+		dest = APP_PATH+'\\PLANTILLA_PEDIDOS\\FICHA_TECNICA_PREPRENSA_'+codemp+'_'+idficha_str+'.pdf'
+		print (dest)
+		doc = c.Documents.Open(f)
+		doc.SaveAs(dest, FileFormat=17)
+		doc.Close()
+		c.Quit()
+		del c
+		os.remove(word_out)
+		
+		comtypes.CoUninitialize()
+		return 'PDF GENERADO CON EXITO'
   
 
      
