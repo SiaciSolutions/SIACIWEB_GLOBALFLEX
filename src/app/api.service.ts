@@ -411,12 +411,28 @@ public getConfCambioVendedorPed(): string {
     return this.http.post(this.apiUrl + ':' + this.port + '/generar_ing_producto', param);
   }
 
+  generar_cotizacion(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/generar_cotizacion', param);
+  }
+
+  calcular_cotizacion(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/calcular_cotizacion', param);
+  }
+
   lista_ing_productos(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/lista_ing_productos', param);
   }
 
+  lista_cotizacion(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/lista_cotizacion', param);
+  }
+
   get_ing_producto(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/get_ing_producto', param);
+  }
+
+  get_cotizador(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/get_cotizador', param);
   }
 
   upload_imagen_ing_producto(formData) {
@@ -554,6 +570,10 @@ public getConfCambioVendedorPed(): string {
   actualizar_pedido_ruta(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_pedido_ruta', param);
   }
+
+  actualizar_cotizacion(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_cotizacion', param);
+  }
   get_rutas(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/get_rutas', param);
   }
@@ -663,7 +683,9 @@ public getConfCambioVendedorPed(): string {
   consulta_citas(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/consulta_citas', param);
   }
-  
+  obtener_articulos(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/obtener_articulos', param);
+  }
   guardar_detalle_vehiculo(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/guardar_detalle_vehiculo', param);
   }
@@ -1131,6 +1153,10 @@ public getConfCambioVendedorPed(): string {
   }
   eliminar_ingproducto(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_ingproducto', param);
+  }
+  
+  eliminar_cotizacion(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_cotizacion', param);
   }
   
    buscar_articulos_pedido(param): Observable<any> {

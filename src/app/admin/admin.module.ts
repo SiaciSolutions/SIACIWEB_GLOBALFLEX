@@ -52,13 +52,14 @@ import { AdminListaTranferenciasComponent } from './admin-lista-transferencia/ad
 import { AdminBusquedaCodBarraComponent } from './admin-busqueda-codbarra/admin-busqueda-codbarra.component';
 import { AdminListaDespachoPedidosComponent } from './admin-lista-despacho-ped/admin-lista-despachos-ped.component';
 import { AdminRegistroDespachoPedidosComponent } from './admin-registro-despacho/admin-registro-despacho.component';
-
 import { AdminIngProductosComponent } from './admin-ing-productos/admin-ing-productos.component';
 import { AdminListaIngProductosComponent } from './admin-lista-ing-productos/admin-lista-ing-productos.component';
 import { AdminFichaPreprensaComponent } from './admin-ficha-preprensa/admin-ficha-preprensa.component';
 import { AdminListaFichasPreprensaComponent } from './admin-lista-ficha-preprensa/admin-lista-ficha-preprensa.component'
 
 
+import { AdminCotizadorComponent } from './admin-cotizador/admin-cotizador.component';
+import { AdminListaContizacionesComponent } from './admin-lista-cotizaciones/admin-lista-cotizaciones.component';
 
 
 
@@ -91,6 +92,7 @@ import {
   MatListModule,
   MatAutocompleteModule
 } from '@angular/material';
+
 
 @NgModule({
   imports: [
@@ -169,7 +171,9 @@ import {
 	AdminListaDespachoPedidosComponent,
 	AdminRegistroDespachoPedidosComponent,
 	AdminFichaPreprensaComponent,
-	AdminListaFichasPreprensaComponent
+	AdminListaFichasPreprensaComponent,
+	AdminCotizadorComponent,
+	AdminListaContizacionesComponent
 
 	
   ],
