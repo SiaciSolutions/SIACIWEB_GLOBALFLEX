@@ -8961,6 +8961,32 @@ def eliminar_ingproducto():
   conn.close()
 
   return (jsonify(d))
+  
+@app.route('/eliminar_ficha_tecnica_preprensa', methods=['POST'])
+def eliminar_ficha_tecnica_preprensa():
+  datos = request.json
+  print ('ENTRADAAAAA')
+  print (datos) 
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+ 
+  sql = """ delete from ficha_tecnica_preprensa where idficha='{}';
+  """.format(datos['idficha'])
+  print (sql)
+  try:
+    curs.execute(sql)
+    conn.commit()
+    d = {'STATUS': 'EXITOSO'}
+  except Exception as e:
+    print (str(e))
+    d = {'STATUS': str(e)}
+
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+
+  return (jsonify(d))
 
 @app.route('/eliminar_cotizacion', methods=['POST'])
 def eliminar_cotizacion():

@@ -203,8 +203,8 @@ export class AdminIngProductosComponent implements OnInit {
 	peso_rollo: number = null;
 	medida_dispensado: number = null;
 	taca: string;
-	embobinado_ext_seleccionado: string;
-	embobinado_interior_seleccionado: string;
+	embobinado_ext_seleccionado: string = 'NO';
+	embobinado_interior_seleccionado: string = 'NO';
 	
 	//VARIABLES PARA CARGAR LA IMAGEN
 	loading
@@ -268,6 +268,7 @@ export class AdminIngProductosComponent implements OnInit {
 	];
 
 	public emboext_lista = [
+		{"emboext_ls": "NO", "nom_doc": "NO APLICA"},
 		{"emboext_ls": "R1", "nom_doc": "R1"},
 		{"emboext_ls": "R2", "nom_doc": "R2"},
 		{"emboext_ls": "R3", "nom_doc": "R3"},
@@ -279,6 +280,7 @@ export class AdminIngProductosComponent implements OnInit {
 	];
 
 	public emboint_lista = [
+		{"emboint_ls": "NO", "nom_doc": "NO APLICA"},
 		{"emboint_ls": "R101", "nom_doc": "R101"},
 		{"emboint_ls": "R102", "nom_doc": "R102"},
 		{"emboint_ls": "R103", "nom_doc": "R103"},
@@ -286,8 +288,7 @@ export class AdminIngProductosComponent implements OnInit {
 		{"emboint_ls": "R105", "nom_doc": "R105"},
 		{"emboint_ls": "R106", "nom_doc": "R106"},
 		{"emboint_ls": "R107", "nom_doc": "R107"},
-		{"emboint_ls": "R108", "nom_doc": "R108"},
-		{"emboint_ls": "NO", "nom_doc": "NO APLICA"}
+		{"emboint_ls": "R108", "nom_doc": "R108"}
 	];
 
 
@@ -1132,10 +1133,22 @@ export class AdminIngProductosComponent implements OnInit {
 			alert("Por favor, seleccionar Taca.")
 			return false;
 		} */
-		else if(!this.embobinado_ext_seleccionado){
+		
+/* 		else if(!this.embobinado_ext_seleccionado){
 			alert("Por favor, ingresar el embobinado Exterior.")
 			return false;
+		} */
+
+
+		else if(this.embobinado_ext_seleccionado == 'NO' && this.embobinado_interior_seleccionado == 'NO'){
+			alert("Por favor, ingresar algún tipo de Embobinado")
+			return false;
 		}
+		else if(this.embobinado_ext_seleccionado != 'NO' && this.embobinado_interior_seleccionado != 'NO'){
+			alert("Por favor, Solo debe seleccionar un tipo de Embobinado")
+			return false;
+		} 
+
 		//COMPROBACION DE LA IMAGEN
 		else if (!this.localCompressedURl && !this.localUrl) {
 			alert("Por favor, seleccione una imagen.");
@@ -1384,10 +1397,19 @@ export class AdminIngProductosComponent implements OnInit {
 			alert("Por favor, seleccionar Taca.")
 			return false;
 		}
-		else if(!this.embobinado_ext_seleccionado){
+/* 		else if(!this.embobinado_ext_seleccionado){
 			alert("Por favor, ingresar el embobinado Exterior.")
 			return false;
+		} */
+
+		else if(this.embobinado_ext_seleccionado == 'NO' && this.embobinado_interior_seleccionado == 'NO'){
+			alert("Por favor, ingresar algún tipo de Embobinado")
+			return false;
 		}
+		else if(this.embobinado_ext_seleccionado != 'NO' && this.embobinado_interior_seleccionado != 'NO'){
+			alert("Por favor, Solo debe seleccionar un tipo de Embobinado")
+			return false;
+		} 
 		//COMPROBACION DE LA IMAGEN
 		///else if (!this.localCompressedURl && !this.localUrl) {
 			//alert("Por favor, seleccione una imagen.");
@@ -1578,13 +1600,16 @@ export class AdminIngProductosComponent implements OnInit {
 			}
 			
 			//********SENTIDO SALIDA**********
-			encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
+/* 			encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
 			if(this.embobinado_interior_seleccionado && this.embobinado_interior_seleccionado !== 'NO'){
 				encabezado_ing_prod['embobinado_interior_seleccionado'] = this.embobinado_interior_seleccionado;
 			}
 			else{
 				encabezado_ing_prod['embobinado_interior_seleccionado'] = null;
-			}
+			} */
+
+			encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
+			encabezado_ing_prod['embobinado_interior_seleccionado'] = this.embobinado_interior_seleccionado;
 			
 			//********IMAGEN************
 			//encabezado_ing_prod['img_etiqueta'] = this.img_etiqueta;
@@ -1812,13 +1837,16 @@ export class AdminIngProductosComponent implements OnInit {
 				}
 				
 				//********SENTIDO SALIDA**********
-				encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
+/* 				encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
 				if(this.embobinado_interior_seleccionado && this.embobinado_interior_seleccionado !== 'NO'){
 					encabezado_ing_prod['embobinado_interior_seleccionado'] = this.embobinado_interior_seleccionado;
 				}
 				else{
 					encabezado_ing_prod['embobinado_interior_seleccionado'] = null;
-				}
+				} */
+				encabezado_ing_prod['embobinado_ext_seleccionado'] = this.embobinado_ext_seleccionado;
+				encabezado_ing_prod['embobinado_interior_seleccionado'] = this.embobinado_interior_seleccionado;
+
 				
 				//********IMAGEN************
 				//encabezado_ing_prod['img_etiqueta'] = this.img_etiqueta;

@@ -294,6 +294,7 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	];
 
 	public emboext_lista = [
+		{"emboext_ls": "NO APLICA", "nom_doc": "NO APLICA"},
 		{"emboext_ls": "R1", "nom_doc": "R1"},
 		{"emboext_ls": "R2", "nom_doc": "R2"},
 		{"emboext_ls": "R3", "nom_doc": "R3"},
@@ -301,20 +302,19 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		{"emboext_ls": "R5", "nom_doc": "R5"},
 		{"emboext_ls": "R6", "nom_doc": "R6"},
 		{"emboext_ls": "R7", "nom_doc": "R7"},
-		{"emboext_ls": "R8", "nom_doc": "R8"},
-		{"emboext_ls": "NO APLICA", "nom_doc": "NO APLICA"}
+		{"emboext_ls": "R8", "nom_doc": "R8"}
+		
 	];
 
 	public emboint_lista = [
+		{"emboint_ls": "NO APLICA", "nom_doc": "NO APLICA"},
 		{"emboint_ls": "R101", "nom_doc": "R101"},
 		{"emboint_ls": "R102", "nom_doc": "R102"},
 		{"emboint_ls": "R103", "nom_doc": "R103"},
 		{"emboint_ls": "R104", "nom_doc": "R104"},
 		{"emboint_ls": "R105", "nom_doc": "R105"},
 		{"emboint_ls": "R106", "nom_doc": "R106"},
-		{"emboint_ls": "R107", "nom_doc": "R107"},
-		{"emboint_ls": "R108", "nom_doc": "R108"},
-		{"emboint_ls": "NO APLICA", "nom_doc": "NO APLICA"}
+		{"emboint_ls": "R107", "nom_doc": "R107"}
 	];
 
 

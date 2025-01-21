@@ -603,22 +603,22 @@ export class AdminListaFichasPreprensaComponent implements OnInit {
 
 	}//FIN ENVIO CORREO PEDIDO
 
-	eliminar_ingproducto(CodIngProd): void {
+	eliminar_ficha_tecnica(idficha): void {
 		let datos = {};
 		this.loading = true;
 		datos['codemp'] = this.empresa;	
-		datos['CodIngProd'] = CodIngProd;	
+		datos['idficha'] = idficha;	
 		
 	
-		if (confirm("******* ESTAS SEGURO DE ELIMINAR ESTA ING PRODUCTO ?  *******..???")){
-			this.srv.eliminar_ingproducto(datos).subscribe(
+		if (confirm("******* ESTAS SEGURO DE ELIMINAR ESTA FICHA TECNICA ?  *******..???")){
+			this.srv.eliminar_ficha_tecnica_preprensa(datos).subscribe(
 			   data => {
 				   console.log (data)
 				   if (data['STATUS'] == 'EXITOSO'){
-					 alert("IngProducto ha sido eliminado con Exito..!!!")
+					 alert("Ficha técnica ha sido eliminada con Exito..!!!")
 					   
 				   }else{
-					alert("Error al eliminar IngProducto por el siguiente error: "+data['STATUS'] )
+					alert("Error al eliminar la ficha por el siguiente error: "+data['STATUS'] )
 				   }
 				   
 					this.ngOnInit()

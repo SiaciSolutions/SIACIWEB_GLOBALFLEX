@@ -1215,6 +1215,11 @@ public getConfCambioVendedorPed(): string {
   generar_pdf_ficha_tecnica_preprensa(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/generar_pdf_ficha_tecnica_preprensa', param);
   }
+  eliminar_ficha_tecnica_preprensa(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_ficha_tecnica_preprensa', param);
+  }
+
+  
 
 
 
