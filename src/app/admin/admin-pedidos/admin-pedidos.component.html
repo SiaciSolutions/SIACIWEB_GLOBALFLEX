@@ -337,7 +337,7 @@
 												
 													<textarea #nomart name="nomart"  rows="3" cols="2" placeholder="Puede cambiar el nombre del articulo"  value="{{el.nomart}}" 
 													(blur)="update_nomart(el.codart,el.index,nomart.value)" (change)="update_nomart(el.codart,el.index,nomart.value)" (keypress)='validaEnter($event,nomart.value)'
-													 class="pa form-control kb-text"></textarea>
+													 class="pa form-control kb-text" disabled></textarea>
 												
 												
 												</td>
@@ -352,7 +352,7 @@
 													
 													<textarea #observacion name="observacion"  rows="3" cols="2" placeholder="Puede registrar una observacion"  value="{{el.num_docs}}" 
 													(blur)="update_observ(el.codart,el.index,observacion.value)" (change)="update_observ(el.codart,el.index,observacion.value)" (keypress)='validaEnter($event,nomart.value)'
-													 class="pa form-control kb-text"></textarea>
+													 class="pa form-control kb-text" ></textarea>
 													
 												
 												

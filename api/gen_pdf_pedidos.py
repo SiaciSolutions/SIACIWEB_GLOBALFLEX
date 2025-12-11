@@ -9,6 +9,7 @@ import win32process
 import shutil
 import coneccion
 import sqlanydb
+from datetime import datetime, date, timedelta
 from jinja2 import Environment, FileSystemLoader
 from reportlab.graphics.barcode import code93
 from reportlab.graphics.barcode import code39
@@ -247,8 +248,12 @@ class GEN_PDF():
 		# logo = InlineImage(tpl, 'C:\\SISTEMA\\LOGO_PEDIDO.png', width=Mm(100) ,height=Mm(20))
 		# logo = InlineImage(tpl,logoemp, width=Mm(90) ,height=Mm(18))
 		logo = InlineImage(tpl,logoemp)
+		dateTimeObj = datetime.now()
+		hora= dateTimeObj.strftime("%H:%M:%S")
+		print (hora)
         
 		context = { 'fectra' : fectra,
+					'hora' : hora,
 					'num_pedido' : num_pedido,
 					'cliente' : cliente,
 					'identificacion' : identificacion,
@@ -1103,7 +1108,8 @@ class GEN_PDF():
           
 		sql = """ SELECT codemp, idficha,fecha,razon_social,ruc,contacto,producto,buffer,proveedor,enviado_por,enviado_a,vendedor,orden_venta,nombre_etiqueta,mat_prima1,mat_prima2,maquina,ancho,
         no_cilindro,gap_ancho,rep_ancho,troquel,avance,desarrollo_cilindro,gap_avance,rep_avance,tipo,forma,tipo_impresion_ex,muestra,corte_seg,layflat,ancho_rollo,existe_cliche,
-        etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,observacion,embon_ext,embon_int,requiere_cliche,solicitado_por,autorizado_por
+        etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,observacion,embon_ext,embon_int,requiere_cliche,ejecutivo_ventas,impreso_responsable,supervisado_responsable,jefe_prod,
+        primario_c,primario_m,primario_k,primario_y,pantone_1,pantone_2,pantone_3,pantone_4,pantone_5,pantone_6,pantone_7
         FROM ficha_tecnica_preprensa WHERE idficha = '{}' and codemp = '{}'
 	      """.format(idficha,codemp)
 		print (sql)
@@ -1159,8 +1165,23 @@ class GEN_PDF():
 		embon_ext = r[43]
 		embon_int = r[44]
 		requiere_cliche = r[45]
-		solicitado_por = r[46]
-		autorizado_por = r[47]
+		ejecutivo_ventas = r[46]
+		impreso_responsable = r[47]
+		supervisado_responsable = r[48]
+		jefe_prod = r[49]
+        #FILA COLORES PRIMARIOS Y COLORES PLANOS O PANTONE
+		primario_c  = 'X' if r[50] == 'SI' else ''
+		primario_m  = 'X' if r[51] == 'SI' else ''
+		primario_k  = 'X' if r[52] == 'SI' else ''
+		primario_y  = 'X' if r[53] == 'SI' else ''
+		pantone_1  = r[54]
+		pantone_2  = r[55]
+		pantone_3  = r[56]
+		pantone_4  = r[57]
+		pantone_5  = r[58]
+		pantone_6  = r[59]
+		pantone_7  = r[60]
+
 		
         
         
@@ -1177,12 +1198,16 @@ class GEN_PDF():
 		tpl=DocxTemplate(APP_PATH+ruta_plantilla_pedidos)
 		# logo = InlineImage(tpl,ruta_img , width=Cm(5), height=Cm(8))
 		# logo = InlineImage(tpl,ruta_img , width=Cm(4) )
+		dateTimeObj = datetime.now()
+		hora= dateTimeObj.strftime("%H:%M:%S")
+		print (hora)
         
         
 		context = { 
         'codemp' : codemp,
 		'idficha' : idficha,
 		'fecha' : fecha,
+		'hora' : hora,
 		'razon_social' : razon_social,
 		'ruc' : ruc,
 		'contacto' : contacto,
@@ -1222,16 +1247,31 @@ class GEN_PDF():
 		'acabado2' : acabado2,
 		'acabado3' : acabado3,
 		'acabado4' : acabado4,
+        #FILA COLORES PRIMARIOS Y COLORES PLANOS O PANTONE
+		'C' : primario_c,
+		'M' : primario_m,
+		'K' : primario_k,
+		'Y' : primario_y,
+		'PANTONE_1' : pantone_1,
+		'PANTONE_2' : pantone_2,
+		'PANTONE_3' : pantone_3,
+		'PANTONE_4' : pantone_4,
+		'PANTONE_5' : pantone_5,
+		'PANTONE_6' : pantone_6,
+		'PANTONE_7' : pantone_7,
 		'observacion' :  observacion,
 		'embon_ext' : embon_ext,
 		'embon_int' : embon_int,
 		'requiere_cliche' : requiere_cliche,
-		'solicitado_por' : solicitado_por,
-		'autorizado_por' : autorizado_por
+		'ejecutivo_ventas' : ejecutivo_ventas,
+		'impreso_responsable' : impreso_responsable,
+        'supervisado_responsable' : supervisado_responsable,
+        'jefe_produccion' : jefe_prod
+        
 		}
   
 
-		
+		# ejecutivo_ventas,impreso_responsable,supervisado_responsable,jefe_prod,
 		tpl.render(context)
 		idficha_str = str(idficha)
 		word_out = APP_PATH+'\\PLANTILLA_PEDIDOS\\FICHA_TECNICA_PREPRENSA_'+codemp+'_'+idficha_str+'.docx'
@@ -1254,9 +1294,162 @@ class GEN_PDF():
 		
 		comtypes.CoUninitialize()
 		return 'PDF GENERADO CON EXITO'
-  
 
-     
+	def gen_ficha_cliente_pdf(self, codemp,codcli):
+		APP_PATH = os.getcwd()
+		print (APP_PATH)
+		
+		codemp=codemp
+		
+		conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+		curs = conn.cursor()
+        
+		sql = """SELECT 
+        nomemp,dir01,ruc,lugemp,(select logoemp from dato_empresa d where d.codemp=e.codemp)
+        FROM empresa e
+        where codemp='{}'
+		""".format(codemp)
+		curs.execute(sql)
+		r = curs.fetchone()
+		print (r)
+        
+		ruc_empresa=r[2]
+		razon_social_empresa = r[0]
+		dir_empresa=r[1]
+		ciudad_empresa=r[3]
+		logoemp = r[4]
+        
+			
+		sql = """
+		select c.nomcli, c.rucced, c.dircli,c.telcli,c.email,c.ciucli, 
+		cc.contactocompras,cc.telefonocompras,cc.condicionpago,cc.ejecutivo,cc.contactopago,cc.telefonopago,cc.observacion_general
+		from clientes c ,cliente_contacto cc 
+		where 
+		c.codemp='{}' and cc.codemp=c.codemp 
+		and c.codcli=cc.codcli 
+		and c.codcli='{}'
+		""".format(codemp,codcli)
+		curs.execute(sql)
+		r = curs.fetchone()
+		print (r)
+
+		nomcli = r[0]
+		identificacion=r[1]
+		direccion=r[2]
+		telefono=r[3] if r[3] != None else ''
+		email=r[4] if r[4] != None else ''
+		ciucli=r[5] if r[5] != None else ''
+		contactocompras = r[6] if r[6] != None else ''
+		telefonocompras = r[7] if r[7] != None else ''
+		condicionpago = r[8]  if r[8] != None else ''
+		ejecutivo = r[9] if r[9] != None else ''
+		contactopago = r[10] if r[10] != None else ''
+		telefonopago = r[11] if r[11] != None else ''
+		observacion_general = r[12] if r[12] != None else ''
+
+		sql = """
+		SELECT
+		codigo,descripcion,troquel,acabado,v_millar,observacion,
+		pantone1,pantone2,pantone3,pantone4,pantone5,pantone6,pantone7,pantone_delta1,
+		pantone_delta2,pantone_delta3,
+		pantone_delta4,pantone_delta5,pantone_delta6,pantone_delta7,pantone_extra1,pantone_extra2,
+		pantone_extra3,pantone_extra4,pantone_extra5,
+		pantone_extra6,pantone_extra7,bobinado_ext,bobinado_int,dispensado
+		FROM "DBA"."productos_cliente" 
+		where codemp='{}' and codcli='{}'
+		order by id asc
+		""".format(codemp,codcli)
+		print (sql)
+		curs.execute(sql)
+		r = curs.fetchall()
+		campos = ['codigo','descripcion','troquel','acabado','v_millar','observacion',
+		'p1','p2','p3','p4','p5','p6','p7','pd1','pd2',
+		'pd3','pd4','pd5','pd6','pd7','pob1','pob2','pob3',
+		'pob4','pob5','pob6','pob7','b_ext','b_int','dispensado']
+		renglones_pedido = []
+		for reg in r:
+			#observacion = '' if reg[9] == None else reg[9]
+			#coduni = 'N/A' if reg[2] == None else reg[2]			 			
+			#reg = (reg[0],reg[1],coduni,reg[3],reg[4],reg[5],format(reg[6], ','),reg[7],reg[8],observacion,reg[10])
+
+			print (reg)
+			# row = (row_db[0],row_db[1],row_db[2],row_db[3],row_db[4],row_db[5],row_db[6],row_db[7],row_db[8],row_db[9],row_db[10],row_db[11],row_db[12])
+			reg_encabezado = dict(zip(campos, reg))
+			renglones_pedido.append(reg_encabezado)
+		print (renglones_pedido) 
 
 
-# ModuleNotFoundError: No module named 'reportlab.graphics.barcode.code128'
+
+
+		sql = """SELECT VALOR FROM "DBA"."parametros_siaciweb" where parametro='FORMATO_FICHACLIENTE' AND CODEMP='{}'""".format(codemp)
+		curs.execute(sql)
+		r = curs.fetchone()
+		print (r)
+        
+		ruta_plantilla_pedidos=r[0]
+        
+        
+		conn.close()
+
+
+        
+		# tpl=DocxTemplate(APP_PATH+'\\PLANTILLA_PEDIDOS\\PEDIDO_PLANTILLA_PYTHON3.docx')# The image must be already saved on the disk
+		tpl=DocxTemplate(APP_PATH+ruta_plantilla_pedidos)# The image must be already saved on the disk
+        # reading images from url is not supported
+		# logo = InlineImage(tpl, 'C:\\SISTEMA\\LOGO_PEDIDO.png', width=Mm(100) ,height=Mm(20))
+		# logo = InlineImage(tpl,logoemp, width=Mm(90) ,height=Mm(18))
+		logo = InlineImage(tpl,logoemp)
+		dateTimeObj = datetime.now()
+		hora= dateTimeObj.strftime("%H:%M:%S")
+		print (hora)
+
+        
+		context = { 
+			        'rz_empresa' : razon_social_empresa,
+                    'ruc_empresa':ruc_empresa,
+                    'direccion_empresa': dir_empresa,
+                    'lugemp': ciudad_empresa,
+					'nomcli' : nomcli,
+					'identificacion' : identificacion,
+					'direccion' : direccion,
+					'telefono' : telefono,
+					'email' : email,
+					'ciucli' : ciucli,
+					'observ' : observacion_general,
+					'ejecutivo':ejecutivo,
+					'contactopago' : contactopago,
+                    'telefonopago' : telefonopago,
+					'condicionpago' : condicionpago,
+					'contactocompras':contactocompras,
+					'telefonocompras' : telefonocompras,
+					'renglones_pedido':renglones_pedido
+		}
+		#'renglones_pedido': renglones_pedido,  #####ARREGLO DE RENGLONES
+		print (context)
+		tpl.render(context)
+
+		word_out = APP_PATH+'\\PLANTILLA_PEDIDOS\\FICHA_CLIENTE_'+codemp+'_'+identificacion+'_WEB.docx'
+		tpl.save(word_out)
+
+		###CONVERTIR A PDF EL PEDIDO PEDIDO_10000221_WEB.pdf
+		print ("########### CONVIRTIENDO A PDF aa ###########")
+		comtypes.CoInitialize()
+		c = win32com.client.DispatchEx("Word.Application")
+		# t, p = win32process.GetWindowThreadProcessId(c.Hwnd)
+		# print (p)
+		
+		f = word_out
+
+		dest = APP_PATH+'\\PLANTILLA_PEDIDOS\\FICHA_CLIENTE_'+codemp+'_'+identificacion+'_WEB.pdf'
+
+		doc = c.Documents.Open(f)
+		doc.SaveAs(dest, FileFormat=17)
+		doc.Close()
+		c.Quit()
+		del c
+		os.remove(word_out)
+		# c.convert(f, dest, "-c PDF") PEDIDO_10000221_WEB.pdf
+		# sleep(0.2) # Time in seconds
+		comtypes.CoUninitialize()
+		print ('PDF GENERADO CON EXITO')
+		return 'PDF GENERADO CON EXITO'

@@ -1,0 +1,422 @@
+<div class="content-wrapper">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+	  <h1 *ngIf="!accion_actualizar">
+		 Agregar Ficha de Cliente
+		<small>Creación de Ficha Cliente</small>
+	  </h1>
+	  
+	  <h1 *ngIf="accion_actualizar">
+		 Actualizar Ficha Cliente {{numtra}}
+		<!-- <small>Actualizacion de los pedidos</small> -->
+	  </h1>
+	  <ol *ngIf="!accion_actualizar" class="breadcrumb">
+		<li><i class="fa fa-dashboard"></i>Ficha Cliente</li>
+		<li class="active">Agregar Ficha Cliente</li>
+	  </ol>
+	  <ol *ngIf="accion_actualizar" class="breadcrumb">
+		<li><i class="fa fa-dashboard"></i>Ficha Cliente</li>
+		<li class="active">Actualizar Ficha Cliente</li>
+	  </ol>
+	</section>
+  
+	<!-- Main content -->
+	  <section class="content">
+      <div class="ingreso-datos">
+        <form class="validation fv-form fv-form-bootstrap" method="post">
+          <div class="box box-primary">
+            
+            <div class="box-body">
+              <div class="col-lg-12">
+                <button type="submit" class="fv-hidden-submit" style="display: none; width: 0px; height: 0px;"></button>
+                <input type="hidden" name="spos_token" value="63b87f6a60dc5db5380a9ae6f8ae9725" style="display:none;"> 
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="reference">BUSQUEDA DE CLIENTE</label>
+                      
+                      
+                      <div class="input-group">
+                        <input   type="text" name="search_customer" id="search_customer" (keyup.enter)="busqueda_razon_social()"  [(ngModel)]="patron_cliente"  class="form-control ui-autocomplete-input" placeholder="Ingrese el nombre del cliente" autocomplete="off">
+                        <div (click)="busqueda_razon_social()" class="input-group-addon no-print" style="padding: 2px 5px;">
+                          <a id="add-customer" class="external"><i class="fa fa-2x fa-search" id="searchIcon"></i></a>
+                        </div>							
+                      </div>					
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label for="date">FECHA CREACION
+                      <a *ngIf="!edit_fecha_creacion"  (click)="edit_fecha_creacion = true" class="tip btn btn-warning btn-xs"><i class="fa fa-edit" title="Editar fecha de creacion"></i></a> 
+                      </label>
+                      <input *ngIf="!edit_fecha_creacion" type="text" name="date" value="{{formato_fecha(this.fectra['value'])}}" class="form-control tip" id="date" required="required" disabled>
+                        
+                    
+                    <mat-form-field *ngIf="edit_fecha_creacion">
+                    <input matInput [matDatepicker]="picker" placeholder="Escoja fecha" [formControl]="fectra" name="fectra" >
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <label for="date"></label>
+                    <div class="form-group">
+                      <input #regresar_lista  routerLink="/admin/lista_fichas" [queryParams]="{usuario:usuario,empresa:empresa}" type="submit"  name="add_purchase" value="Ir a lista de fichas" class="btn btn-danger">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group"  *ngIf="this.exist_razon_social">
+                <p>Resultado de la busqueda por <<{{this.patron_cliente}}>></p>
+                <div class="table-responsive-pedidos">
+                  <table class="table table-striped table-bordered table-condensed table-hover dataTable">
+                  <thead>
+                    <tr class="active" role="row">
+                      <th>Razon Social</th>
+                      <th class="text-center">Tipo ident</th>
+                      <th class="text-center">Num Identificacion</th>
+                      <th style="width:25px; padding-right:5px;" rowspan="1" colspan="1" >Selec</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let rz of razon_social_lista;">
+                      <td>{{rz.nomcli}}</td>
+                      <td class="text-center">{{rz.tpIdCliente}}</td>
+                      <td class="text-center">{{rz.rucced}}</td>
+                      <td class="text-center"> 
+                      <input  type="radio"  name="radio_cliente" (change)="select_razon_social(rz.tpIdCliente,rz.rucced,rz.nomcli,rz.email,rz.codcli,rz.dircli, rz.telefono, rz.nombreC, rz.ciucli)"  />
+                      
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label >RAZON SOCIAL</label>
+                      <input *ngIf="!modificar" type="text" name="razon_social" id="razon_social"   [(ngModel)]="razon_social"  class="form-control ui-autocomplete-input" placeholder="RAZON SOCIAL" autocomplete="off" disabled>
+                      <input *ngIf="modificar" type="text" name="razon_social" id="razon_social"   [(ngModel)]="razon_social"  class="form-control ui-autocomplete-input" placeholder="RAZON SOCIAL" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label>RUC</label>
+                      <input *ngIf="!modificar" type="text" name="ruc" id="ruc"   [(ngModel)]="ruc"  class="form-control ui-autocomplete-input" placeholder="RUC" autocomplete="off" disabled>
+                      <input *ngIf="modificar" type="text" name="ruc" id="ruc"   [(ngModel)]="ruc"  class="form-control ui-autocomplete-input" placeholder="RUC" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="form-group">
+                      <label >CIUDAD</label>
+                      <input *ngIf="!modificar" type="text" name="ciudad" id="ciudad"   [(ngModel)]="ciudad"  class="form-control ui-autocomplete-input" placeholder="CIUDAD" autocomplete="off" disabled>
+                      <input *ngIf="modificar" type="text" name="ciudad" id="ciudad"   [(ngModel)]="ciudad"  class="form-control ui-autocomplete-input" placeholder="CIUDAD" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label >TELEFONOS</label>
+                      <input *ngIf="!modificar" type="text" name="telefono" id="telefono"   [(ngModel)]="telefono"  class="form-control ui-autocomplete-input" placeholder="TELEFONOS" autocomplete="off" disabled>
+                      <input *ngIf="modificar" type="text" name="telefono" id="telefono"   [(ngModel)]="telefono"  class="form-control ui-autocomplete-input" placeholder="TELEFONOS" autocomplete="off">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label >NOMBRE COMERCIAL</label>
+                      <input *ngIf="!modificar" type="text" name="nombreC" id="nombreC"   [(ngModel)]="nombreC"  class="form-control ui-autocomplete-input" placeholder="NOMBRE COMERCIAL" autocomplete="off" disabled>
+                      <input *ngIf="modificar" type="text" name="nombreC" id="nombreC"   [(ngModel)]="nombreC"  class="form-control ui-autocomplete-input" placeholder="NOMBRE COMERCIAL" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label >DIRECCION</label>
+                      <input *ngIf="!modificar" type="text" name="direccion" id="direccion"   [(ngModel)]="direccion"  class="form-control ui-autocomplete-input" placeholder="DIRECCION" autocomplete="off" disabled>
+                      <input *ngIf="modificar" type="text" name="direccion" id="direccion"   [(ngModel)]="direccion"  class="form-control ui-autocomplete-input" placeholder="DIRECCION" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label >E-MAIL</label>
+                      <input *ngIf="!modificar" type="text" name="email_cliente" id="email_cliente"   [(ngModel)]="email_cliente"  class="form-control ui-autocomplete-input" placeholder="E-MAIL" autocomplete="off" disabled>
+                      <input *ngIf="modificar" type="text" name="email_cliente" id="email_cliente"   [(ngModel)]="email_cliente"  class="form-control ui-autocomplete-input" placeholder="E-MAIL" autocomplete="off">
+                    </div>
+                  </div>
+                                            
+                </div>
+               
+
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="datos">
+          <div class="box box-primary">
+          <div class="box-header">
+            <h3 class="box-title">CONTACTOS</h3>
+          </div>
+          <div class="box-body">
+            <div class="col-lg-12">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label >CONTATO PAGOS</label>
+                    <input type="text" name="contacto_pagos" id="contacto_pagos"   [(ngModel)]="contacto_pagos"  class="form-control ui-autocomplete-input" placeholder="CONTACTO PAGOS" autocomplete="off">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label >TELEFONO PAGOS</label>
+                    <input type="text" name="telefono_pagos" id="telefono_pagos"   [(ngModel)]="telefono_pagos"  class="form-control ui-autocomplete-input" placeholder="TELEFONO PAGOS" autocomplete="off">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label >CONDICIONES PAGO</label>
+                    <input type="text" name="condiciones" id="condiciones"   [(ngModel)]="condiciones"  class="form-control ui-autocomplete-input" placeholder="CONDICIONES PAGO" autocomplete="off">
+                  </div>
+                </div>				  				
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label >CONTACTO COMPRAS</label>
+                    <input type="text" name="contacto_compras" id="contacto_compras"   [(ngModel)]="contacto_compras"  class="form-control ui-autocomplete-input" placeholder="CONTACTO COMPRAS" autocomplete="off">
+                  </div>
+                </div>	
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label >TELEFONO COMPRAS</label>
+                    <input type="text" name="telefono_compras" id="telefono_compras"   [(ngModel)]="telefono_compras"  class="form-control ui-autocomplete-input" placeholder="TELEFONO COMPRAS" autocomplete="off">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>EJECUTIVO DE CUENTA</label>
+                    <select name="ejecutivo" id="ejecutivo" [(ngModel)]="ejecutivo" class="form-control">
+                      <option value="" disabled selected>Seleccione un ejecutivo</option>
+                      <option *ngFor="let vendedor of listavendedores" [value]="vendedor.usuario">
+                        {{ vendedor.usuario }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+				  				
+              </div>
+              <div class="row">
+                  <label><strong>Observaciones:</strong></label>
+                  <textarea [(ngModel)]="observacion_general" rows="3" class="form-control" 
+                            style="width: 100%"></textarea>
+                </div>
+               <div class="row">
+                    <div class="box-body">
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <input *ngIf="!accion_actualizar_contacto" #generar_pe type="submit" (click)="agregar_contacto()"  name="add_purchase" value="Agregar Contacto" class="btn btn-primary">
+                          <input *ngIf="accion_actualizar_contacto" type="button" (click)="actualizar_contacto()" value="Actualizar Contacto" class="btn btn-warning">
+                        </div>
+                        <div class="clearfix"></div>
+                      </div>
+                    </div>
+                </div>
+                
+          </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="registro">
+        <div class="box box-primary">
+          <div class="box-header">
+            <h3 class="box-title">DETALLE DE PRODUCTOS</h3>
+            <button type="button" class="btn btn-success btn-sm pull-right" (click)="agregarFila()">Agregar Fila</button>
+            <button type="button" class="btn btn-primary btn-sm pull-right" (click)="insertar_registro()">Guardar Registros</button>
+          </div>
+
+          <!-- Scroll horizontal + Responsive -->
+          <div class="box-body table-responsive" style="overflow-x: auto; width: 100%;">
+            <table class="table table-bordered table-striped" style="min-width: 2200px; table-layout: fixed;">
+              <thead>
+                <tr>
+                  <th style="width: 150px;">CODIGO</th>
+                  <th style="width: 200px;">DESCRIPCION</th>
+                  <th style="width: 150px;">TROQUEL</th>
+                  <th colspan="7" class="text-center">PANTONE</th>
+                  <th style="width: 150px;">ACABADO</th>
+                  <th style="width: 100px;">DISPENSADO</th>
+                  <th style="width: 100px;">BOB_EXT</th>
+                  <th style="width: 100px;">BOB_INT</th>
+                  <th style="width: 100px;">V/MILLAR</th>
+                  <th style="width: 200px;">OBSERVACION</th>
+                  <th style="width: 150px;">Acciones</th>
+                </tr>
+                <tr>
+                  <th colspan="3"></th>
+                  <th style="width: 130px;">P1</th>
+                  <th style="width: 130px;">P2</th>
+                  <th style="width: 130px;">P3</th>
+                  <th style="width: 130px;">P4</th>
+                  <th style="width: 130px;">P5</th>
+                  <th style="width: 130px;">P6</th>
+                  <th style="width: 130px;">P7</th>
+                  <th colspan="4"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let item of filasR; let i = index">
+                  <!-- Fila principal -->
+                  <tr>
+                    <td>
+                      <div class="input-group">
+                        <input [(ngModel)]="item.codigo" name="codigo{{i}}" class="form-control" />
+                        <span class="input-group-btn">
+                          <button type="button" class="btn btn-primary btn-sm" (click)="abrirModalBusqueda(i)">
+                            <i class="fa fa-search"></i>
+                          </button>
+                        </span>
+                      </div>
+                    </td>
+                    <td><input [(ngModel)]="item.descripcion" name="descripcion{{i}}" class="form-control" /></td>
+                    <td><input [(ngModel)]="item.troquel" name="troquel{{i}}" class="form-control" /></td>
+                    <td><input [(ngModel)]="item.pantone1" name="pantone1{{i}}" class="form-control" /></td>
+                    <td><input [(ngModel)]="item.pantone2" name="pantone2{{i}}" class="form-control" /></td>
+                    <td><input [(ngModel)]="item.pantone3" name="pantone3{{i}}" class="form-control" /></td>
+                    <td><input [(ngModel)]="item.pantone4" name="pantone4{{i}}" class="form-control" /></td>
+                    <td><input [(ngModel)]="item.pantone5" name="pantone5{{i}}" class="form-control" /></td>
+                    <td><input [(ngModel)]="item.pantone6" name="pantone6{{i}}" class="form-control" /></td>
+                    <td><input [(ngModel)]="item.pantone7" name="pantone7{{i}}" class="form-control" /></td>
+                    <td>
+                      <select [(ngModel)]="item.acabado" name="acabado{{i}}" class="form-control">
+                        <option value="UV SOBREIMPR">UV SOBREIMPR</option>
+                        <option value="UV TOTAL">UV TOTAL</option>
+                        <option value="UV SELECT">UV SELECT</option>
+                        <option value="RELAM DELAM">RELAM DELAM</option>
+                        <option value="HOT STAMPING">HOT STAMPING</option>
+                        <option value="COLD FOIL">COLD FOIL</option>
+                        <option value="REPUJADO">REPUJADO</option>
+                        <option value="LAMINADO MATE">LAMINADO MATE</option>
+                        <option value="LAMINADO BRILLANTE">LAMINADO BRILLANTE</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select [(ngModel)]="item.dispensado" name="dispensado{{i}}" class="form-control">
+                        <option value="MANUAL">MANUAL</option>
+                        <option value="AUTOMATICO">AUTOMATICO</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select [(ngModel)]="item.bobinado_ext" name="bobinado_ext{{i}}" class="form-control">
+                        <option value="R1">R1</option>
+                        <option value="R2">R2</option>
+                        <option value="R3">R3</option>
+                        <option value="R4">R4</option>
+                        <option value="R5">R5</option>
+                        <option value="R6">R6</option>
+                        <option value="R7">R7</option>
+                        <option value="R8">R8</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select [(ngModel)]="item.bobinado_int" name="bobinado_int{{i}}" class="form-control">
+                        <option value="">NO APLICA</option>
+                        <option value="R101">R101</option>
+                        <option value="R102">R102</option>
+                        <option value="R103">R103</option>
+                        <option value="R104">R104</option>
+                        <option value="R105">R105</option>
+                        <option value="R106">R106</option>
+                        <option value="R107">R107</option>
+                        <option value="R108">R108</option>
+                      </select>
+                    </td>
+                    <td><input #v_millar type="number" [(ngModel)]="item.v_millar" name="v_millar{{i}}" step="0.01" class="form-control"  (keypress)='validaNumericos($event,v_millar.value)' /></td>
+                    <td><input [(ngModel)]="item.observacion" name="observacion{{i}}" class="form-control" /></td>
+                    <td>
+                      <button type="button" class="btn btn-danger btn-sm" (click)="eliminarFila(i)">
+                        <i class="fa fa-trash"></i>
+                      </button>
+                      <button type="button" class="btn btn-warning btn-sm" (click)="actualizarFila(item)">
+                        <i class="fa fa-refresh"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <!-- Fila 2: Selects Delta -->
+                  <tr>
+                    <td colspan="3"></td>
+                    <td *ngFor="let j of [1,2,3,4,5,6,7]">
+                      <select [(ngModel)]="item['pantone_delta' + j]" name="pantone_delta{{j}}_{{i}}" class="form-control">
+                        <option value="">-</option>
+                        <option value="delta +1 -1">delta +1 -1</option>
+                        <option value="delta +2 -2">delta +2 -2</option>
+                        <option value="delta +3 -3">delta +3 -3</option>
+                      </select>
+                    </td>
+                    <td colspan="7"></td>
+                  </tr>
+
+                  <!-- Fila 3: Campos input adicionales -->
+                  <tr>
+                    <td colspan="3"></td>
+                    <td *ngFor="let j of [1,2,3,4,5,6,7]">
+                      <input [(ngModel)]="item['pantone_extra' + j]" name="pantone_extra{{j}}_{{i}}" class="form-control" />
+                    </td>
+                    <td colspan="7"></td>
+                  </tr>
+                </ng-container>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="custom-modal-overlay" *ngIf="mostrarModal">
+        <div class="custom-modal">
+          <div class="custom-modal-header">
+            <h4>Buscar artículo</h4>
+            <button class="close-button" (click)="cerrarModal()">×</button>
+          </div>
+          <div class="custom-modal-body">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar por código o descripción"
+              [(ngModel)]="filtroBusqueda"
+              (input)="buscarArticulo()"
+            />
+
+            <table class="table-busqueda">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Descripción</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let art of resultadosBusqueda"
+                  (click)="seleccionarArticulo(art)"
+                  style="cursor: pointer;"
+                >
+                  <td>{{ art.codart }}</td>
+                  <td>{{ art.nomart }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+	  </section>
+</div>

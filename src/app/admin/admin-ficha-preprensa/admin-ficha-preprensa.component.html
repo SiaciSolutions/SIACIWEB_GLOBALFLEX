@@ -155,7 +155,7 @@
 									  </div>
 									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >ORDEN VENTA</label>
+											  <label >NOTA DE PEDIDO</label>
 											  <input type="text" name="orden_venta" id="orden_venta"   [(ngModel)]="orden_venta"  class="form-control ui-autocomplete-input" placeholder="ORDEN VENTA" autocomplete="off">
 										  </div>
 									  </div>
@@ -255,14 +255,18 @@
 								  </div>
 								  <div class="col-md-2">
 									<label >No CILINDRO</label>
-									<input type="number" name="no_cilindro" id="no_cilindro"   [(ngModel)]="no_cilindro"  class="form-control ui-autocomplete-input" placeholder="No Cilindro" autocomplete="off" [min]="1">
+									<input type="text" name="no_cilindro" id="no_cilindro"   [(ngModel)]="no_cilindro"  class="form-control ui-autocomplete-input" placeholder="No Cilindro" autocomplete="off">
 								  </div>
 								  <div class="col-md-2">
-									<label >GAP ANCHO <span style="font-weight:bold;color:red">(*)</span></label>
+ 									<label >GAP ANCHO 
+		<!-- 								<span style="font-weight:bold;color:red">(*)</span> -->
+									</label> 
 									<input type="number" name="gap_ancho" id="gap_ancho" [(ngModel)]="gap_ancho"  class="form-control ui-autocomplete-input" placeholder="Gap Ancho" autocomplete="off" [min]="1">
 								  </div>
 								  <div class="col-md-2">
-									<label >REP ANCHO<span style="font-weight:bold;color:red">(*)</span></label>
+									<label >REP ANCHO
+<!-- 										<span style="font-weight:bold;color:red">(*)</span>  -->
+									</label> 
 									<input type="number" name="rep_ancho" id="rep_ancho"   [(ngModel)]="rep_ancho"  class="form-control ui-autocomplete-input" placeholder="Rep ancho" autocomplete="off" [min]="1">
 								  </div>
 								  <div class="col-md-2">
@@ -294,7 +298,7 @@
 									<input type="text" name="forma" id="forma"   [(ngModel)]="forma"  class="form-control ui-autocomplete-input" placeholder="Forma" autocomplete="off">
 								  </div>
 								  <div class="col-md-2">
-									<label >TIPO IMPRESION EX</label>
+									<label >TIPO IMPRESION</label>
 									<select  name="tipo_impresion_ex" [(ngModel)]="tipo_impresion_ex" class="form-control select2 tip" style="width:100%;font-weight:bold;">
 										<option *ngFor="let e of impresion_ex_lista; let i = index;" [value]="e.tipo_impresion_ex">{{e.tipo_impresion_ex}}</option>
 									</select>
@@ -368,6 +372,81 @@
 							  </div>  
 						  </div>
 					  </div>
+
+
+					  <div class="box box-primary">
+						<div class="box-body table-responsive no-padding">
+							<div class="col-lg-12">
+								<div class="table-responsive-ing">
+									<table class="table table-hover">
+										<tr>
+											<th colspan="4" class="text-center">PRIMARIOS</th>
+											<th colspan="7" class="text-center">COLORES PLANOS O PANTONE</th>
+										</tr>
+										<tbody>
+											<tr [ngStyle]="{ 'text-align': 'center' }">
+												<td>
+													<label >C</label>
+												</td>
+												<td>
+													<label >M</label>
+												</td>
+												<td>
+													<label >Y</label>
+												</td>
+												<td>
+													<label >K</label>
+												</td>
+												<td><label>PANTONE</label></td>
+												<td><label>PANTONE</label></td>
+												<td><label>PANTONE</label></td>
+												<td><label>PANTONE</label></td>
+												<td><label>PANTONE</label></td>
+												<td><label>PANTONE</label></td>
+												<td><label>PANTONE</label></td>
+											</tr>
+											<tr>
+												<td class="col-md-1" [ngStyle]="{ 'text-align': 'center' }">
+													<input type="checkbox" name="primario_C" id="primario_C" [(ngModel)]="primario_C" autocomplete="off"  >
+												</td>
+												<td class="col-md-1" [ngStyle]="{ 'text-align': 'center' }">
+													<input type="checkbox" name="primario_M" id="primario_M" [(ngModel)]="primario_M" autocomplete="off" >
+												</td>
+												<td class="col-md-1" [ngStyle]="{ 'text-align': 'center' }">
+													<input type="checkbox" name="primario_Y" id="primario_Y" [(ngModel)]="primario_Y" autocomplete="off" >
+												</td>
+												<td class="col-md-1" [ngStyle]="{ 'text-align': 'center' }">
+													<input type="checkbox" name="primario_K" id="primario_K" [(ngModel)]="primario_K" autocomplete="off">
+												</td>
+												<td class="col-md-1">
+													<input type="text" name="pantone_1" id="pantone_1"   [(ngModel)]="pantone_1"  class="form-control ui-autocomplete-input" autocomplete="off" >
+												</td>
+												<td class="col-md-1">
+													<input type="text" name="pantone_2" id="pantone_2"   [(ngModel)]="pantone_2"  class="form-control ui-autocomplete-input" autocomplete="off" >
+												</td>
+												<td class="col-md-1">
+													<input type="text" name="pantone_3" id="pantone_3"   [(ngModel)]="pantone_3"  class="form-control ui-autocomplete-input" autocomplete="off" >
+												</td>
+												<td class="col-md-1">
+													<input type="text" name="pantone_4" id="pantone_4"   [(ngModel)]="pantone_4"  class="form-control ui-autocomplete-input" autocomplete="off" >
+												</td>
+												<td class="col-md-1">
+													<input type="text" name="pantone_5" id="pantone_5"   [(ngModel)]="pantone_5"  class="form-control ui-autocomplete-input" autocomplete="off" >
+												</td>
+												<td class="col-md-1">
+													<input type="text" name="pantone_6" id="pantone_6"   [(ngModel)]="pantone_6"  class="form-control ui-autocomplete-input" autocomplete="off" >
+												</td>
+												<td class="col-md-1">
+													<input type="text" name="pantone_7" id="pantone_7"   [(ngModel)]="pantone_7"  class="form-control ui-autocomplete-input" autocomplete="off" >
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								
+							</div>
+						</div>
+					</div>
 	
 
 					  <div class="row">
@@ -463,44 +542,43 @@
 									  </div>
 								  </div>
 								  <div class="row">
-<!-- 									  <div class="col-md-3">
+ 									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >EJECUTIVO DE VENTAS</label>
-											  <input *ngIf="isOtroResponsableSeleccionado" type="text" name="ejecutivo_ventas" id="ejecutivo_ventas"   [(ngModel)]="ejecutivo_ventas"  class="form-control ui-autocomplete-input" placeholder="DISPENSADO" autocomplete="off">
+											  <label >EJECUTIVO DE VENTAS<span style="font-weight:bold;color:red">(*)</span></label>
 											  <select name="ejecutivo_ventas" [(ngModel)]="ejecutivo_ventas" class="form-control select2 tip" style="width:100%;">
 												  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
 												  <option *ngFor="let e of impresor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>
 											  </select>
 										  </div>
-									  </div> -->
-									  <div class="col-md-6">
+									  </div> 
+									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >SOLICITADO POR <span style="font-weight:bold;color:red">(*)</span></label>
-											  <select name="solicitado_por" [(ngModel)]="solicitado_por" class="form-control select2 tip" style="width:100%;">
+											  <label >APROBADO POR<span style="font-weight:bold;color:red">(*)</span></label>
+											  <select name="impreso_responsable" [(ngModel)]="impreso_responsable" class="form-control select2 tip" style="width:100%;">
 												  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
 												  <option *ngFor="let e of impresor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>
 											  </select>
 										  </div>
 									  </div>
-									  <div class="col-md-6">
+									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >AUTORIZADO POR <span style="font-weight:bold;color:red">(*)</span></label>
-											  <select name="autorizado_por" [(ngModel)]="autorizado_por" class="form-control select2 tip" style="width:100%;">
+											  <label >SUPERVISADO POR<span style="font-weight:bold;color:red">(*)</span></label>
+											  <select name="supervisado_responsable" [(ngModel)]="supervisado_responsable" class="form-control select2 tip" style="width:100%;">
 												  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
 												  <!--<option *ngFor="let e of supervisor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>-->
 												  <option *ngFor="let e of impresor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>
 											  </select>
 										  </div>
 									  </div>
-<!-- 									  <div class="col-md-3">
+ 									  <div class="col-md-3">
 										  <div class="form-group">
-											  <label >JEFE DE PRODUCCION</label>
+											  <label >AUTORIZADO POR<span style="font-weight:bold;color:red">(*)</span></label>
 											  <select name="jefe_prod" [(ngModel)]="jefe_prod" class="form-control select2 tip" style="width:100%;">
 												  <option [ngValue]="undefined" disabled  selected>Seleccione</option>
 												  <option *ngFor="let e of impresor_lista; let i = index;" [value]="e.usuario">{{e.usuario}}</option>
 											  </select>
 										  </div>
-									  </div> -->
+									  </div>
 								  </div>
 								  <div class="form-group">
 									  <!-- <input *ngIf=""  #generar_pe type="submit" (click)="generar_pedido()" disabled name="add_purchase" value="Generar pedido" class="btn btn-primary"> -->

@@ -147,26 +147,28 @@
 								<label for="fecha_hasta">Fecha hasta: </label>
 								<input [(ngModel)]="fecha_hasta" type="date" name="fecha_hasta" placeholder="dd-mm-yyyy" value="" min="1997-01-01" max="2030-12-31">
 				 </div>
-				
+				<div class="col-md-3">
+				 	<label for="category">Status Pedidos</label>                              
+										
+					<select name="status_pedido" [(ngModel)]="status_pedido" class="form-control select2 tip" style="width:100%;">
+					<option [ngValue]="undefined" disabled  selected>Seleccione</option>
+					<option *ngFor="let e of status_pedido_lista; let i = index;" [value]="e.valor">{{e.nomstatus}}</option>
+					</select>
+
+
+				</div>
+
+
+
+
+
+
 				<div class="col-md-2">
 							<br>
 							<input  type="submit" (click)="buscar_factura_fecha()"  name="Buscar" value="Buscar por fecha" class="btn btn-primary">
 				</div>
 				</div>
-				<!-- <div class="box-header"> -->
-					<!-- <!-- <div class="col-md-3"> --> 
-					  <!-- <!-- <h3 class="box-title">Filtrar por fecha de entrega del pedido</h3> --> 
-					<!-- <!-- </div> --> 
-					<!-- <div class="col-md-4"> -->
-					  <!-- <h3 class="box-title">Filtrar por fecha de entrega del pedido</h3> -->
-						<!-- <mat-form-field> -->
-						<!-- <input matInput [matDatepicker]="picker" placeholder="Escoja fecha" [(ngModel)]="fecha_entrega_busqueda" name="fectra" > -->
-						<!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> -->
-						<!-- <mat-datepicker #picker></mat-datepicker> -->
-						<!-- </mat-form-field> -->
-					<!-- <button  type="button" id="filtrar_fecha_entrega" (click)="buscar_fecha_entrega()" class="btn btn-primary" title="filtrar" ><i class="fa fa-fw fa-search"></i></button> -->
-					<!-- <button  type="button" id="ver_listado_completo" (click)="ver_listado_completo()" class="btn btn-warning" title="filtrar" >Ver todo el listado</button> -->
-					<!-- </div> -->
+
 			
 
 

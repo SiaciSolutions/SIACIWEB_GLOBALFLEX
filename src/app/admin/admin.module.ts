@@ -56,11 +56,10 @@ import { AdminIngProductosComponent } from './admin-ing-productos/admin-ing-prod
 import { AdminListaIngProductosComponent } from './admin-lista-ing-productos/admin-lista-ing-productos.component';
 import { AdminFichaPreprensaComponent } from './admin-ficha-preprensa/admin-ficha-preprensa.component';
 import { AdminListaFichasPreprensaComponent } from './admin-lista-ficha-preprensa/admin-lista-ficha-preprensa.component'
-
-
 import { AdminCotizadorComponent } from './admin-cotizador/admin-cotizador.component';
 import { AdminListaContizacionesComponent } from './admin-lista-cotizaciones/admin-lista-cotizaciones.component';
-
+import { AdminFichaClienteComponent } from './admin-ficha-cliente/admin-ficha-cliente.component';
+import { AdminListaFichasComponent } from './admin-lista-fichas/admin-lista-fichas.component';
 
 
 import { NgSelect2Module } from 'ng-select2';
@@ -173,7 +172,9 @@ import {
 	AdminFichaPreprensaComponent,
 	AdminListaFichasPreprensaComponent,
 	AdminCotizadorComponent,
-	AdminListaContizacionesComponent
+	AdminListaContizacionesComponent,
+	AdminFichaClienteComponent,
+	AdminListaFichasComponent
 
 	
   ],

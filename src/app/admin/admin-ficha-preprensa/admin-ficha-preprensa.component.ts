@@ -141,9 +141,9 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	maquina: string = null;
 	ancho: number  = null;
 	troquel: string = null;
-	no_cilindro: number = null;
-	gap_ancho: number = null;
-	rep_ancho: number = null;
+	no_cilindro: string = null;
+	gap_ancho: string = null;
+	rep_ancho: string = null;
 	avance :number = null;
 	desarrollo_cilindro: number = null;
 	gap_avance: number = null;
@@ -157,11 +157,12 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	cold_foil: boolean;
 	repujado_ing_prod: boolean;
 	lami_mate: boolean;
-	laminado_brillan: boolean;
+/* 	laminado_brillan: boolean;
 	primario_C: boolean;
 	primario_M: boolean;
 	primario_Y: boolean;
-	primario_K: boolean;
+	primario_K: boolean; */
+	
 	//fin binarios
 
 	rep_avance: number = null;
@@ -172,6 +173,20 @@ export class AdminFichaPreprensaComponent implements OnInit {
 	corte_seg: string = null;
 	layflat: number = null;
 	ancho_rollo: number = null;
+
+//AGREGAR PRIMARIOS Y PANTONES
+    primario_C: boolean;
+ 	primario_M: boolean;
+ 	primario_Y: boolean;
+ 	primario_K: boolean; 
+	
+	pantone_1: string = null;
+	pantone_2: string = null;
+	pantone_3: string = null;
+	pantone_4: string = null;
+	pantone_5: string = null;
+	pantone_6: string = null;
+	pantone_7: string = null;
 
 	
 	//SECCION NUMERO
@@ -240,9 +255,12 @@ export class AdminFichaPreprensaComponent implements OnInit {
 
 	///////////7
 	requiere_cliche: string = 'NO';
-	solicitado_por: string = null;
-	autorizado_por: string = null;
-	jefe_prod: string;
+	////firmas
+	ejecutivo_ventas: string=null;
+	impreso_responsable: string = null;
+	supervisado_responsable: string = null;
+	jefe_prod: string = null;
+	
 
     tiptra
 	// getConfCambioVendedorPed()
@@ -673,6 +691,17 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		this.acabado2 = data['acabado2']
 		this.acabado3 = data['acabado3']
 		this.acabado4 = data['acabado4']
+		this.primario_C = data['primario_C'] === 'SI';
+		this.primario_M = data['primario_M'] === 'SI';
+		this.primario_K = data['primario_K'] === 'SI';
+		this.primario_Y = data['primario_Y'] === 'SI';
+		this.pantone_1 = data['pantone_1']
+		this.pantone_2 = data['pantone_2']
+		this.pantone_3 = data['pantone_3']
+		this.pantone_4 = data['pantone_4']
+		this.pantone_5 = data['pantone_5']
+		this.pantone_6 = data['pantone_6']
+		this.pantone_7 = data['pantone_7']
 		this.observacion = data['observacion']
 		this.troquel = data['troquel']
 		this.embon_ext = data['embon_ext']
@@ -683,8 +712,9 @@ export class AdminFichaPreprensaComponent implements OnInit {
 		
 
 		this.requiere_cliche = data['requiere_cliche']
-		this.solicitado_por = data['solicitado_por']
-		this.autorizado_por = data['autorizado_por']
+		this.ejecutivo_ventas = data['ejecutivo_ventas']
+		this.impreso_responsable = data['impreso_responsable']
+		this.supervisado_responsable = data['supervisado_responsable']
 		this.jefe_prod = data['jefe_prod']
 
 		this.dato_cliente= {"nomcli":this.razon_social,"idficha":this.idficha}
@@ -976,18 +1006,18 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			alert("Por favor, ingresar el ANCHO")
 			return false;
 		}
-		else if(!this.gap_ancho || this.gap_ancho == 0){
+/* 		else if(!this.gap_ancho || this.gap_ancho == 0){
 			alert("Por favor, ingresar las GAP ANCHO")
 			return false;
-		}
+		} */
 		else if(!this.avance){
 			alert("Por favor, ingresar el AVANCE")
 			return false;
 		}
-		else if(!this.rep_ancho){
+/* 		else if(!this.rep_ancho){
 			alert("Por favor, ingresar REP ANCHO")
 			return false;
-		}
+		} */
 /* 		else if(!this.desarrollo_cilindro){
 			alert("Por favor, ingresar el codigo del cilindro.")
 			return false;
@@ -1118,18 +1148,24 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			alert("Por favor, ingrese un ejecutivo de ventas.");
 			return false;
 		} */
-		else if(!this.solicitado_por){
+
+			
+		else if(!this.ejecutivo_ventas){
+				alert("Por favor, seleccione EJECUTIVO VENTAS");
+				return false;
+			}
+		else if(!this.impreso_responsable){
 			alert("Por favor, seleccione SELECCIONADO POR");
 			return false;
 		}
-		else if(!this.autorizado_por){
+		else if(!this.supervisado_responsable){
 			alert("Por favor, seleccione AUTORIZADO POR");
 			return false;
 		}
-/* 		else if(!this.jefe_prod){
-			alert("Por favor, seleccione un jefe de producción.");
+ 		else if(!this.jefe_prod){
+			alert("Por favor, seleccione JEFE DE PRODUCCION");
 			return false;
-		} */
+		} 
 
 		return true
 	}
@@ -1203,10 +1239,10 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			alert("Por favor, ingresar las no_cilindro.")
 			return false;
 		} */
-		else if(!this.gap_ancho || this.gap_ancho == 0){
+/* 		else if(!this.gap_ancho || this.gap_ancho == 0){
 			alert("Por favor, ingresar las gap_ancho.")
 			return false;
-		}
+		} */
 		else if(!this.avance){
 			alert("Por favor, ingresar el formato seleccionado.")
 			return false;
@@ -1370,11 +1406,11 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			alert("Por favor, ingrese un ejecutivo de ventas.");
 			return false;
 		}
-		else if(!this.solicitado_por){
+		else if(!this.impreso_responsable){
 			alert("Por favor, seleccione un responsable de impresion.");
 			return false;
 		}
-		else if(!this.autorizado_por){
+		else if(!this.supervisado_responsable){
 			alert("Por favor, seleccione supervisor responsable.");
 			return false;
 		}
@@ -1488,6 +1524,21 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			encabezado_ficha_tec_preprensa['acabado3'] = this.acabado3;
 			encabezado_ficha_tec_preprensa['acabado4'] = this.acabado4;
 			encabezado_ficha_tec_preprensa['observacion'] = this.observacion;
+
+
+			//*****TABLA PRIMARIOS Y COLORES PLANOS**********
+			encabezado_ficha_tec_preprensa['primario_C'] = this.primario_C ? 'SI' : 'NO';
+			encabezado_ficha_tec_preprensa['primario_M'] = this.primario_M ? 'SI' : 'NO';
+			encabezado_ficha_tec_preprensa['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
+			encabezado_ficha_tec_preprensa['primario_K'] = this.primario_K ? 'SI' : 'NO';
+			encabezado_ficha_tec_preprensa['pantone_1'] = this.pantone_1;
+			encabezado_ficha_tec_preprensa['pantone_2'] = this.pantone_2;
+			encabezado_ficha_tec_preprensa['pantone_3'] = this.pantone_3;
+			encabezado_ficha_tec_preprensa['pantone_4'] = this.pantone_4;
+			encabezado_ficha_tec_preprensa['pantone_5'] = this.pantone_5;
+			encabezado_ficha_tec_preprensa['pantone_6'] = this.pantone_6;
+			encabezado_ficha_tec_preprensa['pantone_7'] = this.pantone_7;
+
 			
 			//********SENTIDO SALIDA**********
 			encabezado_ficha_tec_preprensa['embon_ext'] = this.embon_ext;
@@ -1504,9 +1555,11 @@ export class AdminFichaPreprensaComponent implements OnInit {
 			
 			//********FIRMAS***********
 			encabezado_ficha_tec_preprensa['requiere_cliche'] = this.requiere_cliche;
-			encabezado_ficha_tec_preprensa['solicitado_por'] = this.solicitado_por;
-			encabezado_ficha_tec_preprensa['autorizado_por'] = this.autorizado_por;
-/* 			encabezado_ficha_tec_preprensa['jefe_prod'] = this.jefe_prod; */
+			
+			encabezado_ficha_tec_preprensa['ejecutivo_ventas'] = this.ejecutivo_ventas;
+			encabezado_ficha_tec_preprensa['impreso_responsable'] = this.impreso_responsable;
+			encabezado_ficha_tec_preprensa['supervisado_responsable'] = this.supervisado_responsable;
+ 			encabezado_ficha_tec_preprensa['jefe_prod'] = this.jefe_prod; 
 
 			let status_encabezado
 			let numtra
@@ -1593,6 +1646,24 @@ export class AdminFichaPreprensaComponent implements OnInit {
 				encabezado_ficha_tec_preprensa['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
 				encabezado_ficha_tec_preprensa['primario_K'] = this.primario_K ? 'SI' : 'NO';
 				*/
+
+				encabezado_ficha_tec_preprensa['primario_C'] = this.primario_C ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_M'] = this.primario_M ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_K'] = this.primario_K ? 'SI' : 'NO';
+				//*****TABLA PRIMARIOS Y COLORES PLANOS**********
+				encabezado_ficha_tec_preprensa['primario_C'] = this.primario_C ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_M'] = this.primario_M ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_Y'] = this.primario_Y ? 'SI' : 'NO';
+				encabezado_ficha_tec_preprensa['primario_K'] = this.primario_K ? 'SI' : 'NO';
+
+				encabezado_ficha_tec_preprensa['pantone_1'] = this.pantone_1;
+				encabezado_ficha_tec_preprensa['pantone_2'] = this.pantone_2;
+				encabezado_ficha_tec_preprensa['pantone_3'] = this.pantone_3;
+				encabezado_ficha_tec_preprensa['pantone_4'] = this.pantone_4;
+				encabezado_ficha_tec_preprensa['pantone_5'] = this.pantone_5;
+				encabezado_ficha_tec_preprensa['pantone_6'] = this.pantone_6;
+				encabezado_ficha_tec_preprensa['pantone_7'] = this.pantone_7;
 
 				encabezado_ficha_tec_preprensa['rep_avance'] = this.rep_avance;
 				encabezado_ficha_tec_preprensa['tipo'] = this.tipo;
@@ -1712,9 +1783,10 @@ export class AdminFichaPreprensaComponent implements OnInit {
 				
 				//********FIRMAS***********
 				encabezado_ficha_tec_preprensa['requiere_cliche'] = this.requiere_cliche;
-				encabezado_ficha_tec_preprensa['solicitado_por'] = this.solicitado_por;
-				encabezado_ficha_tec_preprensa['autorizado_por'] = this.autorizado_por;
-/* 				encabezado_ficha_tec_preprensa['jefe_prod'] = this.jefe_prod; */
+				encabezado_ficha_tec_preprensa['ejecutivo_ventas'] = this.ejecutivo_ventas;
+				encabezado_ficha_tec_preprensa['impreso_responsable'] = this.impreso_responsable;
+				encabezado_ficha_tec_preprensa['supervisado_responsable'] = this.supervisado_responsable;
+ 				encabezado_ficha_tec_preprensa['jefe_prod'] = this.jefe_prod; 
 
 				let status_encabezado
 				let numtra

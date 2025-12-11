@@ -31,7 +31,7 @@ export class ApiService {
   
     // public apiUrl = 'https://192.168.100.112';
   fecha_hora
-  public port = '5009';
+  public port = '5012';
   
 
   empresa
@@ -1218,7 +1218,51 @@ public getConfCambioVendedorPed(): string {
   eliminar_ficha_tecnica_preprensa(param): Observable<any> {
     return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_ficha_tecnica_preprensa', param);
   }
+  //A PARTIR DE AQUI, FICHA DE CLIENTE
+    buscar_contacto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/buscar_contacto', param);
+  }
+  
+  agregar_contacto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/agregar_contacto', param);
+  }
+  
+  buscar_articulo(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/buscar_articulo', param);
+  }
 
+  insertar_registro(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/insertar_registro', param);
+  }
+
+  obtener_registro(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/obtener_registro', param);
+  }
+//estos dos no tienen backend
+  eliminar_registro(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_producto', param);
+  }
+  
+  actualizar_registro(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_producto', param);
+  }
+//estos de arriba no tienen backend
+
+  actualizar_contacto(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/actualizar_contacto', param);
+  }
+
+  lista_ficha(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/lista_ficha', param);
+  }
+  eliminar_ficha(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/eliminar_ficha', param);
+  }
+  generar_pdf_ficha_cliente(param): Observable<any> {
+    return this.http.post(this.apiUrl + ':' + this.port + '/generar_pdf_ficha_cliente', param);
+  }
+
+  
   
 
 

@@ -311,6 +311,24 @@
 			<!-- <li><a href="#"><i class="fa fa-circle-o"></i>Agregar Pedido</a></li> -->
 		</ul>
 		</li>
+	<!--####################### FICHA CLIENTE #######################################-->
+		<li *ngIf="auth.getPedidos() != 'NO'" class="treeview">
+		<a href="#">
+		<i class="fa fa-file-text-o"></i> 
+		<span>FICHA CLIENTE</span>
+			<span class="pull-right-container">
+				<i class="fa fa-angle-left pull-right"></i>
+			</span>
+			</a>
+		<ul class="treeview-menu">
+		
+				<!-- <a [routerLink]="['/profile']" [queryParams]="{ruc: auth.getRUC()}" class="nav-link" >Comprobantes descargados</a> -->
+			<li (click)="ocultar_menu_moviles()"><a routerLink="lista_fichas" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Lista de Fichas Clientes</a></li>
+			<li (click)="ocultar_menu_moviles()"><a routerLink="ficha_cliente" [queryParams]="{usuario: auth.getUsuario(),empresa: auth.getEmpresa()}" ><i class="fa fa-circle-o"></i>Agregar Ficha Cliente</a></li>
+			<!-- <li><a href="#"><i class="fa fa-circle-o"></i>Lista de Pedidos</a></li> -->
+			<!-- <li><a href="#"><i class="fa fa-circle-o"></i>Agregar Pedido</a></li> -->
+		</ul>
+		</li>
 	<!--####################### INGENIERIA DE PRODUCTOS#######################################-->
 	<li *ngIf="auth.getPedidos() != 'NO'" class="treeview">
         <a href="#">

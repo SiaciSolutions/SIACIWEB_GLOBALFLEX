@@ -50,9 +50,9 @@ import { AdminListaDespachoPedidosComponent } from './../admin-lista-despacho-pe
 import { AdminRegistroDespachoPedidosComponent } from './../admin-registro-despacho/admin-registro-despacho.component';
 import { AdminFichaPreprensaComponent } from './../admin-ficha-preprensa/admin-ficha-preprensa.component';
 import { AdminListaFichasPreprensaComponent } from './../admin-lista-ficha-preprensa/admin-lista-ficha-preprensa.component';
-
 import { AdminListaContizacionesComponent } from './../admin-lista-cotizaciones/admin-lista-cotizaciones.component';
-
+import { AdminListaFichasComponent } from './../admin-lista-fichas/admin-lista-fichas.component';
+import { AdminFichaClienteComponent } from './../admin-ficha-cliente/admin-ficha-cliente.component';
 
 
 
@@ -303,6 +303,14 @@ import { AdminListaContizacionesComponent } from './../admin-lista-cotizaciones/
       {
                 path: 'lista_cotizaciones',
                 component: AdminListaContizacionesComponent
+        },
+              {
+            path: 'lista_fichas',
+            component: AdminListaFichasComponent
+        },
+      {
+            path: 'ficha_cliente',
+            component: AdminFichaClienteComponent
         }
 
 

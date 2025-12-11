@@ -53,6 +53,13 @@ export class AdminListaPedidosComponent implements OnInit {
 	fecha_desde
 	fecha_hasta
 	descripcion_error
+
+	public status_pedido_lista = [
+		{"valor": "F", "nomstatus": "FACTURADOS"},
+		{"valor": "N", "nomstatus": "NO FACTURADOS"},
+		{"valor": "T", "nomstatus": "TODOS"}
+	];
+	status_pedido = 'N'
 	
 
   constructor(
@@ -123,6 +130,7 @@ export class AdminListaPedidosComponent implements OnInit {
 	this.fecha_hasta  = formatDate(new Date(), 'yyyy-MM-dd', 'en-US', '-0500');
 	datos['fecha_desde'] = this.fecha_desde
 	datos['fecha_hasta'] = this.fecha_hasta
+	datos['status'] = this.status_pedido
 	
 	
 	
@@ -242,6 +250,7 @@ export class AdminListaPedidosComponent implements OnInit {
 		datos['fecha_hasta'] = this.fecha_hasta
 	    datos['codalm'] = this.srv.getCodAgencia();	
 		datos['api_url'] = this.srv.apiUrl+':'+this.srv.port;
+		datos['status'] = this.status_pedido
 	
 	
 	this.srv.lista_pedidos(datos).subscribe(

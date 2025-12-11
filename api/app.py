@@ -1207,27 +1207,57 @@ def get_renglones_orden():
 @app.route('/lista_pedidos', methods=['POST'])
 def lista_pedidos():
   datos = request.json
-  print ('ENTRADAAAAA')
+  print ('ENTRADAAAAA LISTA PEDIDOS')
   print (datos) 
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   curs = conn.cursor()
   campos = ['numtra', 'codcli','nomusu','fectra','nomcli','observ','totnet','status','email','tiptra','fecha_entrega','status_entrega','fectra_vista']
-
-  sql = """ SELECT p.numtra,p.codcli,p.codusu,fectra,c.nomcli,
-  trim(p.soli_gra),round((p.totnet+p.iva_cantidad),2) as total_iva,
-  (CASE WHEN estado = 'P' THEN 'EMITIDO' 
-  WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' 
-  THEN 'FACTURADO'WHEN estado = 'E' THEN 'EN ESPERA' WHEN estado = 'C' THEN 'COMPRADA'  WHEN estado = 'I' THEN 'SOLICITADO'
-  ELSE 'STATUS_NO_ENCONTRADO' END) AS status,
-  c.email , p.tiptra,
-  (SELECT fecha_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as fecha_entrega,
-  (SELECT status_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as status_entrega,
-  DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra_vista
-  FROM encabezadopedpro p, clientes c where p.tiptra in (1,2) and p.codemp='{}'
-  and p.fectra between '{}' and '{}' 
-  --and p.codusu='{}'
-  and p.codemp = c.codemp and p.codcli = c.codcli and codalm='01'  and estado in ('P','I') order by p.fectra desc""".format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['usuario'])
-  # and p.codemp = c.codemp and p.codcli = c.codcli and codalm='01' and estado='P' order by p.fectra desc""".format(datos['codemp'])
+  
+  if (datos['status'] == 'N'):
+    sql = """ SELECT p.numtra,p.codcli,p.codusu,fectra,c.nomcli,
+    trim(p.soli_gra),round((p.totnet+p.iva_cantidad),2) as total_iva,
+    (CASE WHEN estado = 'P' THEN 'EMITIDO' 
+    WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' 
+    THEN 'FACTURADO'WHEN estado = 'E' THEN 'EN ESPERA' WHEN estado = 'C' THEN 'COMPRADA'  WHEN estado = 'I' THEN 'SOLICITADO'
+    ELSE 'STATUS_NO_ENCONTRADO' END) AS status,
+    c.email , p.tiptra,
+    (SELECT fecha_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as fecha_entrega,
+    (SELECT status_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as status_entrega,
+    DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra_vista
+    FROM encabezadopedpro p, clientes c where p.tiptra in (1,2) and p.codemp='{}'
+    and p.fectra between '{}' and '{}' 
+    --and p.codusu='{}'
+    and p.codemp = c.codemp and p.codcli = c.codcli and codalm='01'  and estado in ('P','I') order by p.fectra desc""".format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['usuario'])
+  if (datos['status'] == 'F'):
+    sql = """ SELECT p.numtra,p.codcli,p.codusu,fectra,c.nomcli,
+    trim(p.soli_gra),round((p.totnet+p.iva_cantidad),2) as total_iva,
+    (CASE WHEN estado = 'P' THEN 'EMITIDO' 
+    WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' 
+    THEN 'FACTURADO'WHEN estado = 'E' THEN 'EN ESPERA' WHEN estado = 'C' THEN 'COMPRADA'  WHEN estado = 'I' THEN 'SOLICITADO'
+    ELSE 'STATUS_NO_ENCONTRADO' END) AS status,
+    c.email , p.tiptra,
+    (SELECT fecha_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as fecha_entrega,
+    (SELECT status_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as status_entrega,
+    DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra_vista
+    FROM encabezadopedpro p, clientes c where p.tiptra in (1,2) and p.codemp='{}'
+    and p.fectra between '{}' and '{}' 
+    --and p.codusu='{}'
+    and p.codemp = c.codemp and p.codcli = c.codcli and codalm='01'  and estado in ('F') order by p.fectra desc""".format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['usuario'])
+  if (datos['status'] == 'T'):
+    sql = """ SELECT p.numtra,p.codcli,p.codusu,fectra,c.nomcli,
+    trim(p.soli_gra),round((p.totnet+p.iva_cantidad),2) as total_iva,
+    (CASE WHEN estado = 'P' THEN 'EMITIDO' 
+    WHEN estado = 'A' THEN 'ANULADO' WHEN estado = 'S' THEN 'PROCESADO' WHEN estado = 'F' 
+    THEN 'FACTURADO'WHEN estado = 'E' THEN 'EN ESPERA' WHEN estado = 'C' THEN 'COMPRADA'  WHEN estado = 'I' THEN 'SOLICITADO'
+    ELSE 'STATUS_NO_ENCONTRADO' END) AS status,
+    c.email , p.tiptra,
+    (SELECT fecha_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as fecha_entrega,
+    (SELECT status_entrega from pedido_ruta pr where pr.empresa=p.codemp and pr.numtra_pedido = p.numtra ) as status_entrega,
+    DATEFORMAT(p.fectra, 'DD-MM-YYYY') as fectra_vista
+    FROM encabezadopedpro p, clientes c where p.tiptra in (1,2) and p.codemp='{}'
+    and p.fectra between '{}' and '{}' 
+    --and p.codusu='{}'
+    and p.codemp = c.codemp and p.codcli = c.codcli and codalm='01'  and estado in ('P','I','F') order by p.fectra desc""".format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'],datos['usuario'])
 
   curs.execute(sql)
   print (sql)
@@ -2347,8 +2377,8 @@ def articulos_index():
   # response.headers['content-type'] = 'application/json'
   # return(response)
 
-@app.route('/busqueda_razon_social', methods=['POST'])
-def busqueda_razon_social():
+@app.route('/busqueda_razon_social_ORIGINAL', methods=['POST'])
+def busqueda_razon_social_ORIGINAL():
   datos = request.json
   print (datos)
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
@@ -2357,6 +2387,30 @@ def busqueda_razon_social():
   # sql = "select codart, nomart, round(prec01, 2), (exiact-(select case when sum(cantid) is null then 0 else sum(cantid) end  as sum from v_exitencias_pedpro where codemp = '{}' and codart like '%{}%')) as exiact,coduni,punreo,codiva  from articulos where (nomart like '%{}%' or codart like '%{}%') and codemp = '{}' order by nomart asc".format(datos['codemp'],datos['nomart'],datos['nomart'],datos['nomart'],datos['codemp'])
   
   sql = "select c.nombres,c.rucced,tpIdCliente,email,dircli,codcli from clientes c where c.codemp = '{}' and c.nomcli like '%{}%' order by c.nomcli asc".format(datos['codemp'],datos['patron_cliente'])
+  curs.execute(sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    d = dict(zip(campos, r))
+    arrresp.append(d)
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
+@app.route('/busqueda_razon_social', methods=['POST'])
+def busqueda_razon_social():
+  datos = request.json
+  print (datos)
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  campos = ['nomcli', 'rucced','tpIdCliente','email','dircli','codcli','telefono', 'nombreC', 'ciucli']
+  # sql = "select codart, nomart, round(prec01, 2), (exiact-(select case when sum(cantid) is null then 0 else sum(cantid) end  as sum from v_exitencias_pedpro where codemp = '{}' and codart like '%{}%')) as exiact,coduni,punreo,codiva  from articulos where (nomart like '%{}%' or codart like '%{}%') and codemp = '{}' order by nomart asc".format(datos['codemp'],datos['nomart'],datos['nomart'],datos['nomart'],datos['codemp'])
+  
+  sql = "SELECT c.nombres, c.rucced, tpIdCliente, email, dircli, codcli, telcli + CASE WHEN telcli2 IS NOT NULL AND telcli2 != '' THEN '-' + telcli2 ELSE '' END AS telefono, nombres, ciucli FROM clientes c where c.codemp = '{}' and c.nomcli like '%{}%' order by c.nomcli asc".format(datos['codemp'],datos['patron_cliente'])
   curs.execute(sql)
   regs = curs.fetchall()
   arrresp = []
@@ -4480,7 +4534,9 @@ def calcular_cotizacion():
   #Valores a entregar:
   costoBobina = costomp*(anchomp*100)
   costoBobina = round(costoBobina,2)
-  otroscostos = cstampingCU+cstamping+laminado_mate+laminado_brillante+troquel+combustible
+#  otroscostos = cstampingCU+cstamping+laminado_mate+laminado_brillante+troquel+combustible
+#  CAMBIO OTROS COSTO "otroscostos" A SOLICITUD DE GLOBALFLEX -CARLOS LEDEZMA 0302025
+  otroscostos = cstampingCU+cstamping+laminado_mate+laminado_brillante+troquel+combustible+impresion+kores
   otroscostos = round(otroscostos,2)
   manoObra = (450.04/240)*horas
   manoObra = round(manoObra,2)
@@ -4913,21 +4969,28 @@ def generar_ficha_tecnica_preprensa():
   
   sql = """INSERT INTO ficha_tecnica_preprensa (codemp,fecha,razon_social,ruc,contacto,producto,buffer,proveedor,enviado_por,nombre_etiqueta,orden_venta,enviado_a,
   mat_prima1,mat_prima2,maquina,ancho,no_cilindro,troquel,gap_ancho,avance,desarrollo_cilindro,gap_avance,rep_avance,tipo,forma,tipo_impresion_ex,muestra,corte_seg,layflat,
-  ancho_rollo,existe_cliche,etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,observacion,embon_ext,embon_int,vendedor,
-  requiere_cliche,solicitado_por,autorizado_por,rep_ancho
+  ancho_rollo,existe_cliche,etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,
+  primario_c,primario_m,primario_k,primario_y,pantone_1,pantone_2,pantone_3,pantone_4,pantone_5,pantone_6,pantone_7,
+  observacion,embon_ext,embon_int,vendedor,
+  requiere_cliche,ejecutivo_ventas,impreso_responsable,supervisado_responsable,jefe_prod,rep_ancho
   )  VALUES ('{}','{}',
-          '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}', {}, {}, '{}', '{}', '{}', '{}',
-          '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'
+          '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
+          '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}',
+          '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'
       )"""\
   .format(datos_limpios['codemp'],datos_limpios['fecIngProd'],
-            datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['contacto'],datos_limpios['producto'],datos_limpios['buffer'],datos_limpios['proveedor'],datos_limpios['enviado_por'],
+            datos_limpios['razon_social'].replace("'","\''"),datos_limpios['ruc'],datos_limpios['contacto'],datos_limpios['producto'],datos_limpios['buffer'],datos_limpios['proveedor'],datos_limpios['enviado_por'],
             datos_limpios['nombre_etiqueta'],datos_limpios['orden_venta'],datos_limpios['enviado_a'],datos_limpios['mat_prima1'],
             datos_limpios['mat_prima2'],datos_limpios['maquina'],datos_limpios['ancho'],datos_limpios['no_cilindro'],datos_limpios['troquel'],datos_limpios['gap_ancho'],datos_limpios['avance'],
             datos_limpios['desarrollo_cilindro'],datos_limpios['gap_avance'],datos_limpios['rep_avance'],
             datos_limpios['tipo'],datos_limpios['forma'], datos_limpios['tipo_impresion_ex'], datos_limpios['muestra'],datos_limpios['corte_seg'],datos_limpios['layflat'],
             datos_limpios['ancho_rollo'],datos_limpios['existe_cliche'],datos_limpios['etiq_fila_cliente'],datos_limpios['etiq_fila_produccion'],
-            datos_limpios['tipo_tinta'],datos_limpios['tipo_corte'],datos_limpios['acabado1'],datos_limpios['acabado2'],datos_limpios['acabado3'],datos_limpios['acabado4'],datos_limpios['observacion'],
-            datos_limpios['embon_ext'],datos_limpios['embon_int'],datos_limpios['vendedor'],datos_limpios['requiere_cliche'],datos_limpios['solicitado_por'],datos_limpios['autorizado_por'],datos_limpios['rep_ancho'])
+            datos_limpios['tipo_tinta'],datos_limpios['tipo_corte'],datos_limpios['acabado1'],datos_limpios['acabado2'],datos_limpios['acabado3'],datos_limpios['acabado4'],
+            datos_limpios['primario_C'],datos_limpios['primario_M'],datos_limpios['primario_K'],datos_limpios['primario_Y'],datos_limpios['pantone_1'],datos_limpios['pantone_2'],
+            datos_limpios['pantone_3'],datos_limpios['pantone_4'],datos_limpios['pantone_5'],datos_limpios['pantone_6'],datos_limpios['pantone_7'],datos_limpios['observacion'],
+            datos_limpios['embon_ext'],datos_limpios['embon_int'],datos_limpios['vendedor'],datos_limpios['requiere_cliche'],
+            datos_limpios['ejecutivo_ventas'],datos_limpios['impreso_responsable'],datos_limpios['supervisado_responsable'],datos_limpios['jefe_prod'],
+            datos_limpios['rep_ancho'])
   print (sql)
   curs.execute(sql)
   conn.commit()
@@ -4945,9 +5008,9 @@ def lista_ficha_preprensa():
   conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
   curs = conn.cursor()
   
-  campos = ['idficha','razon_social','fecha','solicitado_por','autorizado_por']
+  campos = ['idficha','razon_social','fecha','impreso_responsable','supervisado_responsable']
   
-  sql = """ SELECT idficha, razon_social, fecha, solicitado_por, autorizado_por
+  sql = """ SELECT idficha, razon_social, fecha, impreso_responsable, supervisado_responsable
   FROM ficha_tecnica_preprensa where codemp = '{}' and fecha between '{}' and '{}' order by fecha
   """.format(datos['codemp'],datos['fecha_desde'],datos['fecha_hasta'])
   print (sql)
@@ -4979,7 +5042,9 @@ def get_ficha_tecnica_preprensa():
   sql = """
         SELECT codemp, idficha,fecha,razon_social,ruc,contacto,producto,buffer,proveedor,enviado_por,enviado_a,vendedor,orden_venta,nombre_etiqueta,mat_prima1,mat_prima2,maquina,ancho,
         no_cilindro,gap_ancho,rep_ancho,troquel,avance,desarrollo_cilindro,gap_avance,rep_avance,tipo,forma,tipo_impresion_ex,muestra,corte_seg,layflat,ancho_rollo,existe_cliche,
-        etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,observacion,embon_ext,embon_int,requiere_cliche,solicitado_por,autorizado_por
+        etiq_fila_cliente,etiq_fila_produccion,tipo_tinta,tipo_corte,acabado1,acabado2,acabado3,acabado4,
+        primario_c,primario_m,primario_k,primario_y,pantone_1,pantone_2,pantone_3,pantone_4,pantone_5,pantone_6,pantone_7,
+        observacion,embon_ext,embon_int,requiere_cliche,ejecutivo_ventas,impreso_responsable,supervisado_responsable,jefe_prod
         FROM ficha_tecnica_preprensa WHERE idficha = '{}' and codemp = '{}'
 	      """.format(idficha,codemp)
   curs.execute(sql)
@@ -4988,7 +5053,9 @@ def get_ficha_tecnica_preprensa():
   campos = [
   'codemp','idficha','fecha','razon_social','ruc','contacto','producto','buffer','proveedor','enviado_por','enviado_a','vendedor','orden_venta','nombre_etiqueta','mat_prima1','mat_prima2','maquina','ancho',
   'no_cilindro','gap_ancho','rep_ancho','troquel','avance','desarrollo_cilindro','gap_avance','rep_avance','tipo','forma','tipo_impresion_ex','muestra','corte_seg','layflat','ancho_rollo','existe_cliche',
-  'etiq_fila_cliente','etiq_fila_produccion','tipo_tinta','tipo_corte','acabado1','acabado2','acabado3','acabado4','observacion','embon_ext','embon_int','requiere_cliche','solicitado_por','autorizado_por'
+  'etiq_fila_cliente','etiq_fila_produccion','tipo_tinta','tipo_corte','acabado1','acabado2','acabado3','acabado4',
+  'primario_C','primario_M','primario_K','primario_Y','pantone_1','pantone_2','pantone_3','pantone_4','pantone_5','pantone_6','pantone_7',
+  'observacion','embon_ext','embon_int','requiere_cliche','ejecutivo_ventas','impreso_responsable','supervisado_responsable','jefe_prod'
    ]
   print(r)
   
@@ -5051,21 +5118,27 @@ def actualizar_ficha_tecnica_preprensa():
     enviado_a='{}', mat_prima1='{}', mat_prima2='{}', maquina='{}', ancho='{}', no_cilindro='{}', gap_ancho='{}', troquel='{}', avance='{}', desarrollo_cilindro='{}', 
     gap_avance='{}', rep_avance='{}',tipo='{}', forma='{}', tipo_impresion_ex='{}', muestra='{}', corte_seg='{}', layflat='{}', ancho_rollo='{}', 
     existe_cliche='{}', etiq_fila_cliente='{}', etiq_fila_produccion='{}',tipo_tinta='{}', 
-    tipo_corte='{}', acabado1='{}', acabado2='{}', acabado3='{}', acabado4='{}', observacion='{}', rep_ancho='{}', 
-    embon_ext='{}', embon_int='{}', vendedor='{}', requiere_cliche='{}', 
-    solicitado_por='{}', autorizado_por='{}'
+    tipo_corte='{}', acabado1='{}', acabado2='{}', acabado3='{}', acabado4='{}',
+    primario_c='{}',primario_m='{}',primario_k='{}',primario_y='{}',pantone_1='{}',pantone_2='{}',pantone_3='{}',pantone_4='{}',pantone_5='{}',pantone_6='{}',pantone_7='{}',
+    observacion='{}', rep_ancho='{}', 
+    embon_ext='{}', embon_int='{}', vendedor='{}', requiere_cliche='{}',
+    ejecutivo_ventas='{}',impreso_responsable='{}',supervisado_responsable='{}',jefe_prod='{}'
     where codemp = '{}' and idficha ='{}'
   """.format(datos_limpios['fecIngProd'],
-            datos_limpios['razon_social'],datos_limpios['ruc'],datos_limpios['contacto'],datos_limpios['producto'],datos_limpios['buffer'],datos_limpios['proveedor'],
+            datos_limpios['razon_social'].replace("'","\''"),datos_limpios['ruc'],datos_limpios['contacto'],datos_limpios['producto'],datos_limpios['buffer'],datos_limpios['proveedor'],
             datos_limpios['enviado_por'],datos_limpios['nombre_etiqueta'],datos_limpios['orden_venta'],datos_limpios['enviado_a'],datos_limpios['mat_prima1'],
             datos_limpios['mat_prima2'],datos_limpios['maquina'],datos_limpios['ancho'],datos_limpios['no_cilindro'],datos_limpios['gap_ancho'],datos_limpios['troquel'],
             datos_limpios['avance'],datos_limpios['desarrollo_cilindro'],datos_limpios['gap_avance'],datos_limpios['rep_avance'],datos_limpios['tipo'],datos_limpios['forma'],
             datos_limpios['tipo_impresion_ex'], datos_limpios['muestra'], datos_limpios['corte_seg'],datos_limpios['layflat'],datos_limpios['ancho_rollo'],
             datos_limpios['existe_cliche'],datos_limpios['etiq_fila_cliente'],datos_limpios['etiq_fila_produccion'],datos_limpios['tipo_tinta'],
-            datos_limpios['tipo_corte'],datos_limpios['acabado1'],datos_limpios['acabado2'],datos_limpios['acabado3'],datos_limpios['acabado4'],datos_limpios['observacion'],
+            datos_limpios['tipo_corte'],datos_limpios['acabado1'],datos_limpios['acabado2'],datos_limpios['acabado3'],datos_limpios['acabado4'],
+            datos_limpios['primario_C'],datos_limpios['primario_M'],datos_limpios['primario_K'],datos_limpios['primario_Y'],
+            datos_limpios['pantone_1'],datos_limpios['pantone_2'],
+            datos_limpios['pantone_3'],datos_limpios['pantone_4'],datos_limpios['pantone_5'],datos_limpios['pantone_6'],datos_limpios['pantone_7'],
+            datos_limpios['observacion'],
             datos_limpios['rep_ancho'],
             datos_limpios['embon_ext'],datos_limpios['embon_int'],datos_limpios['vendedor'],datos_limpios['requiere_cliche'],
-            datos_limpios['solicitado_por'],datos_limpios['autorizado_por'],
+            datos_limpios['ejecutivo_ventas'],datos_limpios['impreso_responsable'],datos_limpios['supervisado_responsable'],datos_limpios['jefe_prod'],
             datos_limpios['codemp'], datos_limpios['idficha'])
   print(sql)
   curs.execute(sql)
@@ -5079,6 +5152,345 @@ def actualizar_ficha_tecnica_preprensa():
   response = make_response(dumps(d, sort_keys=False, indent=2, default=json_util.default))
   response.headers['content-type'] = 'application/json'
   return(response)
+
+######### SECCION DE FICHA DE CLIENTE HECHO POR FIDEL
+@app.route('/insertar_registro', methods=['POST'])
+def insertar_registro():
+    datos = request.json
+    conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng, host=coneccion.host)
+    curs = conn.cursor()
+    array = datos['arreglo']
+    registros_insertados = 0
+
+    for dato in array:
+        check_sql = """
+            SELECT COUNT(*) FROM productos_cliente
+            WHERE codemp = '{}' AND codcli = '{}' AND codigo = '{}'
+        """.format(datos['codemp'], datos['codcli'], dato['codigo'])
+
+        curs.execute(check_sql)
+        count = curs.fetchone()[0]
+
+        if count == 0:
+            insert_sql = """
+            INSERT INTO productos_cliente 
+            (codemp, codcli, codigo, descripcion, troquel, 
+             pantone1, pantone2, pantone3, pantone4, pantone5, pantone6, pantone7,
+             pantone_delta1, pantone_delta2, pantone_delta3, pantone_delta4, pantone_delta5, pantone_delta6, pantone_delta7,
+             pantone_extra1, pantone_extra2, pantone_extra3, pantone_extra4, pantone_extra5, pantone_extra6, pantone_extra7,
+             acabado, v_millar, observacion, dispensado, bobinado_ext, bobinado_int)
+            VALUES ('{}', '{}', '{}', '{}', '{}',
+                    '{}', '{}', '{}', '{}', '{}', '{}',
+                    '{}', '{}', '{}', '{}', '{}', '{}',
+                    '{}', '{}', '{}', '{}', '{}', '{}',
+                    '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}');
+            """.format(
+                datos['codemp'], datos['codcli'], dato['codigo'], dato['descripcion'], dato['troquel'],
+                dato['pantone1'], dato['pantone2'], dato['pantone3'], dato['pantone4'], dato['pantone5'], dato['pantone6'], dato['pantone7'],
+                dato.get('pantone_delta1', ''), dato.get('pantone_delta2', ''), dato.get('pantone_delta3', ''),
+                dato.get('pantone_delta4', ''), dato.get('pantone_delta5', ''), dato.get('pantone_delta6', ''), dato.get('pantone_delta7', ''),
+                dato.get('pantone_extra1', ''), dato.get('pantone_extra2', ''), dato.get('pantone_extra3', ''),
+                dato.get('pantone_extra4', ''), dato.get('pantone_extra5', ''), dato.get('pantone_extra6', ''), dato.get('pantone_extra7', ''),
+                dato['acabado'], dato['v_millar'], dato['observacion'], dato['dispensado'],
+                dato['bobinado_ext'], dato['bobinado_int']
+            )
+            curs.execute(insert_sql)
+            conn.commit()
+            registros_insertados += 1
+
+    curs.close()
+    conn.close()
+
+    return jsonify({'STATUS': 'EXITOSO', 'INSERTADOS': registros_insertados})
+
+
+@app.route('/eliminar_producto', methods=['POST'])
+def eliminar_producto():
+  datos = request.json
+  codemp = datos.get('codemp')
+  codcli = datos.get('codcli')
+  codigo = datos.get('codigo')
+
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng, host=coneccion.host)
+  curs = conn.cursor()
+
+  sql = """
+    DELETE FROM productos_cliente
+    WHERE codemp = '{}' AND codcli = '{}' AND codigo = '{}'
+  """.format(codemp, codcli, codigo)
+
+  curs.execute(sql)
+  conn.commit()
+  curs.close()
+  conn.close()
+
+  return jsonify({'STATUS': 'EXITOSO'})
+ 
+@app.route('/actualizar_producto', methods=['POST'])
+def actualizar_producto():
+    datos = request.json
+    conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng, host=coneccion.host)
+    curs = conn.cursor()
+    print (datos)
+
+    sql = """
+        UPDATE productos_cliente SET
+            descripcion = '{}', troquel = '{}',
+            pantone1 = '{}', pantone2 = '{}', pantone3 = '{}', pantone4 = '{}', pantone5 = '{}', pantone6 = '{}', pantone7 = '{}',
+            pantone_delta1 = '{}', pantone_delta2 = '{}', pantone_delta3 = '{}', pantone_delta4 = '{}', pantone_delta5 = '{}', pantone_delta6 = '{}', pantone_delta7 = '{}',
+            pantone_extra1 = '{}', pantone_extra2 = '{}', pantone_extra3 = '{}', pantone_extra4 = '{}', pantone_extra5 = '{}', pantone_extra6 = '{}', pantone_extra7 = '{}',
+            acabado = '{}', v_millar = '{}', observacion = '{}', dispensado = '{}', bobinado_ext = '{}', bobinado_int = '{}'
+        WHERE codemp = '{}' AND codcli = '{}' AND codigo = '{}'
+    """.format(
+        datos['descripcion'], datos['troquel'],
+        datos['pantone1'], datos['pantone2'], datos['pantone3'], datos['pantone4'], datos['pantone5'], datos['pantone6'], datos['pantone7'],
+        datos.get('pantone_delta1', ''), datos.get('pantone_delta2', ''), datos.get('pantone_delta3', ''),
+        datos.get('pantone_delta4', ''), datos.get('pantone_delta5', ''), datos.get('pantone_delta6', ''), datos.get('pantone_delta7', ''),
+        datos.get('pantone_extra1', ''), datos.get('pantone_extra2', ''), datos.get('pantone_extra3', ''),
+        datos.get('pantone_extra4', ''), datos.get('pantone_extra5', ''), datos.get('pantone_extra6', ''), datos.get('pantone_extra7', ''),
+        datos['acabado'], datos['v_millar'] if datos['v_millar'] else 0,
+        datos['observacion'], datos['dispensado'], datos['bobinado_ext'], datos['bobinado_int'],
+        datos['codemp'], datos['codcli'], datos['codigo']
+    )
+
+    curs.execute(sql)
+    conn.commit()
+    curs.close()
+    conn.close()
+
+    return jsonify({'STATUS': 'EXITOSO'})
+
+@app.route('/obtener_registro', methods=['POST'])
+def obtener_registro():
+    datos = request.json
+    codemp = datos['codemp']
+    codcli = datos['codcli']
+
+    conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng, host=coneccion.host)
+    curs = conn.cursor()
+
+    sql = """
+        SELECT 
+            codigo, descripcion, troquel, 
+            pantone1, pantone2, pantone3, pantone4, pantone5, pantone6, pantone7,
+            pantone_delta1, pantone_delta2, pantone_delta3, pantone_delta4, pantone_delta5, pantone_delta6, pantone_delta7,
+            pantone_extra1, pantone_extra2, pantone_extra3, pantone_extra4, pantone_extra5, pantone_extra6, pantone_extra7,
+            acabado, v_millar, observacion, dispensado, bobinado_ext, bobinado_int
+        FROM productos_cliente
+        WHERE codemp = '{}' AND codcli = '{}'
+    """.format(codemp, codcli)
+
+    curs.execute(sql)
+    filas = curs.fetchall()
+    columnas = [col[0] for col in curs.description]
+    resultado = [dict(zip(columnas, fila)) for fila in filas]
+
+    curs.close()
+    conn.close()
+
+    return jsonify(resultado)
+
+
+@app.route('/agregar_contacto', methods=['POST'])
+def agregar_contacto():
+  datos = request.json
+  print ('ENTRADAAAAA')
+  print (datos) 
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  
+  sql = """ insert into cliente_contacto (codemp,codcli,contactopago,telefonopago,contactocompras,telefonocompras,condicionpago, ejecutivo, observacion_general)
+    values('{}','{}','{}','{}','{}','{}','{}','{}','{}');
+    """.format(datos['codemp'],datos['codcli'],datos['cpago'],datos['telpago'],datos['ccompra'],datos['telcompra'],datos['condicion'], datos['ejecutivo'], datos['observacion_general'])
+  print (sql)
+  curs.execute(sql)
+  conn.commit()
+  d = {'STATUS': 'EXITOSO'}
+  
+  curs.close()
+  conn.close()
+  return (jsonify(d)) 
+
+@app.route('/buscar_contacto', methods=['POST'])
+def buscar_contacto():
+  datos = request.json
+  print (datos)
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+  campos = ['cpago', 'telpago','ccompra','telcompra','condicion', 'ejecutivo', 'observacion_general']
+  # sql = "select codart, nomart, round(prec01, 2), (exiact-(select case when sum(cantid) is null then 0 else sum(cantid) end  as sum from v_exitencias_pedpro where codemp = '{}' and codart like '%{}%')) as exiact,coduni,punreo,codiva  from articulos where (nomart like '%{}%' or codart like '%{}%') and codemp = '{}' order by nomart asc".format(datos['codemp'],datos['nomart'],datos['nomart'],datos['nomart'],datos['codemp'])
+  
+  sql = "SELECT contactopago, telefonopago, contactocompras, telefonocompras, condicionpago, ejecutivo, observacion_general FROM cliente_contacto c where c.codemp = '{}' and c.codcli like '{}'".format(datos['codemp'],datos['codcli'])
+  curs.execute(sql)
+  regs = curs.fetchall()
+  arrresp = []
+  for r in regs:
+    d = dict(zip(campos, r))
+    arrresp.append(d)
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+  response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
+  response.headers['content-type'] = 'application/json'
+  return(response)
+
+@app.route('/actualizar_contacto', methods=['POST'])
+def actualizar_contacto():
+    datos = request.json
+    print('ACTUALIZANDO CONTACTO')
+    print(datos)
+
+    conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng, host=coneccion.host)
+    curs = conn.cursor()
+
+    sql = """
+    UPDATE cliente_contacto
+    SET contactopago = '{}',
+        telefonopago = '{}',
+        contactocompras = '{}',
+        telefonocompras = '{}',
+        condicionpago = '{}',
+        ejecutivo = '{}',
+        observacion_general = '{}'
+    WHERE codemp = '{}' AND codcli = '{}';
+    """.format(
+        datos['cpago'], datos['telpago'],
+        datos['ccompra'], datos['telcompra'],
+        datos['condicion'], datos['ejecutivo'], datos['observacion_general'],
+        datos['codemp'], datos['codcli']
+    )
+
+    print(sql)
+    curs.execute(sql)
+    conn.commit()
+
+    d = {'STATUS': 'EXITOSO'}
+
+    curs.close()
+    conn.close()
+    return jsonify(d)
+
+ 
+
+@app.route('/lista_ficha', methods=['POST'])
+def lista_ficha():
+    datos = request.json
+    conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng, host=coneccion.host)
+    curs = conn.cursor()
+
+    campos = ['codcli', 'nomcli','rucced', 'contactopago','telefonopago','contactocompras','telefonocompras']
+
+    sql = """
+        SELECT 
+            pc.codcli,
+            c.nomcli,
+            c.rucced,
+            cc.contactopago,
+            cc.telefonopago,
+            cc.contactocompras,
+            cc.telefonocompras
+        FROM productos_cliente pc
+        LEFT JOIN clientes c ON pc.codcli = c.codcli
+        LEFT JOIN cliente_contacto cc ON pc.codcli = cc.codcli
+        WHERE pc.codemp = '{}'
+        GROUP BY pc.codcli, c.nomcli,rucced, cc.contactopago,cc.telefonopago,cc.contactocompras,cc.telefonocompras
+        ORDER BY c.nomcli ASC
+    """.format(datos['codemp'])
+
+    print(sql)
+    curs.execute(sql)
+    regs = curs.fetchall()
+
+    arrresp = []
+    for r in regs:
+        d = dict(zip(campos, r))
+        arrresp.append(d)
+
+    curs.close()
+    conn.close()
+
+    return jsonify(arrresp)
+
+@app.route('/buscar_articulo', methods=['POST'])
+def buscar_articulo():
+    datos = request.json
+    filtro = datos.get('filtro', '')
+    codemp = datos.get('codemp', '')
+
+    conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng, host=coneccion.host)
+    curs = conn.cursor()
+
+    campos = ['codart', 'nomart']
+    sql = """
+        SELECT codart, nomart
+        FROM articulos a
+        WHERE a.codemp = '{}' AND (a.codart LIKE '%{}%' OR a.nomart LIKE '%{}%')
+        ORDER BY nomart ASC
+    """.format(codemp, filtro, filtro)
+
+    curs.execute(sql)
+    regs = curs.fetchall()
+
+    arrresp = [dict(zip(campos, r)) for r in regs]
+
+    curs.close()
+    conn.close()
+
+    response = make_response(dumps(arrresp, sort_keys=False, indent=2, default=json_util.default))
+    response.headers['content-type'] = 'application/json'
+    return response
+
+@app.route('/generar_pdf_ficha_cliente', methods=['POST'])
+def generar_pdf_ficha_cliente():
+    print ("GENERAR FICHA CLIENTE PDF")
+    datos = request.json
+    print (datos)
+    file= 'FICHA_CLIENTE_'+datos['codemp']+'_'+datos['rucced']+'_WEB.pdf'
+    DESTINO='C:\\SISTEMA\\temporales\\'+file
+    ORIGEN = APP_PATH+'\\PLANTILLA_PEDIDOS\\'+file
+       
+    ####### GENERO EL PDF DEL PEDIDO ################################
+    generar_pdf = pdf.GEN_PDF()
+    resp_pdf = generar_pdf.gen_ficha_cliente_pdf(datos['codemp'],datos['codcli'])
+    print (DESTINO)
+    print (ORIGEN)
+    shutil.move(ORIGEN, DESTINO)
+
+    d = {'STATUS':'EXITOSO','PDF':file}
+	
+    # return send_from_directory(PATH_PDF, arr_image[1])
+    return jsonify(d)
+
+
+@app.route('/eliminar_ficha', methods=['POST'])
+def eliminar_ficha():
+  datos = request.json
+  print ('ELIMINANDO FICHA')
+  print (datos) 
+  conn = sqlanydb.connect(uid=coneccion.uid, pwd=coneccion.pwd, eng=coneccion.eng,host=coneccion.host)
+  curs = conn.cursor()
+ 
+  sql = """ delete from productos_cliente where codcli='{}';
+  """.format(datos['codcli'])
+  print (sql)
+  try:
+    curs.execute(sql)
+    conn.commit()
+    d = {'STATUS': 'EXITOSO'}
+  except Exception as e:
+    print (str(e))
+    d = {'STATUS': str(e)}
+
+
+  print("CERRANDO SESION SIACI")
+  curs.close()
+  conn.close()
+
+  return (jsonify(d))
+
+  ######### FIN SECCION DE FICHA DE CLIENTE HECHO POR FIDEL
+
     
 ##################################################### GENERAR PEDIDO GUADAPRODUCT 
 # @app.route('/generar_pedido', methods=['POST'])
@@ -10805,6 +11217,7 @@ if __name__ == "__main__":
     # app.run(host='0.0.0.0', port=5000)
     # app.run(debug=True, host='0.0.0.0', port=5000)
 	app.config['SESSION_TYPE'] = 'memcached'
+	app.debug = True
 	PUERTO_EXE = '5000'
 	SSL = 'NO'
 	
